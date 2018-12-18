@@ -12,12 +12,9 @@ import butterknife.Unbinder;
 
 public abstract class BaseActivity extends AppCompatActivity {
 
-    Unbinder unbinder;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        initToolbar();
-        initView();
     }
 
     @Override
@@ -25,7 +22,6 @@ public abstract class BaseActivity extends AppCompatActivity {
         super.onStart();
         if (!EventBus.getDefault().isRegistered(this))
             EventBus.getDefault().register(this);
-        unbinder = ButterKnife.bind(this);
     }
 
     @Override
@@ -33,8 +29,4 @@ public abstract class BaseActivity extends AppCompatActivity {
         super.onStop();
         EventBus.getDefault().unregister(this);
     }
-
-    public abstract void initToolbar();
-
-    public abstract void initView();
 }
