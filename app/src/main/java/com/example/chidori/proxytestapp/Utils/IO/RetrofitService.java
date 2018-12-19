@@ -1,10 +1,12 @@
 package com.example.chidori.proxytestapp.Utils.IO;
 
 import com.example.chidori.proxytestapp.Utils.Beans.LoginBean;
+import com.example.chidori.proxytestapp.Utils.Beans.URLBean;
 
 import io.reactivex.Observable;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
+import retrofit2.http.GET;
 import retrofit2.http.POST;
 
 public interface RetrofitService {

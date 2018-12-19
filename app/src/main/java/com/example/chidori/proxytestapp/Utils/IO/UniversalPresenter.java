@@ -1,7 +1,9 @@
 package com.example.chidori.proxytestapp.Utils.IO;
 
 import com.example.chidori.proxytestapp.Events.LoginEvent;
+import com.example.chidori.proxytestapp.Events.URLEvent;
 import com.example.chidori.proxytestapp.Utils.Beans.LoginBean;
+import com.example.chidori.proxytestapp.Utils.Beans.URLBean;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -17,7 +19,7 @@ public class UniversalPresenter extends BasePresenter{
     //登录
     public void loginByRetrofit(String username, String password) {
         ApiManager.getInstance()
-                .getRetrofitService()
+                .getRSSRetrofitService()
                 .requestLogin(username, password)
                 .map(new Function<LoginBean, String>() {
                     @Override
@@ -48,4 +50,5 @@ public class UniversalPresenter extends BasePresenter{
                     }
                 });
     }
+
 }

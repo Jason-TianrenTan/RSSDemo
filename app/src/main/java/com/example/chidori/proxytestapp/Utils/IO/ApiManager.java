@@ -12,6 +12,7 @@ public class ApiManager {
     private RetrofitService myApi;
     private static ApiManager sApiManager;
 
+    private RetrofitService defApi;
 
     //get instance of api
     public static ApiManager getInstance() {
@@ -27,7 +28,7 @@ public class ApiManager {
 
 
     //request Retrofit service
-    public RetrofitService getRetrofitService() {
+    public RetrofitService getRSSRetrofitService() {
         OkHttpClient client = new OkHttpClient.Builder()
                 .addInterceptor(new HttpInterceptor())
                 .build();
@@ -41,5 +42,21 @@ public class ApiManager {
             myApi = retrofit.create(RetrofitService.class);
         }
         return myApi;
+    }
+
+    public RetrofitService getDefaultRetrofitService(String url) {
+        OkHttpClient client = new OkHttpClient.Builder()
+                .addInterceptor(new HttpInterceptor())
+                .build();
+        if (defApi == null) {
+            Retrofit retrofit = new Retrofit.Builder()
+                    .baseUrl(url)
+                    .client(client)
+                    .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .build();
+            defApi = retrofit.create(RetrofitService.class);
+        }
+        return defApi;
     }
 }

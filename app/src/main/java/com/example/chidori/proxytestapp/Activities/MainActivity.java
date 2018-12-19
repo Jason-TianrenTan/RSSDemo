@@ -1,47 +1,85 @@
 package com.example.chidori.proxytestapp.Activities;
 
 import android.app.AlertDialog;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.webkit.JsResult;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.chidori.proxytestapp.Contract.Contract;
 import com.example.chidori.proxytestapp.Events.LoginEvent;
+import com.example.chidori.proxytestapp.Events.URLEvent;
+import com.example.chidori.proxytestapp.Presenter.ReaderPresenterImpl;
 import com.example.chidori.proxytestapp.R;
 
+import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
-public class MainActivity extends BaseActivity implements Contract.ILoginView {
+public class MainActivity extends AppCompatActivity implements Contract.IReaderView {
 
 
-    @BindView(R.id.webview)
-    WebView webView;
-    @BindView(R.id.toolbar)
-    Toolbar toolbar;
+    @BindView(R.id.webview) WebView webView;
+    @BindView(R.id.toolbar) Toolbar toolbar;
+    @BindView(R.id.page_title) TextView titleTextView;
 
-    String testURL = "http://blog.sina.com.cn/s/blog_4caedc7a0102x40l.html";
+    Contract.IReaderPresenter presenter;
+    String testURL = "https://blog.csdn.net/baidu_33634330/article/details/77680289";
+
+    @Override
+    public void onTitleFound(String title) {
+        titleTextView.setText(title);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+        setSupportActionBar(toolbar);
+        initPresenter();
         initWebView();
     }
 
+    private void initPresenter() {
+        presenter = new ReaderPresenterImpl();
+        ((ReaderPresenterImpl) presenter).attachView(this);
+    }
 
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onEventCall(LoginEvent loginEvent) {
-        //处理
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_reader, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_favorite:
+                Toast.makeText(this, "已添加到收藏夹", Toast.LENGTH_SHORT).show();
+                break;
+        }
+        return true;
     }
 
 
@@ -50,7 +88,8 @@ public class MainActivity extends BaseActivity implements Contract.ILoginView {
         webView.setWebViewClient(new WebViewClient(){
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
-                view.loadUrl(url); return true; }
+                view.loadUrl(url); return true;
+            }
         });
 
         WebSettings settings = webView.getSettings();
@@ -67,10 +106,6 @@ public class MainActivity extends BaseActivity implements Contract.ILoginView {
                 localBuilder.setMessage(message).setPositiveButton("确定", null);
                 localBuilder.setCancelable(false);
                 localBuilder.create().show();
-                //注意:
-                // 必须要这一句代码:result.confirm()表示:
-                // 处理结果为确定状态同时唤醒WebCore线程
-                // 否则不能继续点击按钮
                 result.confirm();
                 return true;
             }
@@ -79,6 +114,7 @@ public class MainActivity extends BaseActivity implements Contract.ILoginView {
             @Override
             public void onReceivedTitle(WebView view, String title) {
                 super.onReceivedTitle(view, title);
+                presenter.setTitle(title);
                 Log.i("ansen", "网页标题:" + title);
             }
 
@@ -89,6 +125,14 @@ public class MainActivity extends BaseActivity implements Contract.ILoginView {
             }
         };
         webView.setWebChromeClient(webChromeClient);
+
+        Intent intent = getIntent();
+        String action = intent.getAction();
+        if (Intent.ACTION_SEND.equals(action)) {
+            String url = intent.getStringExtra(Intent.EXTRA_TEXT);
+            webView.loadUrl(url);
+            presenter.doLoadURL(url);
+        }
 
     }
 
