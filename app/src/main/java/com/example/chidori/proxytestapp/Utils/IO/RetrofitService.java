@@ -1,10 +1,12 @@
 package com.example.chidori.proxytestapp.Utils.IO;
 
+import com.example.chidori.proxytestapp.Utils.Beans.CreateCollectionBean;
 import com.example.chidori.proxytestapp.Utils.Beans.LoginBean;
 import com.example.chidori.proxytestapp.Utils.Beans.RegisterBean;
 import com.example.chidori.proxytestapp.Utils.Beans.URLBean;
 
 
+import com.example.chidori.proxytestapp.Utils.Beans.UpdateBean;
 import com.google.gson.JsonObject;
 
 import io.reactivex.Observable;
@@ -28,6 +30,20 @@ public interface RetrofitService {
     @Headers({
             "Accept: application/json",
     })
-    @POST("user/login")
+    @POST("user/register")
     Observable<RegisterBean> requestRegister(@Body JsonObject jsonObject);
+
+    //更新
+    @Headers({
+            "Accept: application/json",
+    })
+    @POST("user/update")
+    Observable<UpdateBean> requestUpdate(@Body JsonObject jsonObject);
+
+    //创建
+    @Headers({
+            "Accept: application/json",
+    })
+    @POST("/collection")
+    Observable<CreateCollectionBean> createCollection(@Body JsonObject jsonObject);
 }

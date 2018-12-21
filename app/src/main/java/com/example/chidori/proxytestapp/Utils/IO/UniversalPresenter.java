@@ -2,18 +2,17 @@ package com.example.chidori.proxytestapp.Utils.IO;
 
 import android.widget.Toast;
 
+import com.example.chidori.proxytestapp.Events.CreateCollectionEvent;
 import com.example.chidori.proxytestapp.Events.LoginEvent;
 import com.example.chidori.proxytestapp.Events.RegisterEvent;
-import com.example.chidori.proxytestapp.Events.URLEvent;
+import com.example.chidori.proxytestapp.Events.UpdateAccountEvent;
+import com.example.chidori.proxytestapp.Utils.Beans.CreateCollectionBean;
 import com.example.chidori.proxytestapp.Utils.Beans.LoginBean;
 import com.example.chidori.proxytestapp.Utils.Beans.RegisterBean;
-import com.example.chidori.proxytestapp.Utils.Beans.URLBean;
+import com.example.chidori.proxytestapp.Utils.Beans.UpdateBean;
 import com.google.gson.JsonObject;
 
 import org.greenrobot.eventbus.EventBus;
-import org.json.JSONObject;
-
-import java.lang.ref.WeakReference;
 
 import io.reactivex.Observer;
 import io.reactivex.Scheduler;
@@ -24,6 +23,7 @@ import io.reactivex.schedulers.Schedulers;
 
 public class UniversalPresenter extends BasePresenter{
 
+    //userid = 061583de-12be-4116-ac58-e7343aa7f024
     //登录
     public void LoginByRetrofit(String username, String password) {
 
@@ -140,24 +140,74 @@ public class UniversalPresenter extends BasePresenter{
         }
         ApiManager.getInstance()
                 .getRSSRetrofitService()
-                .requestRegister(wrapper)
-                .map(new Function<RegisterBean, RegisterBean.ResResultBean>() {
+                .requestUpdate(wrapper)
+                .map(new Function<UpdateBean, UpdateBean.ResResultBean>() {
                     @Override
-                    public RegisterBean.ResResultBean apply(RegisterBean bean) {
+                    public UpdateBean.ResResultBean apply(UpdateBean bean) {
                         return bean.getResResult();
                     }
                 }).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<RegisterBean.ResResultBean>() {
+                .subscribe(new Observer<UpdateBean.ResResultBean>() {
                     @Override
                     public void onSubscribe(Disposable d) {
                         addDisposable(d);
                     }
 
                     @Override
-                    public void onNext(RegisterBean.ResResultBean result) {
+                    public void onNext(UpdateBean.ResResultBean result) {
+                        EventBus.getDefault().post(new UpdateAccountEvent(result));
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        e.printStackTrace();
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
+    }
+
+    //创建收藏夹
+    public void CreateCollection(String name, String desc, int pbStatus, String userId) {
+
+        JsonObject wrapper = new JsonObject();
+        try {
+            JsonObject jsonObject = new JsonObject();
+            wrapper.add("reqParam", jsonObject);
+            jsonObject.addProperty("name", name);
+            jsonObject.addProperty("description", desc);
+            jsonObject.addProperty("publicStatus", pbStatus);
+
+            JsonObject userJson = new JsonObject();
+            userJson.addProperty("userId", userId);
+            wrapper.add("reqUserInfo", userJson);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        ApiManager.getInstance()
+                .getRSSRetrofitService()
+                .createCollection(wrapper)
+                .map(new Function<CreateCollectionBean, CreateCollectionBean.ResResultBean>() {
+                    @Override
+                    public CreateCollectionBean.ResResultBean apply(CreateCollectionBean bean) {
+                        return bean.getResResult();
+                    }
+                }).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<CreateCollectionBean.ResResultBean>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                        addDisposable(d);
+                    }
+
+                    @Override
+                    public void onNext(CreateCollectionBean.ResResultBean result) {
                         System.out.println("result: " + result.isIsSuccess());
-                        EventBus.getDefault().post(new RegisterEvent(result));
+                        EventBus.getDefault().post(new CreateCollectionEvent(result));
                     }
 
                     @Override

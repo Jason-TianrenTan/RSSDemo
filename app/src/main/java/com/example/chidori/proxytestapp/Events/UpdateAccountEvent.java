@@ -13,4 +13,8 @@ public class UpdateAccountEvent {
 
     private UpdateBean.ResResultBean result;
 
+    public UpdateAccountEvent(UpdateBean.ResResultBean bean) {
+        result = bean;
+    }
+
 }
