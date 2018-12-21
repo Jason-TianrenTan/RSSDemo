@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.EventLog;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -22,6 +23,7 @@ import com.example.chidori.proxytestapp.Events.LoginEvent;
 import com.example.chidori.proxytestapp.Events.URLEvent;
 import com.example.chidori.proxytestapp.Presenter.ReaderPresenterImpl;
 import com.example.chidori.proxytestapp.R;
+import com.example.chidori.proxytestapp.Utils.IO.UniversalPresenter;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -59,6 +61,15 @@ public class MainActivity extends AppCompatActivity implements Contract.IReaderV
         setSupportActionBar(toolbar);
         initPresenter();
         initWebView();
+
+        //测试
+        test();
+    }
+
+
+
+    private void test() {
+        new UniversalPresenter().LoginByRetrofit("Ophelia", "123456");
     }
 
     private void initPresenter() {

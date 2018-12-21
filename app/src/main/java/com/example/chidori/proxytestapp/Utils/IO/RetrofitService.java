@@ -1,17 +1,33 @@
 package com.example.chidori.proxytestapp.Utils.IO;
 
 import com.example.chidori.proxytestapp.Utils.Beans.LoginBean;
+import com.example.chidori.proxytestapp.Utils.Beans.RegisterBean;
 import com.example.chidori.proxytestapp.Utils.Beans.URLBean;
 
+
+import com.google.gson.JsonObject;
+
 import io.reactivex.Observable;
+import retrofit2.http.Body;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
+import retrofit2.http.Headers;
 import retrofit2.http.POST;
 
 public interface RetrofitService {
 
-    @FormUrlEncoded
-    @POST("login")//登录
-    Observable<LoginBean> requestLogin(@Field("username") String username, @Field("password") String password);
+    //登录
+    @Headers({
+            "Accept: application/json",
+    })
+    @POST("user/login")
+    Observable<LoginBean> requestLogin(@Body JsonObject jsonObject);
+
+    //注册
+    @Headers({
+            "Accept: application/json",
+    })
+    @POST("user/login")
+    Observable<RegisterBean> requestRegister(@Body JsonObject jsonObject);
 }

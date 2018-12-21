@@ -1,25 +1,11 @@
 package com.example.chidori.proxytestapp.Contract;
 
+import com.example.chidori.proxytestapp.Events.UpdateAccountEvent;
+import com.example.chidori.proxytestapp.Utils.Beans.LoginBean;
+import com.example.chidori.proxytestapp.Utils.Beans.RegisterBean;
+import com.example.chidori.proxytestapp.Utils.Beans.UpdateBean;
+
 public interface Contract {
-
-    //登录
-    interface ILoginView {
-
-    }
-
-    interface ILoginModel {
-
-        void doLogin(String username, String password);
-    }
-
-    interface ILoginPresenter {
-
-    }
-
-    interface ILoginCallback {
-        void Ok();
-        void Error(String errMsg);
-    }
 
 
     //阅读器
@@ -36,5 +22,49 @@ public interface Contract {
         String getTitle();
         String getNickname();
         void setTitle(String title);
+    }
+
+
+    //注册
+    interface IRegisterView {
+        void onRegisterResult(RegisterBean.ResResultBean resResultBean);
+    }
+
+    interface IRegisterModel {
+        void doRegister(String username, String password, String phone, String email, int sex);
+    }
+
+    interface IRegisterPresenter {
+
+    }
+
+
+    //登录
+    interface ILoginView {
+        void onLoginResult(LoginBean.ResResultBean resResultBean);
+    }
+
+    interface ILoginModel {
+
+        void doLogin(String username, String password);
+    }
+
+    interface ILoginPresenter {
+
+    }
+
+
+
+    //更新用户信息
+    interface IUpdateView {
+        void onUpdateResult(UpdateAccountEvent updateEvent);
+    }
+
+    interface IUpdateModel {
+        void doUpdateUserInfo(String username, String password, String phone, String email, int sex, String userId);
+    }
+
+    interface IUpdatePresenter {
+
     }
 }
