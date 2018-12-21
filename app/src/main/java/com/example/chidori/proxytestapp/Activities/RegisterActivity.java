@@ -5,16 +5,23 @@ import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
+
 
 import com.example.chidori.proxytestapp.R;
 
 
 public class RegisterActivity extends AppCompatActivity {
+
+    private Toolbar toolbar;
+    private TextView toolbarTitle;
 
     //private TextView tv_main_title;//标题
     //private TextView tv_back;//返回按钮
@@ -33,6 +40,28 @@ public class RegisterActivity extends AppCompatActivity {
         //设置此界面为竖屏
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         init();
+        setToolbar();
+        toolbarTitle.setText("注册账号");
+
+    }
+
+    private void setToolbar(){
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setTitle("");
+        toolbarTitle = (TextView) findViewById(R.id.toolbar_txt);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if(id==android.R.id.home){
+            finish();
+            return true;
+        }
+        else return false;
     }
 
     private void init() {
@@ -76,14 +105,12 @@ public class RegisterActivity extends AppCompatActivity {
                 } else if (!psw.equals(pswAgain)) {
                     Toast.makeText(RegisterActivity.this, "输入两次的密码不一样", Toast.LENGTH_SHORT).show();
                     return;
-
                     //从SharedPreferences中读取输入的用户名，判断SharedPreferences中是否有此用户名
                 } else if (isExistphoneNumber(phoneNumber)) {
                     Toast.makeText(RegisterActivity.this, "此手机号已经存在", Toast.LENGTH_SHORT).show();
                     return;
                 } else {
                     Toast.makeText(RegisterActivity.this, "注册成功", Toast.LENGTH_SHORT).show();
-
                     //注册成功后把账号传递到LoginActivity.java中
                     Intent data = new Intent();
                     data.putExtra("phonenumber", phoneNumber);

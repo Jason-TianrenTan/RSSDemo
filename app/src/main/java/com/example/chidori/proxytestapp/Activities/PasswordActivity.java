@@ -5,15 +5,20 @@ import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 import com.example.chidori.proxytestapp.R;
 
 public class PasswordActivity extends AppCompatActivity {
 
+    private Toolbar toolbar;
+    private TextView toolbarTitle;
     private Button btn_reset;//重置按钮
     private EditText phone_number,new_psw,new_psw_again;
     private String phoneNumber,psw,pswAgain;
@@ -25,7 +30,30 @@ public class PasswordActivity extends AppCompatActivity {
         //设置此界面为竖屏
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         init();
+        setToolbar();
+        toolbarTitle.setText("重置密码");
     }
+
+
+    private void setToolbar(){
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setTitle("");
+        toolbarTitle = (TextView) findViewById(R.id.toolbar_txt);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if(id==android.R.id.home){
+            finish();
+            return true;
+        }
+        else return false;
+    }
+
     private void init() {
 
         btn_reset = findViewById(R.id.btn_reset);
