@@ -56,8 +56,7 @@ public class PasswordActivity extends AppCompatActivity {
                     return;
                 } else {
                     Toast.makeText(PasswordActivity.this, "修改成功", Toast.LENGTH_SHORT).show();
-                    //保存手机号和密码到SharedPreferences中
-                    savePasswordInfo(phoneNumber,psw);
+
                     //重置成功后把账号传递到LoginActivity.java中
                     Intent data = new Intent();
                     data.putExtra("phonenumber", phoneNumber);
@@ -89,21 +88,4 @@ public class PasswordActivity extends AppCompatActivity {
         return has_phoneNumber;
     }
 
-    /**     * 保存账号和密码到SharedPreferences中SharedPreferences     */
-    private void savePasswordInfo(String phoneNumber,String psw){
-        String md5Psw = MD5Utils.md5(psw);
-        //把密码用MD5加密
-        //loginInfo表示文件名, mode_private SharedPreferences sp = getSharedPreferences( );
-        SharedPreferences sp=getSharedPreferences("loginInfo", MODE_PRIVATE);
-        //获取编辑器， SharedPreferences.Editor  editor -> sp.edit();
-        SharedPreferences.Editor editor=sp.edit();
-        //以手机号为key，密码为value保存在SharedPreferences中
-        // key,value,如键值对，editor.putString(用户名，密码）;
-        editor.remove(phoneNumber);
-        editor.commit();
-        editor.putString(phoneNumber, md5Psw);
-        //提交修改 editor.commit();
-        editor.commit();
-
-    }
 }

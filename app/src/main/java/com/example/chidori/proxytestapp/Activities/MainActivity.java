@@ -2,6 +2,7 @@ package com.example.chidori.proxytestapp.Activities;
 
 import android.app.AlertDialog;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.webkit.JsResult;
@@ -21,7 +22,7 @@ import org.greenrobot.eventbus.ThreadMode;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class MainActivity extends BaseActivity implements Contract.ILoginView {
+public class MainActivity extends AppCompatActivity {
 
 
     @BindView(R.id.webview)

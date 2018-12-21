@@ -3,17 +3,14 @@ package com.example.chidori.proxytestapp.Activities;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
 import android.widget.Toast;
-import com.example.chidori.proxytestapp.Activities.MD5Utils;
+
 import com.example.chidori.proxytestapp.R;
 
 
@@ -87,8 +84,6 @@ public class RegisterActivity extends AppCompatActivity {
                 } else {
                     Toast.makeText(RegisterActivity.this, "注册成功", Toast.LENGTH_SHORT).show();
 
-                    //保存账号、昵称和密码到SharedPreferences中
-                    saveRegisterInfo(phoneNumber, psw);
                     //注册成功后把账号传递到LoginActivity.java中
                     Intent data = new Intent();
                     data.putExtra("phonenumber", phoneNumber);
@@ -125,20 +120,4 @@ public class RegisterActivity extends AppCompatActivity {
         return has_phoneNumber;
     }
 
-    /**
-     * 保存账号和密码到SharedPreferences中SharedPreferences
-     */
-    private void saveRegisterInfo(String phoneNumber, String psw) {
-        String md5Psw = MD5Utils.md5(psw);
-        //把密码用MD5加密
-        //loginInfo表示文件名, mode_private SharedPreferences sp = getSharedPreferences( );
-        SharedPreferences sp = getSharedPreferences("loginInfo", MODE_PRIVATE);
-        //获取编辑器， SharedPreferences.Editor  editor -> sp.edit();
-        SharedPreferences.Editor editor = sp.edit();
-        //以手机号为key，密码为value保存在SharedPreferences中
-        // key,value,如键值对，editor.putString(用户名，密码）;
-        editor.putString(phoneNumber, md5Psw);
-        //提交修改 editor.commit();
-        editor.commit();
-    }
 }
