@@ -50,7 +50,7 @@ public interface Contract {
     }
 
     interface ILoginPresenter {
-
+        void doLogin(String username, String password);
     }
 
 

@@ -30,4 +30,10 @@ public class LoginPresenterImpl implements Contract.ILoginPresenter {
     public void onLoginCall(LoginEvent loginEvent) {
         //处理登录结果
     }
+
+
+    @Override
+    public void doLogin(String username, String password) {
+        model.doLogin(username, password);
+    }
 }
