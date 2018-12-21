@@ -1,6 +1,7 @@
 package com.example.chidori.proxytestapp.Utils.IO;
 
 import com.example.chidori.proxytestapp.Utils.Beans.CreateCollectionBean;
+import com.example.chidori.proxytestapp.Utils.Beans.EntryListBean;
 import com.example.chidori.proxytestapp.Utils.Beans.LoginBean;
 import com.example.chidori.proxytestapp.Utils.Beans.RegisterBean;
 import com.example.chidori.proxytestapp.Utils.Beans.URLBean;
@@ -44,6 +45,19 @@ public interface RetrofitService {
     @Headers({
             "Accept: application/json",
     })
-    @POST("/collection")
+    @POST("collection")
     Observable<CreateCollectionBean> createCollection(@Body JsonObject jsonObject);
+
+    //列出文章
+    @Headers({
+            "Accept: application/json",
+    })
+    @POST("entry/list/publicToAll")
+    Observable<EntryListBean> getPublicEntriesToAll(@Body JsonObject jsonObject);
+
+    @Headers({
+            "Accept: application/json",
+    })
+    @POST("entry/list/publicToGroup")
+    Observable<EntryListBean> getPublicEntriesToGroup(@Body JsonObject jsonObject);
 }

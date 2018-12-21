@@ -38,7 +38,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
-public class MainActivity extends AppCompatActivity implements Contract.IReaderView {
+public class ReaderActivity extends AppCompatActivity implements Contract.IReaderView {
 
 
     @BindView(R.id.webview) WebView webView;
