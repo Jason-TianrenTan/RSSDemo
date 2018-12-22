@@ -15,14 +15,18 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
+import com.example.chidori.proxytestapp.Contract.Contract;
+import com.example.chidori.proxytestapp.Presenter.RegisterPresenterImpl;
 import com.example.chidori.proxytestapp.R;
+import com.example.chidori.proxytestapp.Utils.Beans.RegisterBean;
 
 
-public class RegisterActivity extends AppCompatActivity {
+public class RegisterActivity extends AppCompatActivity implements Contract.IRegisterView{
 
     private Toolbar toolbar;
     private TextView toolbarTitle;
 
+    private RegisterPresenterImpl presenter;
     //private TextView tv_main_title;//标题
     //private TextView tv_back;//返回按钮
     private Button btn_register;//注册按钮
@@ -43,6 +47,8 @@ public class RegisterActivity extends AppCompatActivity {
         setToolbar();
         toolbarTitle.setText("注册账号");
 
+        presenter = new RegisterPresenterImpl();
+        presenter.attachView(this);
     }
 
     private void setToolbar(){
@@ -110,14 +116,7 @@ public class RegisterActivity extends AppCompatActivity {
                     Toast.makeText(RegisterActivity.this, "此手机号已经存在", Toast.LENGTH_SHORT).show();
                     return;
                 } else {
-                    Toast.makeText(RegisterActivity.this, "注册成功", Toast.LENGTH_SHORT).show();
-                    //注册成功后把账号传递到LoginActivity.java中
-                    Intent data = new Intent();
-                    data.putExtra("phonenumber", phoneNumber);
-                    setResult(RESULT_OK, data);
-                    //RESULT_OK为Activity系统常量，状态码为-1，
-                    // 表示此页面下的内容操作成功将data返回到上一页面，如果是用back返回过去的则不存在用setResult传递data值
-                    RegisterActivity.this.finish();
+                    presenter.doRegister(userName, psw, phoneNumber, "12345679@126.com", 1);
                 }
             }
         });
@@ -147,4 +146,9 @@ public class RegisterActivity extends AppCompatActivity {
         return has_phoneNumber;
     }
 
+    @Override
+    public void onRegisterResult(RegisterBean.ResResultBean resResultBean) {
+        //这里写注册成功的逻辑
+
+    }
 }

@@ -8,7 +8,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
-public class RegisterPresenterImpl {
+public class RegisterPresenterImpl implements Contract.IRegisterPresenter{
 
     private RegisterModelImpl model;
     //View
@@ -28,6 +28,11 @@ public class RegisterPresenterImpl {
     public void onRegisterCall(RegisterEvent registerEvent) {
         //处理注册结果
         registerView.onRegisterResult(registerEvent.getResult());
+    }
+
+    @Override
+    public void doRegister(String username, String password, String phone, String email, int sex) {
+        model.doRegister(username, password, phone, email, sex);
     }
 }
 

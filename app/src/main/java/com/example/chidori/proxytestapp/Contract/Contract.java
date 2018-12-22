@@ -35,7 +35,7 @@ public interface Contract {
     }
 
     interface IRegisterPresenter {
-
+        void doRegister(String username, String password, String phone, String email, int sex);
     }
 
 
