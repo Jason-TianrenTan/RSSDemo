@@ -76,6 +76,4 @@ public interface RetrofitService {
     })
     @POST("collection/clear")
     Observable<ModifyCollectionBean> addEntryToCollection(@Body JsonObject jsonObject);
-
-
 }

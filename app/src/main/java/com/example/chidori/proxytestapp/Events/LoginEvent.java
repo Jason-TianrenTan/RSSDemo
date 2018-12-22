@@ -8,9 +8,13 @@ public class LoginEvent {
         return result;
     }
 
-    private LoginBean.ResResultBean result;
-    public LoginEvent(LoginBean.ResResultBean bean) {
-        this.result = bean;
+    public void setResult(LoginBean.ResResultBean result) {
+        this.result = result;
     }
 
+    private LoginBean.ResResultBean result;
+
+    public LoginEvent(LoginBean.ResResultBean bean) {
+        result = bean;
+    }
 }

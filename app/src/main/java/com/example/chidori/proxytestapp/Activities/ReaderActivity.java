@@ -2,11 +2,9 @@ package com.example.chidori.proxytestapp.Activities;
 
 import android.app.AlertDialog;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.EventLog;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -19,21 +17,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.chidori.proxytestapp.Contract.Contract;
-import com.example.chidori.proxytestapp.Events.LoginEvent;
-import com.example.chidori.proxytestapp.Events.URLEvent;
 import com.example.chidori.proxytestapp.Presenter.ReaderPresenterImpl;
 import com.example.chidori.proxytestapp.R;
 import com.example.chidori.proxytestapp.Utils.IO.UniversalPresenter;
 
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
 
 public class ReaderActivity extends AppCompatActivity implements Contract.IReaderView {
 
@@ -53,7 +42,7 @@ public class ReaderActivity extends AppCompatActivity implements Contract.IReade
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_reader);
         ButterKnife.bind(this);
         setSupportActionBar(toolbar);
         initPresenter();

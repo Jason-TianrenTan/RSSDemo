@@ -1,3 +1,4 @@
+
 package com.example.chidori.proxytestapp.Model;
 
 import com.example.chidori.proxytestapp.Contract.Contract;

@@ -27,5 +27,7 @@ public class RegisterPresenterImpl {
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onRegisterCall(RegisterEvent registerEvent) {
         //处理注册结果
+        registerView.onRegisterResult(registerEvent.getResult());
     }
 }
+

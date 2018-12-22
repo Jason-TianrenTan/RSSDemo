@@ -39,9 +39,8 @@ public interface Contract {
     }
 
 
-    //登录
     interface ILoginView {
-        void onLoginResult(LoginBean.ResResultBean resResultBean);
+        void onLoginCall(LoginBean.ResResultBean bean);
     }
 
     interface ILoginModel {
@@ -52,8 +51,6 @@ public interface Contract {
     interface ILoginPresenter {
         void doLogin(String username, String password);
     }
-
-
 
     //更新用户信息
     interface IUpdateView {

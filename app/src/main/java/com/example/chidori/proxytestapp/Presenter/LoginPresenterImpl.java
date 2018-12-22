@@ -9,6 +9,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+
 public class LoginPresenterImpl implements Contract.ILoginPresenter {
 
     //Model
@@ -29,6 +30,7 @@ public class LoginPresenterImpl implements Contract.ILoginPresenter {
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onLoginCall(LoginEvent loginEvent) {
         //处理登录结果
+        loginView.onLoginCall(loginEvent.getResult());
     }
 
 
@@ -36,4 +38,5 @@ public class LoginPresenterImpl implements Contract.ILoginPresenter {
     public void doLogin(String username, String password) {
         model.doLogin(username, password);
     }
+
 }

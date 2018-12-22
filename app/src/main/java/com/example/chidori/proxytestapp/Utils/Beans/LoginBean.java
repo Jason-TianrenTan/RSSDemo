@@ -3,7 +3,7 @@ package com.example.chidori.proxytestapp.Utils.Beans;
 public class LoginBean {
 
     /**
-     * resId : 29297afb-f66c-4fda-81b3-0670d9b5e962
+     * resId : 51a669e6-8d42-46c8-88c0-eeb4479520a7
      * reqId : null
      * reqType : null
      * resResult : {"curData":{"userId":"061583de-12be-4116-ac58-e7343aa7f024","username":"abcd","sex":1,"phone":"12321","email":"1231126789@qq.com","avatar":null},"isSuccess":true,"message":"请求成功"}

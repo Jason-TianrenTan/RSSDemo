@@ -17,12 +17,13 @@ import com.google.gson.JsonObject;
 import org.greenrobot.eventbus.EventBus;
 
 import io.reactivex.Observer;
+import io.reactivex.Scheduler;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 
-public class UniversalPresenter extends BasePresenter{
+public class UniversalPresenter extends BasePresenter {
 
     //userid = 061583de-12be-4116-ac58-e7343aa7f024
     //collectionid = a6c04078-7da9-44e3-8817-0fb216cf830a
