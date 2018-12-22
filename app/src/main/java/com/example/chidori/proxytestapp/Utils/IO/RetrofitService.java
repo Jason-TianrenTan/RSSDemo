@@ -3,8 +3,8 @@ package com.example.chidori.proxytestapp.Utils.IO;
 import com.example.chidori.proxytestapp.Utils.Beans.CreateCollectionBean;
 import com.example.chidori.proxytestapp.Utils.Beans.EntryListBean;
 import com.example.chidori.proxytestapp.Utils.Beans.LoginBean;
+import com.example.chidori.proxytestapp.Utils.Beans.ModifyCollectionBean;
 import com.example.chidori.proxytestapp.Utils.Beans.RegisterBean;
-import com.example.chidori.proxytestapp.Utils.Beans.URLBean;
 
 
 import com.example.chidori.proxytestapp.Utils.Beans.UpdateBean;
@@ -12,8 +12,6 @@ import com.google.gson.JsonObject;
 
 import io.reactivex.Observable;
 import retrofit2.http.Body;
-import retrofit2.http.Field;
-import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.Headers;
 import retrofit2.http.POST;
@@ -52,12 +50,32 @@ public interface RetrofitService {
     @Headers({
             "Accept: application/json",
     })
-    @POST("entry/list/publicToAll")
+    @GET("entry/list/publicToAll")
     Observable<EntryListBean> getPublicEntriesToAll(@Body JsonObject jsonObject);
 
     @Headers({
             "Accept: application/json",
     })
-    @POST("entry/list/publicToGroup")
+    @GET("entry/list/publicToGroup")
     Observable<EntryListBean> getPublicEntriesToGroup(@Body JsonObject jsonObject);
+
+    @Headers({
+            "Accept: application/json",
+    })
+    @POST("collection/changeStatus")
+    Observable<ModifyCollectionBean> changeCollectionStatus(@Body JsonObject jsonObject);
+
+    @Headers({
+            "Accept: application/json",
+    })
+    @POST("collection/clear")
+    Observable<ModifyCollectionBean> clearCollection(@Body JsonObject jsonObject);
+
+    @Headers({
+            "Accept: application/json",
+    })
+    @POST("collection/clear")
+    Observable<ModifyCollectionBean> addEntryToCollection(@Body JsonObject jsonObject);
+
+
 }

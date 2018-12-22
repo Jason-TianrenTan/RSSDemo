@@ -5,8 +5,6 @@ import com.example.chidori.proxytestapp.Events.URLEvent;
 import com.example.chidori.proxytestapp.Utils.IO.UniversalPresenter;
 
 import org.greenrobot.eventbus.EventBus;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Request;

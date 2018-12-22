@@ -28,9 +28,6 @@ import com.example.chidori.proxytestapp.Utils.IO.UniversalPresenter;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -69,7 +66,7 @@ public class ReaderActivity extends AppCompatActivity implements Contract.IReade
 
 
     private void test() {
-        new UniversalPresenter().LoginByRetrofit("Ophelia", "123456");
+        UniversalPresenter testPresenter = new UniversalPresenter();
     }
 
     private void initPresenter() {
