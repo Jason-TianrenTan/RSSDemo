@@ -76,8 +76,6 @@ public class LoginActivity extends AppCompatActivity implements Contract.ILoginV
                  //开始登录，获取手机号和密码 getText().toString().trim();
                  phonenum = et_phonenum.getText().toString().trim();
                  psw = et_psw.getText().toString().trim();
-                 //对当前用户输入的密码进行MD5加密再进行比对判断, MD5Utils.md5( ); psw 进行加密判断是否一致
-                 System.out.println("Loggin");
                  if (TextUtils.isEmpty(phonenum)) {
                      Toast.makeText(LoginActivity.this, "请输入手机号", Toast.LENGTH_SHORT).show();
                      return;
