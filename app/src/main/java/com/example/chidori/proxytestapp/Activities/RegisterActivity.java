@@ -148,7 +148,7 @@ public class RegisterActivity extends AppCompatActivity implements Contract.IReg
 
     @Override
     public void onRegisterResult(RegisterBean.ResResultBean resResultBean) {
-        //这里写注册成功的逻辑
-
+        //这里写处理注册结果的逻辑
+        //具体参考RegisterBean文件
     }
 }
