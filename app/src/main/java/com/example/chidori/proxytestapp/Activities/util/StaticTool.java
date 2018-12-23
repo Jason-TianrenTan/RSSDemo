@@ -20,7 +20,7 @@ public class StaticTool {
     public static List<GroupCard> groupCardList = getTestGroupCardList();
     public static List<SourceCard> sourceCardList = getTestSourceCardList();
 
-    public static List<EntryCard> getTestIntroCardList(){
+    public static List<EntryCard> getTestEntryCardList(){
         List<EntryCard> entryCardList = new ArrayList<>();
         for(int i=0;i<10;i++) {
             entryCardList.add(new EntryCard("id"+i,"title"+i,"detail"+i));

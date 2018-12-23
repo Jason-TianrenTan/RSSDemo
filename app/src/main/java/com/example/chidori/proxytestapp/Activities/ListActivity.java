@@ -6,8 +6,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -36,7 +34,6 @@ public class ListActivity extends AppCompatActivity {
     public static final int collection = 1;
     public static final int source = 2;
     public static final int entry = 3;
-    public static final int group_collection = 4;
 
     private Toolbar toolbar;
     private TextView toolbarTitle;
@@ -69,11 +66,8 @@ public class ListActivity extends AppCompatActivity {
         // 绑定toolbar跟menu
         getMenuInflater().inflate(R.menu.toolbar, menu);
 
-        if(type == entry || type == group_collection) toolbar.getMenu().findItem(R.id.add).setVisible(false);
+        if(type == entry) toolbar.getMenu().findItem(R.id.add).setVisible(false);
         else toolbar.getMenu().findItem(R.id.add).setVisible(true);
-
-        if(type == group_collection) toolbar.getMenu().findItem(R.id.detail).setVisible(true);
-        else toolbar.getMenu().findItem(R.id.detail).setVisible(false);
 
         return true;
     }
@@ -187,28 +181,21 @@ public class ListActivity extends AppCompatActivity {
             }
             case collection:{
                 toolbarTitle.setText("我的收藏");
-                List<CollectionCard> cardList = StaticTool.getTestCollectionCardList();
-                CollectionCardRecyclerAdapter recyclerAdapter = new CollectionCardRecyclerAdapter(cardList);
-                StaticTool.setSourceCardRecyclerView(recyclerAdapter,view);
-                break;
-            }
-            case group_collection:{
-                toolbarTitle.setText(getIntent().getStringExtra("title"));
-                List<CollectionCard> cardList = StaticTool.getTestCollectionCardList();
-                CollectionCardRecyclerAdapter recyclerAdapter = new CollectionCardRecyclerAdapter(cardList);
+                List<CollectionCard> cardList = StaticTool.collectionCardList;
+                CollectionCardRecyclerAdapter recyclerAdapter = new CollectionCardRecyclerAdapter(cardList,true);
                 StaticTool.setSourceCardRecyclerView(recyclerAdapter,view);
                 break;
             }
             case source:{
                 toolbarTitle.setText("我的订阅");
-                List<SourceCard> cardList = StaticTool.getTestSourceCardList();
+                List<SourceCard> cardList = StaticTool.sourceCardList;
                 SourceCardRecyclerAdapter recyclerAdapter = new SourceCardRecyclerAdapter(cardList);
                 StaticTool.setSourceCardRecyclerView(recyclerAdapter,view);
                 break;
             }
             case entry:{
                 toolbarTitle.setText(getIntent().getStringExtra("title"));
-                List<EntryCard> cardList = StaticTool.getTestIntroCardList();
+                List<EntryCard> cardList = StaticTool.getTestEntryCardList();
                 EntryCardRecyclerAdapter recyclerAdapter = new EntryCardRecyclerAdapter(cardList);
                 StaticTool.setSourceCardRecyclerView(recyclerAdapter,view);
                 break;

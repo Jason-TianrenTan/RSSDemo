@@ -1,6 +1,5 @@
 package com.example.chidori.proxytestapp.Activities;
 
-import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.net.Uri;
@@ -19,13 +18,11 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.PopupMenu;
-import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.chidori.proxytestapp.Activities.entity.CollectionCard;
 import com.example.chidori.proxytestapp.Activities.entity.SourceCard;
-import com.example.chidori.proxytestapp.Activities.util.navigationFragment;
+import com.example.chidori.proxytestapp.Activities.util.NavigationFragment;
 import com.example.chidori.proxytestapp.Activities.util.StaticTool;
 import com.example.chidori.proxytestapp.R;
 
@@ -39,9 +36,9 @@ public class MenuActivity extends AppCompatActivity {
     private static BottomNavigationView navigation;
     private static FragmentManager fragmentManager;
     private static int current;
-    private static navigationFragment home;
-    private static navigationFragment group;
-    private static navigationFragment user;
+    private static NavigationFragment home;
+    private static NavigationFragment group;
+    private static NavigationFragment user;
     private boolean isExit=false;
     private static String path;
 
@@ -53,7 +50,7 @@ public class MenuActivity extends AppCompatActivity {
 
         current = 0;
         toolbarTitle.setText("主页");
-        home = navigationFragment.newInstance(current);
+        home = NavigationFragment.newInstance(current);
         fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction().add(R.id.menu_container, home).show(home).commit();
 
@@ -184,7 +181,7 @@ public class MenuActivity extends AppCompatActivity {
                 if(home!=null) transaction.hide(home);
                 if(user!=null) transaction.hide(user);
                 if (group == null) {
-                    group = navigationFragment.newInstance(current);
+                    group = NavigationFragment.newInstance(current);
                     transaction.add(R.id.menu_container,group).commit();
                 }
                 else transaction.show(group).commit();
@@ -198,7 +195,7 @@ public class MenuActivity extends AppCompatActivity {
                 if(home!=null) transaction.hide(home);
                 if(group!=null) transaction.hide(group);
                 if (user == null) {
-                    user = navigationFragment.newInstance(current);
+                    user = NavigationFragment.newInstance(current);
                     transaction.add(R.id.menu_container,user).commit();
                 }
                 else transaction.show(user).commit();

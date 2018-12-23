@@ -13,6 +13,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.chidori.proxytestapp.Activities.ListActivity;
+import com.example.chidori.proxytestapp.Activities.TabActivity;
 import com.example.chidori.proxytestapp.Activities.entity.GroupCard;
 import com.example.chidori.proxytestapp.R;
 
@@ -56,8 +57,7 @@ public class GroupCardRecyclerAdapter extends RecyclerView.Adapter<GroupCardRecy
         holder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
-                Intent intent = new Intent(context,ListActivity.class);
-                intent.putExtra("type",ListActivity.group_collection);
+                Intent intent = new Intent(context,TabActivity.class);
                 intent.putExtra("title",groupCard.getTitle());
                 intent.putExtra("id", groupCard.getId());
                 Toast.makeText(context, groupCard.getId(), Toast.LENGTH_SHORT).show();

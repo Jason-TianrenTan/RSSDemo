@@ -9,11 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.chidori.proxytestapp.Activities.entity.CollectionCard;
-import com.example.chidori.proxytestapp.Activities.entity.SourceCard;
 import com.example.chidori.proxytestapp.R;
-
-import java.util.List;
 
 
 public class TabFragment extends Fragment {
@@ -21,13 +17,34 @@ public class TabFragment extends Fragment {
     private int option;
     private SwipeRefreshLayout swipeRefresh;
     private RecyclerView.Adapter recyclerAdapter;
+    public static final int source = 0;
+    public static final int publicEntry = 1;
+    public static final int group_collection = 2;
+    public static final int group_entry = 3;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_recycler_swipe, container, false);
 
-        if(option == 0) recyclerAdapter = new SourceCardRecyclerAdapter(StaticTool.sourceCardList);
-        else recyclerAdapter = new CollectionCardRecyclerAdapter(StaticTool.getTestCollectionCardList());
+        switch (option){
+            case source:{
+                recyclerAdapter = new SourceCardRecyclerAdapter(StaticTool.sourceCardList);
+                break;
+            }
+            case publicEntry:{
+                recyclerAdapter = new EntryCardRecyclerAdapter(StaticTool.getTestEntryCardList());
+                break;
+            }
+            case group_collection:{
+                recyclerAdapter = new CollectionCardRecyclerAdapter(StaticTool.getTestCollectionCardList(),false);
+                break;
+            }
+            case group_entry:{
+                recyclerAdapter = new EntryCardRecyclerAdapter(StaticTool.getTestEntryCardList());
+                break;
+            }
+        }
+
         StaticTool.setSourceCardRecyclerView(recyclerAdapter,view);
 
         swipeRefresh = (SwipeRefreshLayout)view.findViewById(R.id.swipe_refresh);
@@ -49,8 +66,24 @@ public class TabFragment extends Fragment {
                 getActivity().runOnUiThread(new Runnable(){
                     @Override
                     public void run(){
-                        if(option == 0) recyclerAdapter = new SourceCardRecyclerAdapter(StaticTool.sourceCardList);
-                        else recyclerAdapter = new CollectionCardRecyclerAdapter(StaticTool.getTestCollectionCardList());
+                        switch (option){
+                            case source:{
+                                recyclerAdapter = new SourceCardRecyclerAdapter(StaticTool.sourceCardList);
+                                break;
+                            }
+                            case publicEntry:{
+                                recyclerAdapter = new EntryCardRecyclerAdapter(StaticTool.getTestEntryCardList());
+                                break;
+                            }
+                            case group_collection:{
+                                recyclerAdapter = new CollectionCardRecyclerAdapter(StaticTool.getTestCollectionCardList(),false);
+                                break;
+                            }
+                            case group_entry:{
+                                recyclerAdapter = new EntryCardRecyclerAdapter(StaticTool.getTestEntryCardList());
+                                break;
+                            }
+                        }
                         swipeRefresh.setRefreshing(false);
                     }
                 });

@@ -6,8 +6,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -23,10 +21,10 @@ import com.example.chidori.proxytestapp.R;
 
 import java.util.List;
 
-public class navigationFragment extends Fragment {
+public class NavigationFragment extends Fragment {
 
-    public static navigationFragment newInstance(int info) {
-        navigationFragment fragment = new navigationFragment();
+    public static NavigationFragment newInstance(int info) {
+        NavigationFragment fragment = new NavigationFragment();
         Bundle args = new Bundle();
         args.putInt("info", info);
         fragment.setArguments(args);
@@ -70,11 +68,11 @@ public class navigationFragment extends Fragment {
         String[] tabName = {"已订阅","更多"};
 
         TabFragment tab1 = new TabFragment();
-        tab1.setOption(0);
+        tab1.setOption(TabFragment.source);
         tab_adapter.addFragment(tab1);
         tabs.addTab(tabs.newTab());
         TabFragment tab2 = new TabFragment();
-        tab2.setOption(1);
+        tab2.setOption(TabFragment.publicEntry);
         tab_adapter.addFragment(tab2);
         tabs.addTab(tabs.newTab());
 

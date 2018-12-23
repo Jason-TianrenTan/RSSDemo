@@ -28,6 +28,7 @@
         <activity android:name=".Activities.GroupNewActivity" />
         <activity android:name=".Activities.GroupDetailActivity" />
         <activity android:name=".Activities.MainActivity" />
+        <activity android:name=".Activities.TabActivity" />
 
     </application>
 

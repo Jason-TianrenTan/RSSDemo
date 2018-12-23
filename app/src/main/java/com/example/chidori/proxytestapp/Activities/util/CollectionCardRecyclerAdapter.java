@@ -24,6 +24,7 @@ import java.util.List;
 public class CollectionCardRecyclerAdapter extends RecyclerView.Adapter<CollectionCardRecyclerAdapter.ViewHolder> {
     private Context context;
     private List<CollectionCard> cardList;
+    private boolean option;
 
     static class ViewHolder extends RecyclerView.ViewHolder{
 
@@ -39,8 +40,9 @@ public class CollectionCardRecyclerAdapter extends RecyclerView.Adapter<Collecti
         }
     }
 
-    public CollectionCardRecyclerAdapter(List<CollectionCard> list) {
+    public CollectionCardRecyclerAdapter(List<CollectionCard> list,boolean option) {
         this.cardList = list;
+        this.option = option;
     }
 
     @NonNull
@@ -70,8 +72,10 @@ public class CollectionCardRecyclerAdapter extends RecyclerView.Adapter<Collecti
         holder.cardView.setOnLongClickListener(new View.OnLongClickListener(){
             @Override
             public boolean onLongClick(View v) {
-                setDeleteDialog(position);
-                Toast.makeText(context, collectionCard.getId(), Toast.LENGTH_SHORT).show();
+                if(option){
+                    setDeleteDialog(position);
+                    Toast.makeText(context, collectionCard.getId(), Toast.LENGTH_SHORT).show();
+                }
                 return true;
             }
         });
