@@ -22,7 +22,7 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/card_star_id"
+            android:id="@+id/card_source_id"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="id"

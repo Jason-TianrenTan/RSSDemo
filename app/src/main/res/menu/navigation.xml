@@ -12,11 +12,6 @@
         android:title="group" />
 
     <item
-        android:id="@+id/navigation_star"
-        android:icon="@drawable/star"
-        android:title="star" />
-
-    <item
         android:id="@+id/navigation_user"
         android:icon="@drawable/user"
         android:title="user" />

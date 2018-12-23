@@ -23,10 +23,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Activities.ElseActivity"
-            tools:ignore="InnerclassSeparator" />
         <activity android:name=".Activities.ListActivity"
             tools:ignore="InnerclassSeparator" />
+        <activity android:name=".Activities.GroupNewActivity" />
+        <activity android:name=".Activities.GroupDetailActivity" />
+        <activity android:name=".Activities.MainActivity" />
 
     </application>
 

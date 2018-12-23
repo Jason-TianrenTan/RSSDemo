@@ -1,21 +1,9 @@
 package com.example.chidori.proxytestapp.Activities;
 
-import android.Manifest;
-import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.ContentResolver;
-import android.content.ContentUris;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.pm.PackageManager;
-import android.database.Cursor;
 import android.net.Uri;
-import android.os.Build;
-import android.os.Environment;
-import android.provider.DocumentsContract;
-import android.provider.MediaStore;
-import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -31,18 +19,16 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.PopupMenu;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.chidori.proxytestapp.Activities.entity.IntroCard;
-import com.example.chidori.proxytestapp.Activities.entity.StarCard;
+import com.example.chidori.proxytestapp.Activities.entity.CollectionCard;
+import com.example.chidori.proxytestapp.Activities.entity.SourceCard;
 import com.example.chidori.proxytestapp.Activities.util.navigationFragment;
-import com.example.chidori.proxytestapp.Activities.util.staticData;
+import com.example.chidori.proxytestapp.Activities.util.StaticTool;
 import com.example.chidori.proxytestapp.R;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -55,7 +41,6 @@ public class MenuActivity extends AppCompatActivity {
     private static int current;
     private static navigationFragment home;
     private static navigationFragment group;
-    private static navigationFragment star;
     private static navigationFragment user;
     private boolean isExit=false;
     private static String path;
@@ -86,7 +71,6 @@ public class MenuActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // 绑定toolbar跟menu
         getMenuInflater().inflate(R.menu.toolbar, menu);
-        toolbar.getMenu().findItem(R.id.detail).setVisible(false);
         toolbar.getMenu().findItem(R.id.add).setVisible(true);
         return true;
     }
@@ -100,12 +84,8 @@ public class MenuActivity extends AppCompatActivity {
                     return true;
                 }
                 case 1:{
-                    Intent intent = new Intent(MenuActivity.this, ElseActivity.class);
+                    Intent intent = new Intent(MenuActivity.this, GroupNewActivity.class);
                     startActivity(intent);
-                    return true;
-                }
-                case 2:{
-                    setInputDialog("新建收藏夹","请输入新收藏夹名称");
                     return true;
                 }
             }
@@ -128,10 +108,8 @@ public class MenuActivity extends AppCompatActivity {
                     case R.id.input_opml:{
                         Toast.makeText(MenuActivity.this, "opml文件", Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-                        //*****************************************
                         //在这里选择筛选的文件类型
-                        //*****************************************
-                        intent.setType("*/*");//设置类型，我这里是任意类型，任意后缀的可以这样写。
+                        intent.setType("*/*");//设置类型
                         intent.addCategory(Intent.CATEGORY_OPENABLE);
                         startActivityForResult(intent, 1);
                         return true;
@@ -156,33 +134,25 @@ public class MenuActivity extends AppCompatActivity {
 
     private void setInputDialog(String title,String message){
         Context context = this;
-        EditText et = new EditText(context);
-        new AlertDialog.Builder(context)
-                .setTitle(title)
-                .setMessage(message)
-                .setView(et)
-                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        String input = et.getText().toString();
-                        if (input.equals("")) {
-                            Toast.makeText(getBaseContext(), "输入不能为空", Toast.LENGTH_SHORT).show();
-                        }
-                        else {
-                            switch (current){
-                                case 0:{
-                                    staticData.WDDRList.add(new IntroCard(input,"default","default"));
-                                    break;
-                                }
-                                case 2:{
-                                    staticData.SCJList.add(new StarCard(input));
-                                    break;
-                                }
-                            }
-                        }
-                    }
-                })
-                .setNegativeButton("取消", null)
-                .show();
+
+        android.support.v7.app.AlertDialog.Builder dialog = new android.support.v7.app.AlertDialog.Builder(context);
+        dialog.setTitle(title).setMessage(message);
+        View v = View.inflate(context,R.layout.view_dialog_source, null);
+        dialog.setView(v);
+
+        View finalV = v;
+        dialog.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                EditText et = (EditText) finalV.findViewById(R.id.dialog_input);
+                String input = et.getText().toString();
+                if (input.equals("")) {
+                    Toast.makeText(getBaseContext(), "输入不能为空", Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    StaticTool.sourceCardList.add(new SourceCard("id",input));
+                }
+            }
+        }).setNegativeButton("取消", null).show();
     }
 
     private void setNavigation(){
@@ -195,11 +165,6 @@ public class MenuActivity extends AppCompatActivity {
         });
     }
 
-    public static void changeFragment(int itemId){
-        navigation.setSelectedItemId(itemId);
-        setCurrent(itemId);
-    }
-
     private static boolean setCurrent(int itemId){
         FragmentTransaction transaction = fragmentManager.beginTransaction();
         switch (itemId) {
@@ -207,10 +172,8 @@ public class MenuActivity extends AppCompatActivity {
                 if (current == 0) return true;
                 current = 0;
                 if(group!=null) transaction.hide(group);
-                if(star!=null) transaction.hide(star);
                 if(user!=null) transaction.hide(user);
                 transaction.show(home).commit();
-                home.atHomePage();
                 toolbarTitle.setText("主页");
                 toolbar.getMenu().findItem(R.id.add).setVisible(true);
                 return true;
@@ -219,7 +182,6 @@ public class MenuActivity extends AppCompatActivity {
                 if (current == 1) return true;
                 current = 1;
                 if(home!=null) transaction.hide(home);
-                if(star!=null) transaction.hide(star);
                 if(user!=null) transaction.hide(user);
                 if (group == null) {
                     group = navigationFragment.newInstance(current);
@@ -230,27 +192,11 @@ public class MenuActivity extends AppCompatActivity {
                 toolbar.getMenu().findItem(R.id.add).setVisible(true);
                 return true;
 
-            case R.id.navigation_star:
+            case R.id.navigation_user:
                 if (current == 2) return true;
                 current = 2;
                 if(home!=null) transaction.hide(home);
                 if(group!=null) transaction.hide(group);
-                if(user!=null) transaction.hide(user);
-                if (star == null) {
-                    star = navigationFragment.newInstance(current);
-                    transaction.add(R.id.menu_container,star).commit();
-                }
-                else transaction.show(star).commit();
-                toolbarTitle.setText("我的收藏");
-                toolbar.getMenu().findItem(R.id.add).setVisible(true);
-                return true;
-
-            case R.id.navigation_user:
-                if (current == 3) return true;
-                current = 3;
-                if(home!=null) transaction.hide(home);
-                if(group!=null) transaction.hide(group);
-                if(star!=null) transaction.hide(star);
                 if (user == null) {
                     user = navigationFragment.newInstance(current);
                     transaction.add(R.id.menu_container,user).commit();
