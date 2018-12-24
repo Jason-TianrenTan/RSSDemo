@@ -58,7 +58,15 @@ public class AddSourceBean {
 
     public static class ResResultBean {
         /**
-         * curData : {"sourceId":"6ef9bbab-398d-4633-9d5a-505eca502964","name":"test","description":"testdesc","userId":"061583de-12be-4116-ac58-e7343aa7f024","link":"https://www.iteye.com/rss/news","file":null,"type":1,"preset":null,"createTime":"12/22/18 3:44 PM","updateTime":"12/22/18 3:44 PM","remark":null}
+         * curData : {"sourceId":"6ef9bbab-398d-4633-9d5a-505eca502964",
+         * "name":"test",
+         * "description":"testdesc",
+         * "userId":"061583de-12be-4116-ac58-e7343aa7f024",
+         * "link":"https://www.iteye.com/rss/news",
+         * "file":null,"type":1,"preset":null,
+         * "createTime":"12/22/18 3:44 PM","
+         * updateTime":"12/22/18 3:44 PM",
+         * "remark":null}
          * isSuccess : true
          * message : 请求成功
          */
