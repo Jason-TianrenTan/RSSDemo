@@ -22,6 +22,7 @@ import com.example.chidori.proxytestapp.Utils.Beans.SourceListBean;
 import com.example.chidori.proxytestapp.Utils.Beans.UpdateBean;
 import com.example.chidori.proxytestapp.Utils.Beans.UpdateCollectionBean;
 import com.example.chidori.proxytestapp.Utils.Beans.UserDetailBean;
+import com.example.chidori.proxytestapp.Utils.Beans.UserGroupsBean;
 import com.google.gson.JsonObject;
 
 import java.util.Map;
@@ -241,6 +242,14 @@ public interface RetrofitService {
     })
     @GET("group/detail/name")
     Observable<SearchGroupBean> searchGroup(@QueryMap Map<String, String> map);
+
+
+    //根据userid获取所在小组
+    @Headers({
+            "Accept: application/json",
+    })
+    @GET("group/detail/user")
+    Observable<UserGroupsBean> GetUserGroups(@QueryMap Map<String, String> map);
 
 
     //获取小组成员信息

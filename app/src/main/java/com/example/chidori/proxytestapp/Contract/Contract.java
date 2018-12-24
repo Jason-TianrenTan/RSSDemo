@@ -105,6 +105,8 @@ public interface Contract {
         void onEntriesByCollectionRetrieved(String status);
         void onEntryAddedToCollection(String status);
         void onCollectionCreated(String status);
+
+        void onUserGroupsRetrieved(String status);
     }
 
     interface IListModel {
@@ -116,6 +118,8 @@ public interface Contract {
         void doGetEntriesByCollection(String collectionId);
         void doAddEntryToCollection(String collectionId, String entryId);
         void doCreateCollection(String name, String desc, int publicStatus);
+
+        void doGetUserGroups(String userId);
     }
 
     interface IListPresenter {
@@ -127,6 +131,8 @@ public interface Contract {
         void doGetEntriesByCollection(String collectionId);
         void doAddEntryToCollection(String collectionId, String entryId);
         void doCreateCollection(String name, String desc, int publicStatus);
+
+        void doGetUserGroups(String userId);
     }
 
 
@@ -232,5 +238,6 @@ public interface Contract {
         void doGetGroupMembers(String groupId);
         void doGetUserInfo(String userId);//根据UserId获取成员信息
     }
+
 
 }
