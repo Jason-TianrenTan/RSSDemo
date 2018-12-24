@@ -15,14 +15,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.chidori.proxytestapp.Activities.ListActivity;
-import com.example.chidori.proxytestapp.Activities.entity.SourceCard;
+import com.example.chidori.proxytestapp.Activities.entity.Source;
 import com.example.chidori.proxytestapp.R;
 
 import java.util.List;
 
 public class SourceCardRecyclerAdapter extends RecyclerView.Adapter<SourceCardRecyclerAdapter.ViewHolder> {
     private Context context;
-    private List<SourceCard> cardList;
+    private List<Source> cardList;
 
     static class ViewHolder extends RecyclerView.ViewHolder{
 
@@ -36,7 +36,7 @@ public class SourceCardRecyclerAdapter extends RecyclerView.Adapter<SourceCardRe
         }
     }
 
-    public SourceCardRecyclerAdapter(List<SourceCard> list) {
+    public SourceCardRecyclerAdapter(List<Source> list) {
         this.cardList = list;
     }
 
@@ -52,15 +52,16 @@ public class SourceCardRecyclerAdapter extends RecyclerView.Adapter<SourceCardRe
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        final SourceCard starCard = cardList.get(position);
+        final Source sourceCard = cardList.get(position);
         holder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
                 Intent intent = new Intent(context, ListActivity.class);
-                intent.putExtra("type",ListActivity.entry);
-                intent.putExtra("id", starCard.getId());
-                intent.putExtra("title",starCard.getTitle());
-                Toast.makeText(context, starCard.getId(), Toast.LENGTH_SHORT).show();
+                intent.putExtra("type",ListActivity.source_entry);
+                intent.putExtra("id", sourceCard.getSourceId());
+                intent.putExtra("title",sourceCard.getName());
+                StaticTool.opId=sourceCard.getSourceId();
+                StaticTool.opPosition=position;
                 context.startActivity(intent);
             }
         });
@@ -68,16 +69,18 @@ public class SourceCardRecyclerAdapter extends RecyclerView.Adapter<SourceCardRe
             @Override
             public boolean onLongClick(View v) {
                 setDialog(position);
+                StaticTool.opId=sourceCard.getSourceId();
+                StaticTool.opPosition=position;
                 return true;
             }
         });
-        holder.card_id.setText(starCard.getId());
+        holder.card_id.setText(sourceCard.getName());
     }
 
     private void setDialog(int position){
         new AlertDialog.Builder(context)
                 .setTitle("提示")
-                .setMessage("是否取消订阅:"+cardList.get(position).getId())
+                .setMessage("是否取消订阅:"+cardList.get(position).getName())
                 .setPositiveButton("确定", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         StaticTool.sourceCardList.remove(position);

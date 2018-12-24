@@ -10,14 +10,14 @@ import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.TextView;
 
-import com.example.chidori.proxytestapp.Activities.entity.CollectionCard;
+import com.example.chidori.proxytestapp.Activities.entity.Collection;
 import com.example.chidori.proxytestapp.R;
 
 import java.util.List;
 
 public class CollectionRadioRecyclerAdapter extends RecyclerView.Adapter<CollectionRadioRecyclerAdapter.ViewHolder> {
     private Context context;
-    private List<CollectionCard> cardList;
+    private List<Collection> cardList;
     private int checkedPosition = -1;
     private RadioButton checked_btn;
 
@@ -37,7 +37,7 @@ public class CollectionRadioRecyclerAdapter extends RecyclerView.Adapter<Collect
         }
     }
 
-    public CollectionRadioRecyclerAdapter(List<CollectionCard> list) {
+    public CollectionRadioRecyclerAdapter(List<Collection> list) {
         this.cardList = list;
     }
 
@@ -53,7 +53,7 @@ public class CollectionRadioRecyclerAdapter extends RecyclerView.Adapter<Collect
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        final CollectionCard collectionCard = cardList.get(position);
+        final Collection collectionCard = cardList.get(position);
         holder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
@@ -65,13 +65,13 @@ public class CollectionRadioRecyclerAdapter extends RecyclerView.Adapter<Collect
                 }
             }
         });
-        holder.card_title.setText(collectionCard.getTitle());
-        holder.card_level.setText(collectionCard.getLevel());
+        holder.card_title.setText(collectionCard.getName());
+        holder.card_level.setText(collectionCard.getPublicStatus());
     }
 
     public String getCheckedCollectionId() {
         if(checkedPosition == -1) return null;
-        else return cardList.get(checkedPosition).getId();
+        else return cardList.get(checkedPosition).getCollectionId();
     }
 
     @Override

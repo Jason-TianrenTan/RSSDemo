@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.support.annotation.NonNull;
 
 import android.support.v7.widget.CardView;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,14 +15,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.chidori.proxytestapp.Activities.ListActivity;
-import com.example.chidori.proxytestapp.Activities.entity.CollectionCard;
+import com.example.chidori.proxytestapp.Activities.entity.Collection;
 import com.example.chidori.proxytestapp.R;
 
 import java.util.List;
 
 public class CollectionCardRecyclerAdapter extends RecyclerView.Adapter<CollectionCardRecyclerAdapter.ViewHolder> {
     private Context context;
-    private List<CollectionCard> cardList;
+    private List<Collection> cardList;
     private boolean option;
 
     static class ViewHolder extends RecyclerView.ViewHolder{
@@ -40,7 +39,7 @@ public class CollectionCardRecyclerAdapter extends RecyclerView.Adapter<Collecti
         }
     }
 
-    public CollectionCardRecyclerAdapter(List<CollectionCard> list,boolean option) {
+    public CollectionCardRecyclerAdapter(List<Collection> list,boolean option) {
         this.cardList = list;
         this.option = option;
     }
@@ -57,15 +56,17 @@ public class CollectionCardRecyclerAdapter extends RecyclerView.Adapter<Collecti
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        final CollectionCard collectionCard = cardList.get(position);
+        final Collection collectionCard = cardList.get(position);
         holder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
                 Intent intent = new Intent(context, ListActivity.class);
-                intent.putExtra("type",ListActivity.entry);
-                intent.putExtra("title",collectionCard.getTitle());
-                intent.putExtra("id", collectionCard.getId());
-                Toast.makeText(context, collectionCard.getId(), Toast.LENGTH_SHORT).show();
+                intent.putExtra("type",ListActivity.collection_entry);
+                intent.putExtra("title",collectionCard.getName());
+                intent.putExtra("id", collectionCard.getCollectionId());
+                Toast.makeText(context, collectionCard.getCollectionId(), Toast.LENGTH_SHORT).show();
+                StaticTool.opPosition=position;
+                StaticTool.opId=collectionCard.getCollectionId();
                 context.startActivity(intent);
             }
         });
@@ -73,24 +74,24 @@ public class CollectionCardRecyclerAdapter extends RecyclerView.Adapter<Collecti
             @Override
             public boolean onLongClick(View v) {
                 if(option){
-                    setDeleteDialog(position);
-                    Toast.makeText(context, collectionCard.getId(), Toast.LENGTH_SHORT).show();
+                    StaticTool.opPosition = position;
+                    StaticTool.opId = collectionCard.getCollectionId();
+                    setDeleteDialog(collectionCard.getName());
                 }
                 return true;
             }
         });
-        holder.card_title.setText(collectionCard.getTitle());
-        holder.card_level.setText(collectionCard.getLevel());
+        holder.card_title.setText(collectionCard.getName());
+        holder.card_level.setText(collectionCard.getPublicStatus());
     }
 
-    private void setDeleteDialog(int position){
+    private void setDeleteDialog(String name){
         new AlertDialog.Builder(context)
                 .setTitle("提示")
-                .setMessage("是否删除收藏夹:"+cardList.get(position).getId())
+                .setMessage("是否删除收藏夹:"+name)
                 .setPositiveButton("确定", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        StaticTool.collectionCardList.remove(position);
-                        notifyDataSetChanged();
+                        ListActivity.getPresenter().deleteCollection(StaticTool.opId);
                     }
                 })
                 .setNegativeButton("取消", null)

@@ -38,12 +38,16 @@ public class Collection {
         this.description = description;
     }
 
-    public int getPublicStatus() {
+    public String getPublicStatus() {
         return publicStatus;
     }
 
     public void setPublicStatus(int publicStatus) {
-        this.publicStatus = publicStatus;
+        switch (publicStatus){
+            case 0: this.publicStatus = "私有";
+            case 1: this.publicStatus = "组内公开";
+            case 2: this.publicStatus = "全公开";
+        }
     }
 
     public String getCreateTime() {
@@ -62,7 +66,7 @@ public class Collection {
         this.updateTime = updateTime;
     }
 
-    private int publicStatus;
+    private String publicStatus;
     private String createTime;
     private String updateTime;
 }

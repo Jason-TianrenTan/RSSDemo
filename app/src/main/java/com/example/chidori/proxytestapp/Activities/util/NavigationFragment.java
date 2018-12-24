@@ -16,7 +16,7 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.example.chidori.proxytestapp.Activities.ListActivity;
-import com.example.chidori.proxytestapp.Activities.entity.GroupCard;
+import com.example.chidori.proxytestapp.Activities.entity.Group;
 import com.example.chidori.proxytestapp.R;
 
 import java.util.List;
@@ -97,7 +97,7 @@ public class NavigationFragment extends Fragment {
                 Toast.makeText(getContext(), query, Toast.LENGTH_SHORT).show();
                 //搜索活动
                 //cardList = ...(query);
-                List<GroupCard> cardList = StaticTool.getTestGroupCardList();
+                List<Group> cardList = StaticTool.getTestGroupCardList();
                 GroupCardRecyclerAdapter recyclerAdapter = new GroupCardRecyclerAdapter(cardList);
                 StaticTool.setSourceCardRecyclerView(recyclerAdapter,view);
                 return true;

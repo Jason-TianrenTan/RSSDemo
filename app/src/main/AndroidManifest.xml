@@ -51,8 +51,7 @@
         </activity>
         <activity android:name=".Activities.RegisterActivity" />
         <activity android:name=".Activities.PasswordActivity" />
-        <activity android:name=".Activities.ListActivity"
-            tools:ignore="InnerclassSeparator" />
+        <activity android:name=".Activities.ListActivity"/>
         <activity android:name=".Activities.GroupNewActivity" />
         <activity android:name=".Activities.GroupDetailActivity" />
         <activity android:name=".Activities.TabActivity" />

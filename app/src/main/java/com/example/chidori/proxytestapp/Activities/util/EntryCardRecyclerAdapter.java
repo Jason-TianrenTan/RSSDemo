@@ -18,14 +18,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.chidori.proxytestapp.Activities.ReaderActivity;
-import com.example.chidori.proxytestapp.Activities.entity.EntryCard;
+import com.example.chidori.proxytestapp.Activities.entity.Entry;
 import com.example.chidori.proxytestapp.R;
 
 import java.util.List;
 
 public class EntryCardRecyclerAdapter extends RecyclerView.Adapter<EntryCardRecyclerAdapter.ViewHolder>{
     private Context context;
-    private List<EntryCard> cardList;
+    private List<Entry> cardList;
 
     static class ViewHolder extends RecyclerView.ViewHolder{
 
@@ -44,7 +44,7 @@ public class EntryCardRecyclerAdapter extends RecyclerView.Adapter<EntryCardRecy
         }
     }
 
-    public EntryCardRecyclerAdapter(List<EntryCard> list) {
+    public EntryCardRecyclerAdapter(List<Entry> list) {
         this.cardList = list;
     }
 
@@ -60,22 +60,22 @@ public class EntryCardRecyclerAdapter extends RecyclerView.Adapter<EntryCardRecy
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        final EntryCard entryCard = cardList.get(position);
+        final Entry entryCard = cardList.get(position);
 
         holder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
                 Intent intent = new Intent(context, ReaderActivity.class);
-                intent.putExtra("id", entryCard.getId());
-                Toast.makeText(context, entryCard.getId(), Toast.LENGTH_SHORT).show();
+                intent.putExtra("id", entryCard.getEntryId());
+                Toast.makeText(context, entryCard.getEntryId(), Toast.LENGTH_SHORT).show();
                 context.startActivity(intent);
             }
         });
 
         holder.card_title.setText(entryCard.getTitle());
-        holder.card_detail.setText(entryCard.getDetail());
+        holder.card_detail.setText(entryCard.getSourceName());
 
-        holder.stared = StaticTool.starList.contains(entryCard.getId());
+        holder.stared = StaticTool.starList.contains(entryCard.getEntryId());
         if(holder.stared) holder.card_star_btn.setImageDrawable(ContextCompat.getDrawable(context,R.drawable.stared));
         else holder.card_star_btn.setImageDrawable(ContextCompat.getDrawable(context,R.drawable.star));
 
@@ -86,7 +86,7 @@ public class EntryCardRecyclerAdapter extends RecyclerView.Adapter<EntryCardRecy
                     //从收藏表中删除
                     Toast.makeText(context, "取消收藏", Toast.LENGTH_SHORT).show();
                     holder.stared = false;
-                    StaticTool.starList.remove(entryCard.getId());
+                    StaticTool.starList.remove(entryCard.getEntryId());
                     ((ImageButton)v).setImageDrawable(ContextCompat.getDrawable(context,R.drawable.star));
                 }
                 else {
@@ -97,7 +97,7 @@ public class EntryCardRecyclerAdapter extends RecyclerView.Adapter<EntryCardRecy
                     }
                     Toast.makeText(context, "收藏成功", Toast.LENGTH_SHORT).show();
                     holder.stared = true;
-                    StaticTool.starList.add(entryCard.getId());
+                    StaticTool.starList.add(entryCard.getEntryId());
                     ((ImageButton)v).setImageDrawable(ContextCompat.getDrawable(context,R.drawable.stared));
                 }
             }

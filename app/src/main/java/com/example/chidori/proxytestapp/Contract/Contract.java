@@ -199,7 +199,7 @@ public interface Contract {
     }
 
 
-    //NavigationFragment (属于MenuActivity)
+    //NavigationFragment.java.java (属于MenuActivity)
     interface INavMenuView {
         void onGroupSearchResult(String status);
     }

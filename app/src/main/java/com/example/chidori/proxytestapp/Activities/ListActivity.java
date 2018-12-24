@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -16,30 +17,39 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.chidori.proxytestapp.Activities.entity.GroupCard;
-import com.example.chidori.proxytestapp.Activities.entity.EntryCard;
-import com.example.chidori.proxytestapp.Activities.entity.CollectionCard;
-import com.example.chidori.proxytestapp.Activities.entity.SourceCard;
+import com.example.chidori.proxytestapp.Activities.entity.Collection;
+import com.example.chidori.proxytestapp.Activities.entity.Entry;
+import com.example.chidori.proxytestapp.Activities.entity.Source;
 import com.example.chidori.proxytestapp.Activities.util.CollectionCardRecyclerAdapter;
 import com.example.chidori.proxytestapp.Activities.util.GroupCardRecyclerAdapter;
 import com.example.chidori.proxytestapp.Activities.util.EntryCardRecyclerAdapter;
 import com.example.chidori.proxytestapp.Activities.util.SourceCardRecyclerAdapter;
 import com.example.chidori.proxytestapp.Activities.util.StaticTool;
+import com.example.chidori.proxytestapp.Contract.Contract;
+import com.example.chidori.proxytestapp.Presenter.ListPresenterImpl;
 import com.example.chidori.proxytestapp.R;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
-public class ListActivity extends AppCompatActivity {
+public class ListActivity extends AppCompatActivity implements Contract.IListView{
     public static final int group = 0;
     public static final int collection = 1;
     public static final int source = 2;
-    public static final int entry = 3;
+    public static final int source_entry = 3;
+    public static final int collection_entry = 4;
 
     private Toolbar toolbar;
     private TextView toolbarTitle;
     private int type = -1;
     private String id;
     private View view;
+
+    private List cardList;
+    private static RecyclerView.Adapter recyclerAdapter;
+
+    private static ListPresenterImpl presenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +59,9 @@ public class ListActivity extends AppCompatActivity {
 
         type = getIntent().getIntExtra("type",-1);
         id = getIntent().getStringExtra("id");
+        presenter = new ListPresenterImpl();
+        presenter.attachView(this);
+
         setToolbar();
         setCardList();
     }
@@ -66,7 +79,7 @@ public class ListActivity extends AppCompatActivity {
         // 绑定toolbar跟menu
         getMenuInflater().inflate(R.menu.toolbar, menu);
 
-        if(type == entry) toolbar.getMenu().findItem(R.id.add).setVisible(false);
+        if((type == source_entry)||(type==collection_entry)) toolbar.getMenu().findItem(R.id.add).setVisible(false);
         else toolbar.getMenu().findItem(R.id.add).setVisible(true);
 
         return true;
@@ -156,12 +169,12 @@ public class ListActivity extends AppCompatActivity {
                 else {
                     switch (type){
                         case source:{
-                            StaticTool.sourceCardList.add(new SourceCard("id",input));
+                            StaticTool.sourceCardList.add(new Source(UUID.randomUUID().toString(),input,"","",0,"",""));
                             break;
                         }
                         case collection:{
                             RadioGroup r = (RadioGroup) finalV.findViewById(R.id.dialog_radio);
-                            StaticTool.collectionCardList.add(new CollectionCard("id",input,r.getCheckedRadioButtonId()));
+                            StaticTool.collectionCardList.add(new Collection("id",input,"",r.getCheckedRadioButtonId(),"",""));
                             break;
                         }
                     }
@@ -174,33 +187,144 @@ public class ListActivity extends AppCompatActivity {
         switch (type){
             case group:{
                 toolbarTitle.setText("我的小组");
-                List<GroupCard> cardList = StaticTool.getTestGroupCardList();
-                GroupCardRecyclerAdapter recyclerAdapter = new GroupCardRecyclerAdapter(cardList);
+                cardList = StaticTool.getTestGroupCardList();
+                recyclerAdapter = new GroupCardRecyclerAdapter(cardList);
                 StaticTool.setSourceCardRecyclerView(recyclerAdapter,view);
                 break;
             }
             case collection:{
                 toolbarTitle.setText("我的收藏");
-                List<CollectionCard> cardList = StaticTool.collectionCardList;
-                CollectionCardRecyclerAdapter recyclerAdapter = new CollectionCardRecyclerAdapter(cardList,true);
-                StaticTool.setSourceCardRecyclerView(recyclerAdapter,view);
+                presenter.doGetUserCollections();
                 break;
             }
             case source:{
                 toolbarTitle.setText("我的订阅");
-                List<SourceCard> cardList = StaticTool.sourceCardList;
-                SourceCardRecyclerAdapter recyclerAdapter = new SourceCardRecyclerAdapter(cardList);
-                StaticTool.setSourceCardRecyclerView(recyclerAdapter,view);
+                presenter.doGetUserSources();
                 break;
             }
-            case entry:{
+            case source_entry:{
                 toolbarTitle.setText(getIntent().getStringExtra("title"));
-                List<EntryCard> cardList = StaticTool.getTestEntryCardList();
-                EntryCardRecyclerAdapter recyclerAdapter = new EntryCardRecyclerAdapter(cardList);
-                StaticTool.setSourceCardRecyclerView(recyclerAdapter,view);
+                presenter.doGetEntriesBySource(StaticTool.opId);
+                break;
+            }
+            case collection_entry:{
+                toolbarTitle.setText(getIntent().getStringExtra("title"));
+                presenter.doGetEntriesByCollection(StaticTool.opId);
                 break;
             }
         }
     }
 
+    @Override
+    public void onUserCollectionsCall(String status) {
+
+        if(status.equals("success")){
+            cardList = presenter.getCollections();
+            if(cardList==null) cardList = new ArrayList<Collection>();
+            recyclerAdapter = new CollectionCardRecyclerAdapter(cardList,true);
+            StaticTool.setSourceCardRecyclerView(recyclerAdapter,view);
+        }
+        else {
+            Toast.makeText(ListActivity.this, "获取收藏夹列表失败", Toast.LENGTH_SHORT).show();
+            cardList = new ArrayList<Collection>();
+        }
+    }
+
+    @Override
+    public void onCollectionDeleted(String status) {
+
+        if(status.equals("success")){
+            presenter.deleteCollection(StaticTool.opId);
+            StaticTool.collectionCardList.remove(StaticTool.opPosition);
+            StaticTool.opPosition = -1;
+            recyclerAdapter.notifyDataSetChanged();
+            Toast.makeText(ListActivity.this, "删除成功", Toast.LENGTH_SHORT).show();
+
+        }
+        else Toast.makeText(ListActivity.this, "删除失败", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onUserSourcesRetrieved(String status) {
+        if(status.equals("success")){
+            cardList = presenter.getSources();
+            if(cardList==null) cardList = new ArrayList<Source>();
+            recyclerAdapter = new SourceCardRecyclerAdapter(cardList);
+            StaticTool.setSourceCardRecyclerView(recyclerAdapter,view);
+        }
+        else {
+            Toast.makeText(ListActivity.this, "获得订阅列表失败", Toast.LENGTH_SHORT).show();
+            cardList = new ArrayList<Source>();
+        }
+    }
+
+    @Override
+    public void onSourceDeleted(String status) {
+        if(status.equals("success")){
+            presenter.deleteSource(StaticTool.opId);
+            StaticTool.sourceCardList.remove(StaticTool.opPosition);
+            StaticTool.opPosition=-1;
+            recyclerAdapter.notifyDataSetChanged();
+            Toast.makeText(ListActivity.this, "删除成功", Toast.LENGTH_SHORT).show();
+        }
+        else {
+            Toast.makeText(ListActivity.this, "删除失败", Toast.LENGTH_SHORT).show();
+        }
+
+    }
+
+    @Override
+    public void onEntriesBySourceRetrieved(String status) {
+        if(status.equals("success")){
+            /*
+            *
+            *
+            * */
+            cardList = StaticTool.getTestEntryCardList();
+            if(cardList==null) cardList = new ArrayList<Entry>();
+            recyclerAdapter = new EntryCardRecyclerAdapter(cardList);
+            StaticTool.setSourceCardRecyclerView(recyclerAdapter,view);
+            StaticTool.opPosition=-1;
+            StaticTool.opId=null;
+        }
+        else {
+            Toast.makeText(ListActivity.this, "获得文章失败", Toast.LENGTH_SHORT).show();
+            cardList = new ArrayList<Entry>();
+        }
+    }
+
+    @Override
+    public void onEntriesByCollectionRetrieved(String status) {
+        if(status.equals("success")){
+            /*
+             *
+             *
+             * */
+            cardList = StaticTool.getTestEntryCardList();
+            if(cardList==null) cardList = new ArrayList<Entry>();
+            recyclerAdapter = new EntryCardRecyclerAdapter(cardList);
+            StaticTool.setSourceCardRecyclerView(recyclerAdapter,view);
+            StaticTool.opPosition=-1;
+            StaticTool.opId=null;
+        }
+        else {
+            Toast.makeText(ListActivity.this, "获得文章失败", Toast.LENGTH_SHORT).show();
+            cardList =new ArrayList<Entry>();
+        }
+    }
+
+    @Override
+    public void onEntryAddedToCollection(String status) {
+        if(status.equals("success")){
+            //Toast.makeText(ListActivity.this, "收藏", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    public static ListPresenterImpl getPresenter(){
+        return presenter;
+    }
+
+    public static RecyclerView.Adapter getRecyclerAdapter(){
+        return recyclerAdapter;
+    }
 }

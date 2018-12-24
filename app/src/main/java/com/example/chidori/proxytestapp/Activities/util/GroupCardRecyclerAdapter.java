@@ -12,16 +12,15 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.chidori.proxytestapp.Activities.ListActivity;
 import com.example.chidori.proxytestapp.Activities.TabActivity;
-import com.example.chidori.proxytestapp.Activities.entity.GroupCard;
+import com.example.chidori.proxytestapp.Activities.entity.Group;
 import com.example.chidori.proxytestapp.R;
 
 import java.util.List;
 
 public class GroupCardRecyclerAdapter extends RecyclerView.Adapter<GroupCardRecyclerAdapter.ViewHolder> {
     private Context context;
-    private List<GroupCard> cardList;
+    protected List<Group> cardList;
 
     static class ViewHolder extends RecyclerView.ViewHolder{
 
@@ -37,7 +36,7 @@ public class GroupCardRecyclerAdapter extends RecyclerView.Adapter<GroupCardRecy
         }
     }
 
-    public GroupCardRecyclerAdapter(List<GroupCard> list) {
+    public GroupCardRecyclerAdapter(List<Group> list) {
         this.cardList = list;
     }
 
@@ -53,19 +52,18 @@ public class GroupCardRecyclerAdapter extends RecyclerView.Adapter<GroupCardRecy
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        final GroupCard groupCard = cardList.get(position);
+        final Group groupCard = cardList.get(position);
         holder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
                 Intent intent = new Intent(context,TabActivity.class);
-                intent.putExtra("title",groupCard.getTitle());
-                intent.putExtra("id", groupCard.getId());
-                Toast.makeText(context, groupCard.getId(), Toast.LENGTH_SHORT).show();
+                intent.putExtra("title",groupCard.getName());
+                intent.putExtra("id", groupCard.getGroupId());
                 context.startActivity(intent);
             }
         });
 
-        holder.card_id.setText(groupCard.getId());
+        holder.card_id.setText(groupCard.getName());
     }
 
 

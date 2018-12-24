@@ -21,16 +21,20 @@ import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.chidori.proxytestapp.Activities.entity.SourceCard;
+import com.example.chidori.proxytestapp.Activities.entity.Source;
 import com.example.chidori.proxytestapp.Activities.util.NavigationFragment;
 import com.example.chidori.proxytestapp.Activities.util.StaticTool;
+import com.example.chidori.proxytestapp.Contract.Contract;
+import com.example.chidori.proxytestapp.Presenter.MenuPresenterImpl;
 import com.example.chidori.proxytestapp.R;
+import com.example.chidori.proxytestapp.Utils.Beans.SaveRSSBean;
 
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.UUID;
 
 
-public class MenuActivity extends AppCompatActivity {
+public class MenuActivity extends AppCompatActivity implements Contract.IMenuView {
     private static Toolbar toolbar;
     private static TextView toolbarTitle;
     private static BottomNavigationView navigation;
@@ -42,11 +46,16 @@ public class MenuActivity extends AppCompatActivity {
     private boolean isExit=false;
     private static String path;
 
+    private MenuPresenterImpl presenter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
         setToolbar();
+
+        presenter = new MenuPresenterImpl();
+        presenter.attachView(this);
 
         current = 0;
         toolbarTitle.setText("主页");
@@ -146,7 +155,7 @@ public class MenuActivity extends AppCompatActivity {
                     Toast.makeText(getBaseContext(), "输入不能为空", Toast.LENGTH_SHORT).show();
                 }
                 else {
-                    StaticTool.sourceCardList.add(new SourceCard("id",input));
+                    StaticTool.sourceCardList.add(new Source(UUID.randomUUID().toString(),input,"","",0,"",""));
                 }
             }
         }).setNegativeButton("取消", null).show();
@@ -224,5 +233,10 @@ public class MenuActivity extends AppCompatActivity {
             }
         }
         return false;
+    }
+
+    @Override
+    public void onLinkResult(SaveRSSBean.ResResultBean bean) {
+
     }
 }

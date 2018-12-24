@@ -11,19 +11,24 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.chidori.proxytestapp.Activities.entity.GroupCard;
+import com.example.chidori.proxytestapp.Activities.entity.Group;
 import com.example.chidori.proxytestapp.Activities.util.StaticTool;
+import com.example.chidori.proxytestapp.Contract.Contract;
+import com.example.chidori.proxytestapp.Presenter.GroupPresenterImpl;
 import com.example.chidori.proxytestapp.R;
+
+import java.util.UUID;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class GroupNewActivity extends AppCompatActivity {
+public class GroupNewActivity extends AppCompatActivity implements Contract.IGroupView {
 
     private CircleImageView imageView;
     private Button btn_newgroup;
     private EditText editText;
     private Toolbar toolbar;
     private TextView toolbarTitle;
+    private GroupPresenterImpl presenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +39,9 @@ public class GroupNewActivity extends AppCompatActivity {
         btn_newgroup =(Button)findViewById(R.id.btn_new_group);
         editText =(EditText)findViewById(R.id.edit_groupname);
 
+        presenter = new GroupPresenterImpl();
+        presenter.attachView(this);
+
         setToolbar();
         toolbarTitle.setText("新建小组");
 
@@ -41,9 +49,8 @@ public class GroupNewActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 //创建新小组
-                StaticTool.groupCardList.add(new GroupCard("addid",editText.getText().toString()));
-                Toast.makeText(GroupNewActivity.this, "小组创建成功", Toast.LENGTH_SHORT).show();
-                finish();
+                presenter.doCreateGroup(editText.getText().toString(),"");
+                btn_newgroup.setClickable(false);
             }
         });
     }
@@ -75,4 +82,18 @@ public class GroupNewActivity extends AppCompatActivity {
         else return false;
     }
 
+    @Override
+    public void onGroupCreated(String status) {
+        if(status.equals("success")){
+            StaticTool.groupCardList.add(new Group(UUID.randomUUID().toString(),editText.getText().toString(),"","","","",""));
+            Toast.makeText(GroupNewActivity.this, "小组创建成功", Toast.LENGTH_SHORT).show();
+            ListActivity.getRecyclerAdapter().notifyDataSetChanged();
+            finish();
+
+        }
+        else {
+            Toast.makeText(GroupNewActivity.this, "小组创建失败", Toast.LENGTH_SHORT).show();
+            btn_newgroup.setClickable(true);
+        }
+    }
 }
