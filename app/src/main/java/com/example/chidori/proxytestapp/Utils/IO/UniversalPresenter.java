@@ -3,6 +3,7 @@ package com.example.chidori.proxytestapp.Utils.IO;
 import com.example.chidori.proxytestapp.Events.AddSourceEvent;
 import com.example.chidori.proxytestapp.Events.CollectionListEvent;
 import com.example.chidori.proxytestapp.Events.CreateCollectionEvent;
+import com.example.chidori.proxytestapp.Events.DeleteSourceEvent;
 import com.example.chidori.proxytestapp.Events.EntryListEvent;
 import com.example.chidori.proxytestapp.Events.LoginEvent;
 import com.example.chidori.proxytestapp.Events.ModifyCollectionEvent;
@@ -16,6 +17,7 @@ import com.example.chidori.proxytestapp.Events.UpdateCollectionEvent;
 import com.example.chidori.proxytestapp.Utils.Beans.AddSourceBean;
 import com.example.chidori.proxytestapp.Utils.Beans.CollectionListBean;
 import com.example.chidori.proxytestapp.Utils.Beans.CreateCollectionBean;
+import com.example.chidori.proxytestapp.Utils.Beans.DeleteSourceBean;
 import com.example.chidori.proxytestapp.Utils.Beans.EntryListBean;
 import com.example.chidori.proxytestapp.Utils.Beans.LoginBean;
 import com.example.chidori.proxytestapp.Utils.Beans.ModifyCollectionBean;
@@ -569,6 +571,50 @@ public class UniversalPresenter extends BasePresenter {
                 });
     }
 
+    //删除收藏夹
+    public void DeleteCollection(String collectionId) {
+        JsonObject wrapper = new JsonObject();
+        try {
+            JsonObject jsonObject = new JsonObject();
+            wrapper.add("reqParam", jsonObject);
+            jsonObject.addProperty("collectionId", collectionId);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        ApiManager.getInstance()
+                .getRSSRetrofitService()
+                .deleteCollection(wrapper)
+                .map(new Function<ModifyCollectionBean, ModifyCollectionBean.ResResultBean>() {
+                    @Override
+                    public ModifyCollectionBean.ResResultBean apply(ModifyCollectionBean bean) {
+                        return bean.getResResult();
+                    }
+                }).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<ModifyCollectionBean.ResResultBean>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                        addDisposable(d);
+                    }
+
+                    @Override
+                    public void onNext(ModifyCollectionBean.ResResultBean result) {
+                        System.out.println("result: " + result.isIsSuccess());
+                        EventBus.getDefault().post(new ModifyCollectionEvent(result, ModifyCollectionEvent.EventType.DELETE));
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        e.printStackTrace();
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
+    }
+
 
     //添加文章
     public void AddEntryToCollection(String collectionId, String entryId) {
@@ -1047,6 +1093,53 @@ public class UniversalPresenter extends BasePresenter {
                     }
                 });
     }
+
+
+    //删除源
+    public void DeleteRSS(String sourceId) {
+
+        JsonObject wrapper = new JsonObject();
+        try {
+            JsonObject jsonObject = new JsonObject();
+            wrapper.add("reqParam", jsonObject);
+            jsonObject.addProperty("sourceId", sourceId);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        ApiManager.getInstance()
+                .getRSSRetrofitService()
+                .deleteRSS(wrapper)
+                .map(new Function<DeleteSourceBean,DeleteSourceBean.ResResultBean>() {
+                    @Override
+                    public DeleteSourceBean.ResResultBean apply(DeleteSourceBean bean) {
+                        return bean.getResResult();
+                    }
+                }).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<DeleteSourceBean.ResResultBean>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                        addDisposable(d);
+                    }
+
+                    @Override
+                    public void onNext(DeleteSourceBean.ResResultBean result) {
+                        System.out.println("result: " + result.isIsSuccess());
+                        EventBus.getDefault().post(new DeleteSourceEvent(result));
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        e.printStackTrace();
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
+    }
+
 
 
     //刷新全部RSS源

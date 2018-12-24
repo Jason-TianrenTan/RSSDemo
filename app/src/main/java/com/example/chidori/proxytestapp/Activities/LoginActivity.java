@@ -12,6 +12,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.chidori.proxytestapp.Config;
 import com.example.chidori.proxytestapp.Contract.Contract;
 import com.example.chidori.proxytestapp.Events.LoginEvent;
 import com.example.chidori.proxytestapp.Presenter.LoginPresenterImpl;
@@ -135,12 +136,12 @@ public class LoginActivity extends AppCompatActivity implements Contract.ILoginV
         if (data != null) {
             //是获取注册界面回传过来的手机号
             //getExtra().getString("***");
-            String phonenum = data.getStringExtra("phonenumber");
-            if (!TextUtils.isEmpty(phonenum)) {
+            String username = data.getStringExtra("username");
+            if (!TextUtils.isEmpty(username)) {
                 //设置用户名到 et_phonenum 控件
-                et_phonenum.setText(phonenum);
+                et_phonenum.setText(username);
                 //et_phonenum控件的setSelection()方法来设置光标位置
-                et_phonenum.setSelection(phonenum.length());
+                et_phonenum.setSelection(username.length());
             }
         }
     }
@@ -159,10 +160,14 @@ public class LoginActivity extends AppCompatActivity implements Contract.ILoginV
              //RESULT_OK为Activity系统常量，状态码为-1
              // 表示此页面下的内容操作成功将data返回到上一页面，如果是用back返回过去的则不存在用setResult传递data值
              setResult(RESULT_OK, data);
+             Config.userId = bean.getCurData().getUserId();
+             Config.email = bean.getCurData().getEmail();
+             Config.phone = bean.getCurData().getPhone();
+             Config.sex = bean.getCurData().getSex();
              //销毁登录界面
              LoginActivity.this.finish();
              //跳转到主界面，登录成功的状态传递到 MainActivity 中
-             startActivity(new Intent(LoginActivity.this, ReaderActivity.class));
+             startActivity(new Intent(LoginActivity.this, MenuActivity.class));
          }
          else {
              String message = bean.getMessage();

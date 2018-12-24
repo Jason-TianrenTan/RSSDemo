@@ -58,7 +58,12 @@ public class SaveRSSBean {
 
     public static class ResResultBean {
         /**
-         * curData : {"sourceId":"586104ba-81a7-4682-89cd-7a6dfc09826d","name":"三联生活周刊","description":"","userId":"061583de-12be-4116-ac58-e7343aa7f024","link":"http://blog.sina.com.cn/rss/1191965271.xml","file":null,"type":0,"preset":0,"createTime":"12/22/18 7:16 PM","updateTime":"12/22/18 7:16 PM","remark":null}
+         * curData : {"sourceId":"586104ba-81a7-4682-89cd-7a6dfc09826d",
+         * "name":"三联生活周刊",
+         * "description":"",
+         * "userId":"061583de-12be-4116-ac58-e7343aa7f024",
+         * "link":"http://blog.sina.com.cn/rss/1191965271.xml",
+         * "file":null,"type":0,"preset":0,"createTime":"12/22/18 7:16 PM","updateTime":"12/22/18 7:16 PM","remark":null}
          * isSuccess : true
          * message : 请求成功
          */

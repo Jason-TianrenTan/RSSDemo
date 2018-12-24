@@ -3,6 +3,7 @@ package com.example.chidori.proxytestapp.Utils.IO;
 import com.example.chidori.proxytestapp.Utils.Beans.AddSourceBean;
 import com.example.chidori.proxytestapp.Utils.Beans.CollectionListBean;
 import com.example.chidori.proxytestapp.Utils.Beans.CreateCollectionBean;
+import com.example.chidori.proxytestapp.Utils.Beans.DeleteSourceBean;
 import com.example.chidori.proxytestapp.Utils.Beans.EntryListBean;
 import com.example.chidori.proxytestapp.Utils.Beans.LoginBean;
 import com.example.chidori.proxytestapp.Utils.Beans.ModifyCollectionBean;
@@ -83,6 +84,12 @@ public interface RetrofitService {
     @Headers({
             "Accept: application/json",
     })
+    @POST("collection/delete")
+    Observable<ModifyCollectionBean> deleteCollection(@Body JsonObject jsonObject);
+
+    @Headers({
+            "Accept: application/json",
+    })
     @POST("collection/clear")
     Observable<ModifyCollectionBean> clearCollection(@Body JsonObject jsonObject);
 
@@ -122,13 +129,6 @@ public interface RetrofitService {
     @GET("collection/list/groupPublic")
     Observable<CollectionListBean> getGroupPublic(@Body JsonObject jsonObject);
 
-    //删除文章
-    /*
-    @Headers({
-            "Accept: application/json",
-    })
-    @GET("collection/delete")
-    Observable<DeleteEntryBean> deleteEntry(@Body JsonObject jsonObject);*/
 
 
     //通过来源获取所有文章
@@ -199,6 +199,13 @@ public interface RetrofitService {
     })
     @POST("source/rss/batch/refresh")
     Observable<RefreshSourceBean> refreshAllRSS(@Body JsonObject jsonObject);
+
+    //删除RSS源
+    @Headers({
+            "Accept: application/json",
+    })
+    @POST("source/rss/single/refresh")
+    Observable<DeleteSourceBean> deleteRSS(@Body JsonObject jsonObject);
 
     //userid = 061583de-12be-4116-ac58-e7343aa7f024
     //collectionid = a6c04078-7da9-44e3-8817-0fb216cf830a

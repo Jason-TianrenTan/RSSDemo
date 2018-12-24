@@ -1,8 +1,11 @@
 package com.example.chidori.proxytestapp.Contract;
 
+import com.example.chidori.proxytestapp.Events.SaveRSSEvent;
 import com.example.chidori.proxytestapp.Events.UpdateAccountEvent;
+import com.example.chidori.proxytestapp.Utils.Beans.CollectionListBean;
 import com.example.chidori.proxytestapp.Utils.Beans.LoginBean;
 import com.example.chidori.proxytestapp.Utils.Beans.RegisterBean;
+import com.example.chidori.proxytestapp.Utils.Beans.SaveRSSBean;
 import com.example.chidori.proxytestapp.Utils.Beans.UpdateBean;
 
 public interface Contract {
@@ -54,7 +57,7 @@ public interface Contract {
 
     //更新用户信息
     interface IUpdateView {
-        void onUpdateResult(UpdateAccountEvent updateEvent);
+        void onUpdateResult(UpdateBean.ResResultBean bean);
     }
 
     interface IUpdateModel {
@@ -63,5 +66,56 @@ public interface Contract {
 
     interface IUpdatePresenter {
 
+    }
+
+
+    interface IMenuView {
+        void onLinkResult(SaveRSSBean.ResResultBean bean);
+    }
+
+    interface IMenuModel {
+        void doAddRSSFromLink(String link);
+    }
+
+    interface IMenuPresenter {
+        void doAddRSSFromLink(String link);
+    }
+
+
+    interface IFragmentsView {
+        void onEntriesResult();
+    }
+
+    interface IFramentsModel {
+
+    }
+
+    interface IFragmentsPresenter {
+
+    }
+
+
+    interface IListView {
+        void onUserCollectionsCall(String status);
+        void onCollectionDeleted(String status);
+        void onUserSourcesRetrieved(String status);
+        void onSourceDeleted(String status);
+        void onEntriesBySourceRetrieved(String status);
+    }
+
+    interface IListModel {
+        void doGetUserCollections();
+        void deleteCollection(String collectionId);
+        void doGetUserSources();
+        void deleteSource(String sourceId);
+        void doGetEntriesBySource(String sourceId);
+    }
+
+    interface IListPresenter {
+        void doGetUserCollections();
+        void deleteCollection(String collectionId);
+        void doGetUserSources();
+        void deleteSource(String sourceId);
+        void doGetEntriesBySource(String sourceId);
     }
 }

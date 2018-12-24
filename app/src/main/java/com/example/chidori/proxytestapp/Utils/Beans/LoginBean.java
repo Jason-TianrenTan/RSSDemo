@@ -58,7 +58,11 @@ public class LoginBean {
 
     public static class ResResultBean {
         /**
-         * curData : {"userId":"061583de-12be-4116-ac58-e7343aa7f024","username":"abcd","sex":1,"phone":"12321","email":"1231126789@qq.com","avatar":null}
+         * curData : {"userId":"061583de-12be-4116-ac58-e7343aa7f024",
+         * "username":"abcd",
+         * "sex":1,
+         * "phone":"12321",
+         * "email":"1231126789@qq.com","avatar":null}
          * isSuccess : true
          * message : 请求成功
          */

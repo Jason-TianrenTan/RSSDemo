@@ -20,6 +20,9 @@ import com.example.chidori.proxytestapp.Presenter.RegisterPresenterImpl;
 import com.example.chidori.proxytestapp.R;
 import com.example.chidori.proxytestapp.Utils.Beans.RegisterBean;
 
+import java.util.Map;
+import java.util.Set;
+
 
 public class RegisterActivity extends AppCompatActivity implements Contract.IRegisterView{
 
@@ -150,5 +153,16 @@ public class RegisterActivity extends AppCompatActivity implements Contract.IReg
     public void onRegisterResult(RegisterBean.ResResultBean resResultBean) {
         //这里写处理注册结果的逻辑
         //具体参考RegisterBean文件
+        if (resResultBean.isIsSuccess()) {
+            Toast.makeText(this, "注册成功", Toast.LENGTH_SHORT).show();
+            String userId = resResultBean.getCurData().getUserId(),
+                phoneNumber = resResultBean.getCurData().getPhone(),
+                email = resResultBean.getCurData().getEmail();
+            int sex = resResultBean.getCurData().getSex();
+            Intent intent = new Intent();
+            intent.putExtra("username", userName);
+            setResult(1, intent);
+            finish();
+        }
     }
 }

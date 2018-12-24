@@ -8,7 +8,8 @@ public class ModifyCollectionEvent {
         CHANGE_STATUS, //修改公开状态
         CLEAR, //清除收藏夹
         ADD_ENTRY, //添加文章
-        MOVE_ENTRY//移动文章
+        MOVE_ENTRY,//移动文章
+        DELETE//删除收藏夹
     }
 
     public EventType getType() {
