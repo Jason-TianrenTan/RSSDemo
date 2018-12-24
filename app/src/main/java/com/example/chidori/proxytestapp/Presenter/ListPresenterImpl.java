@@ -5,13 +5,12 @@ import com.example.chidori.proxytestapp.Activities.entity.Collection;
 import com.example.chidori.proxytestapp.Activities.entity.Source;
 import com.example.chidori.proxytestapp.Contract.Contract;
 import com.example.chidori.proxytestapp.Events.CollectionListEvent;
+import com.example.chidori.proxytestapp.Events.CreateGroupEvent;
 import com.example.chidori.proxytestapp.Events.DeleteSourceEvent;
 import com.example.chidori.proxytestapp.Events.EntryListEvent;
-import com.example.chidori.proxytestapp.Events.LoginEvent;
 import com.example.chidori.proxytestapp.Events.ModifyCollectionEvent;
 import com.example.chidori.proxytestapp.Events.SourceListEvent;
 import com.example.chidori.proxytestapp.Model.ListModelImpl;
-import com.example.chidori.proxytestapp.Utils.Beans.CollectionListBean;
 
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
@@ -77,8 +76,23 @@ public class ListPresenterImpl implements Contract.IListPresenter {
                 model.setupEntries(entryListEvent.getResult());
                 listView.onEntriesBySourceRetrieved("success");
             } else listView.onEntriesBySourceRetrieved("failure");
+        } else if (entryListEvent.getType() == EntryListEvent.EventType.LIST_COLLECTION) {
+            if (entryListEvent.getResult().isIsSuccess()) {
+                model.setupEntries(entryListEvent.getResult());
+                listView.onEntriesByCollectionRetrieved("success");
+            } else listView.onEntriesByCollectionRetrieved("failure");
         }
     }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEntryAddedToCollection(ModifyCollectionEvent modifyCollectionEvent) {
+        if (modifyCollectionEvent.getType() == ModifyCollectionEvent.EventType.ADD_ENTRY) {
+            if (modifyCollectionEvent.getResult().isIsSuccess())
+                listView.onEntryAddedToCollection("success");
+            else listView.onEntryAddedToCollection("failure");
+        }
+    }
+
 
     @Override
     public void doGetUserCollections() {
@@ -103,6 +117,16 @@ public class ListPresenterImpl implements Contract.IListPresenter {
     @Override
     public void doGetEntriesBySource(String sourceId) {
         model.doGetEntriesBySource(sourceId);
+    }
+
+    @Override
+    public void doGetEntriesByCollection(String collectionId) {
+        model.doGetEntriesByCollection(collectionId);
+    }
+
+    @Override
+    public void doAddEntryToCollection(String collectionId, String entryId) {
+        model.doAddEntryToCollection(collectionId, entryId);
     }
 
 }

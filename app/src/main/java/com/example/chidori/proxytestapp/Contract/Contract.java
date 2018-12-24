@@ -101,6 +101,8 @@ public interface Contract {
         void onUserSourcesRetrieved(String status);
         void onSourceDeleted(String status);
         void onEntriesBySourceRetrieved(String status);
+        void onEntriesByCollectionRetrieved(String status);
+        void onEntryAddedToCollection(String status);
     }
 
     interface IListModel {
@@ -109,6 +111,8 @@ public interface Contract {
         void doGetUserSources();
         void deleteSource(String sourceId);
         void doGetEntriesBySource(String sourceId);
+        void doGetEntriesByCollection(String collectionId);
+        void doAddEntryToCollection(String collectionId, String entryId);
     }
 
     interface IListPresenter {
@@ -117,5 +121,31 @@ public interface Contract {
         void doGetUserSources();
         void deleteSource(String sourceId);
         void doGetEntriesBySource(String sourceId);
+        void doGetEntriesByCollection(String collectionId);
+        void doAddEntryToCollection(String collectionId, String entryId);
+    }
+
+
+    interface IGroupView {
+        void onGroupCreated(String status);
+    }
+
+    interface IGroupModel {
+        void doCreateGroup(String groupName, String desc);
+    }
+
+    interface IGroupPresenter {
+        void doCreateGroup(String groupName, String desc);
+    }
+
+
+    interface IGroupDetailView {
+        void onGroupEntered(String status);
+        void onGroupQuit(String status);
+    }
+
+    interface IGroupDetailModel {
+        void doEnterGroup(String groupId);
+        void doQuitGroup(String status);
     }
 }

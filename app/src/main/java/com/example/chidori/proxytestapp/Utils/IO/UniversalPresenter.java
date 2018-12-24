@@ -3,8 +3,10 @@ package com.example.chidori.proxytestapp.Utils.IO;
 import com.example.chidori.proxytestapp.Events.AddSourceEvent;
 import com.example.chidori.proxytestapp.Events.CollectionListEvent;
 import com.example.chidori.proxytestapp.Events.CreateCollectionEvent;
+import com.example.chidori.proxytestapp.Events.CreateGroupEvent;
 import com.example.chidori.proxytestapp.Events.DeleteSourceEvent;
 import com.example.chidori.proxytestapp.Events.EntryListEvent;
+import com.example.chidori.proxytestapp.Events.GroupModifyEvent;
 import com.example.chidori.proxytestapp.Events.LoginEvent;
 import com.example.chidori.proxytestapp.Events.ModifyCollectionEvent;
 import com.example.chidori.proxytestapp.Events.RefreshSourceEvent;
@@ -17,8 +19,10 @@ import com.example.chidori.proxytestapp.Events.UpdateCollectionEvent;
 import com.example.chidori.proxytestapp.Utils.Beans.AddSourceBean;
 import com.example.chidori.proxytestapp.Utils.Beans.CollectionListBean;
 import com.example.chidori.proxytestapp.Utils.Beans.CreateCollectionBean;
+import com.example.chidori.proxytestapp.Utils.Beans.CreateGroupBean;
 import com.example.chidori.proxytestapp.Utils.Beans.DeleteSourceBean;
 import com.example.chidori.proxytestapp.Utils.Beans.EntryListBean;
+import com.example.chidori.proxytestapp.Utils.Beans.GroupModifyBean;
 import com.example.chidori.proxytestapp.Utils.Beans.LoginBean;
 import com.example.chidori.proxytestapp.Utils.Beans.ModifyCollectionBean;
 import com.example.chidori.proxytestapp.Utils.Beans.RefreshSourceBean;
@@ -1173,6 +1177,159 @@ public class UniversalPresenter extends BasePresenter {
                     public void onNext(RefreshSourceBean.ResResultBean result) {
                         System.out.println("result: " + result.isIsSuccess());
                         EventBus.getDefault().post(new RefreshSourceEvent(result, RefreshSourceEvent.EventType.BATCH_RSS));
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        e.printStackTrace();
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
+    }
+
+
+
+    //新建小组
+    public void CreateGroup(String groupName, String desc, String userId) {
+
+        JsonObject wrapper = new JsonObject();
+        try {
+            JsonObject jsonObject = new JsonObject();
+            wrapper.add("reqParam", jsonObject);
+            jsonObject.addProperty("name", groupName);
+            jsonObject.addProperty("description", desc);
+
+            JsonObject userObject = new JsonObject();
+            userObject.addProperty("userId", userId);
+            wrapper.add("reqUserInfo", userObject);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        ApiManager.getInstance()
+                .getRSSRetrofitService()
+                .createGroup(wrapper)
+                .map(new Function<CreateGroupBean, CreateGroupBean.ResResultBean>() {
+                    @Override
+                    public CreateGroupBean.ResResultBean apply(CreateGroupBean bean) {
+                        return bean.getResResult();
+                    }
+                }).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<CreateGroupBean.ResResultBean>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                        addDisposable(d);
+                    }
+
+                    @Override
+                    public void onNext(CreateGroupBean.ResResultBean result) {
+                        System.out.println("result: " + result.isIsSuccess());
+                        EventBus.getDefault().post(new CreateGroupEvent(result));
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        e.printStackTrace();
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
+    }
+
+
+    //加入小组
+    public void EnterGroup(String groupId, String userId) {
+
+        JsonObject wrapper = new JsonObject();
+        try {
+            JsonObject jsonObject = new JsonObject();
+            wrapper.add("reqParam", jsonObject);
+            jsonObject.addProperty("groupId", groupId);
+
+            JsonObject userObject = new JsonObject();
+            userObject.addProperty("userId", userId);
+            wrapper.add("reqUserInfo", userObject);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        ApiManager.getInstance()
+                .getRSSRetrofitService()
+                .enterGroup(wrapper)
+                .map(new Function<GroupModifyBean, GroupModifyBean.ResResultBean>() {
+                    @Override
+                    public GroupModifyBean.ResResultBean apply(GroupModifyBean bean) {
+                        return bean.getResResult();
+                    }
+                }).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<GroupModifyBean.ResResultBean>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                        addDisposable(d);
+                    }
+
+                    @Override
+                    public void onNext(GroupModifyBean.ResResultBean result) {
+                        System.out.println("result: " + result.isIsSuccess());
+                        EventBus.getDefault().post(new GroupModifyEvent(result.isIsSuccess(), GroupModifyEvent.EventType.ENTER));
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        e.printStackTrace();
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
+    }
+
+
+    //退出小组
+    public void QuitGroup(String groupId, String userId) {
+
+        JsonObject wrapper = new JsonObject();
+        try {
+            JsonObject jsonObject = new JsonObject();
+            wrapper.add("reqParam", jsonObject);
+            jsonObject.addProperty("groupId", groupId);
+
+            JsonObject userObject = new JsonObject();
+            userObject.addProperty("userId", userId);
+            wrapper.add("reqUserInfo", userObject);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        ApiManager.getInstance()
+                .getRSSRetrofitService()
+                .quitGroup(wrapper)
+                .map(new Function<GroupModifyBean, GroupModifyBean.ResResultBean>() {
+                    @Override
+                    public GroupModifyBean.ResResultBean apply(GroupModifyBean bean) {
+                        return bean.getResResult();
+                    }
+                }).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<GroupModifyBean.ResResultBean>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                        addDisposable(d);
+                    }
+
+                    @Override
+                    public void onNext(GroupModifyBean.ResResultBean result) {
+                        System.out.println("result: " + result.isIsSuccess());
+                        EventBus.getDefault().post(new GroupModifyEvent(result.isIsSuccess(), GroupModifyEvent.EventType.QUIT));
                     }
 
                     @Override

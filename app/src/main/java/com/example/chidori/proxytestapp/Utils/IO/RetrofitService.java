@@ -3,8 +3,10 @@ package com.example.chidori.proxytestapp.Utils.IO;
 import com.example.chidori.proxytestapp.Utils.Beans.AddSourceBean;
 import com.example.chidori.proxytestapp.Utils.Beans.CollectionListBean;
 import com.example.chidori.proxytestapp.Utils.Beans.CreateCollectionBean;
+import com.example.chidori.proxytestapp.Utils.Beans.CreateGroupBean;
 import com.example.chidori.proxytestapp.Utils.Beans.DeleteSourceBean;
 import com.example.chidori.proxytestapp.Utils.Beans.EntryListBean;
+import com.example.chidori.proxytestapp.Utils.Beans.GroupModifyBean;
 import com.example.chidori.proxytestapp.Utils.Beans.LoginBean;
 import com.example.chidori.proxytestapp.Utils.Beans.ModifyCollectionBean;
 import com.example.chidori.proxytestapp.Utils.Beans.RecommendListBean;
@@ -129,8 +131,6 @@ public interface RetrofitService {
     @GET("collection/list/groupPublic")
     Observable<CollectionListBean> getGroupPublic(@Body JsonObject jsonObject);
 
-
-
     //通过来源获取所有文章
     @Headers({
             "Accept: application/json",
@@ -206,6 +206,28 @@ public interface RetrofitService {
     })
     @POST("source/rss/single/refresh")
     Observable<DeleteSourceBean> deleteRSS(@Body JsonObject jsonObject);
+
+
+    //新建小组
+    @Headers({
+            "Accept: application/json",
+    })
+    @POST("group")
+    Observable<CreateGroupBean> createGroup(@Body JsonObject jsonObject);
+
+    //加入小组
+    @Headers({
+            "Accept: application/json",
+    })
+    @POST("user/enterGroup")
+    Observable<GroupModifyBean> enterGroup(@Body JsonObject jsonObject);
+
+    //退出小组
+    @Headers({
+            "Accept: application/json",
+    })
+    @POST("user/enterGroup")
+    Observable<GroupModifyBean> quitGroup(@Body JsonObject jsonObject);
 
     //userid = 061583de-12be-4116-ac58-e7343aa7f024
     //collectionid = a6c04078-7da9-44e3-8817-0fb216cf830a

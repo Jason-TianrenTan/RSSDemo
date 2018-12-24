@@ -101,4 +101,15 @@ public class ListModelImpl implements Contract.IListModel {
     public void doGetEntriesBySource(String sourceId) {
         new UniversalPresenter().GetEntryListBySource(sourceId);
     }
+
+    @Override
+    public void doGetEntriesByCollection(String collectionId) {
+        new UniversalPresenter().GetEntryOfCollection(collectionId);
+    }
+
+    @Override
+    public void doAddEntryToCollection(String collectionId, String entryId) {
+        new UniversalPresenter().AddEntryToCollection(collectionId, entryId);
+    }
+
 }
