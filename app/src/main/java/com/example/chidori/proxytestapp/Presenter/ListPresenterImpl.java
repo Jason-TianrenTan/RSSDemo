@@ -101,6 +101,10 @@ public class ListPresenterImpl implements Contract.IListPresenter {
             if (modifyCollectionEvent.getResult().isIsSuccess())
                 listView.onEntryAddedToCollection("success");
             else listView.onEntryAddedToCollection("failure");
+        } else if (modifyCollectionEvent.getType() == ModifyCollectionEvent.EventType.REMOVE) {
+            if (modifyCollectionEvent.getResult().isIsSuccess())
+                listView.onEntryRemoved("success");
+            else listView.onEntryRemoved("failure");
         }
     }
 
@@ -117,6 +121,8 @@ public class ListPresenterImpl implements Contract.IListPresenter {
             listView.onCollectionCreated("success");
         else listView.onCollectionCreated("failure");
     }
+
+
 
     @Override
     public void doGetUserCollections() {
@@ -161,6 +167,11 @@ public class ListPresenterImpl implements Contract.IListPresenter {
     @Override
     public void doGetUserGroups(String userId) {
         model.doGetUserGroups(userId);
+    }
+
+    @Override
+    public void removeEntry(String entryId) {
+        model.removeEntry(entryId);
     }
 
 }

@@ -64,6 +64,7 @@ public class ListModelImpl implements Contract.IListModel {
         }
     }
 
+
     private ArrayList<Collection> collections;
 
     public ArrayList<Group> getUserGroups() {
@@ -137,6 +138,11 @@ public class ListModelImpl implements Contract.IListModel {
     @Override
     public void doGetUserGroups(String userId) {
         new UniversalPresenter().GetUserGroups(userId);
+    }
+
+    @Override
+    public void removeEntry(String entryId) {
+        new UniversalPresenter().RemoveEntry(entryId);
     }
 
 }

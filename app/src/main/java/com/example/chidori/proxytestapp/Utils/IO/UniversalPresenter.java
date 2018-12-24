@@ -1488,4 +1488,45 @@ public class UniversalPresenter extends BasePresenter {
                     }
                 });
     }
+
+
+    //remove entry
+    public void RemoveEntry(String entryId) {
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("entryId", entryId);
+        JsonObject wrapper = new JsonObject();
+        wrapper.add("reqParam", jsonObject);
+        ApiManager.getInstance()
+                .getRSSRetrofitService()
+                .removeEntry(wrapper)
+                .map(new Function<ModifyCollectionBean, ModifyCollectionBean.ResResultBean>() {
+                    @Override
+                    public ModifyCollectionBean.ResResultBean apply(ModifyCollectionBean bean) {
+                        return bean.getResResult();
+                    }
+                }).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<ModifyCollectionBean.ResResultBean>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                        addDisposable(d);
+                    }
+
+                    @Override
+                    public void onNext(ModifyCollectionBean.ResResultBean result) {
+                        System.out.println("result: " + result.isIsSuccess());
+                        EventBus.getDefault().post(new ModifyCollectionEvent(result, ModifyCollectionEvent.EventType.REMOVE));
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        e.printStackTrace();
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
+    }
 }

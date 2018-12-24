@@ -107,6 +107,7 @@ public interface Contract {
         void onCollectionCreated(String status);
 
         void onUserGroupsRetrieved(String status);
+        void onEntryRemoved(String status);
     }
 
     interface IListModel {
@@ -120,6 +121,7 @@ public interface Contract {
         void doCreateCollection(String name, String desc, int publicStatus);
 
         void doGetUserGroups(String userId);
+        void removeEntry(String entryId);
     }
 
     interface IListPresenter {
@@ -133,6 +135,7 @@ public interface Contract {
         void doCreateCollection(String name, String desc, int publicStatus);
 
         void doGetUserGroups(String userId);
+        void removeEntry(String entryId);
     }
 
 
