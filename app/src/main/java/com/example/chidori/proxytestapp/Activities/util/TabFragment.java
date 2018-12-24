@@ -52,7 +52,7 @@ public class TabFragment extends Fragment implements Contract.ITabACView{
                 break;
             }
             case publicEntry:{
-                recyclerAdapter = new EntryCardRecyclerAdapter(StaticTool.getTestEntryCardList());
+                recyclerAdapter = new EntryCardRecyclerAdapter(StaticTool.getTestEntryCardList(),0);
                 break;
             }
             case group_collection:{
@@ -92,7 +92,7 @@ public class TabFragment extends Fragment implements Contract.ITabACView{
                                 break;
                             }
                             case publicEntry:{
-                                recyclerAdapter = new EntryCardRecyclerAdapter(StaticTool.getTestEntryCardList());
+                                recyclerAdapter = new EntryCardRecyclerAdapter(StaticTool.getTestEntryCardList(),0);
                                 break;
                             }
                             case group_collection:{
@@ -138,7 +138,7 @@ public class TabFragment extends Fragment implements Contract.ITabACView{
         if(status.equals("success")){
             cardList = tabACPresenter.getEntries();
             if(cardList==null) cardList = new ArrayList<Entry>();
-            recyclerAdapter = new EntryCardRecyclerAdapter(cardList);
+            recyclerAdapter = new EntryCardRecyclerAdapter(cardList,EntryCardRecyclerAdapter.tabAC);
             StaticTool.setSourceCardRecyclerView(recyclerAdapter,view);
             StaticTool.opPosition=-1;
             StaticTool.opId=null;

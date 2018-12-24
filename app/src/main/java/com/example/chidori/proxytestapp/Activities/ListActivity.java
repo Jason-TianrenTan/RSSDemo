@@ -278,7 +278,7 @@ public class ListActivity extends AppCompatActivity implements Contract.IListVie
         if(status.equals("success")){
             cardList = presenter.getEntries();
             if(cardList==null) cardList = new ArrayList<Entry>();
-            recyclerAdapter = new EntryCardRecyclerAdapter(cardList);
+            recyclerAdapter = new EntryCardRecyclerAdapter(cardList,EntryCardRecyclerAdapter.listAC);
             StaticTool.setSourceCardRecyclerView(recyclerAdapter,view);
             StaticTool.opPosition=-1;
             StaticTool.opId=null;
@@ -294,7 +294,7 @@ public class ListActivity extends AppCompatActivity implements Contract.IListVie
         if(status.equals("success")){
             cardList = presenter.getEntries();
             if(cardList==null) cardList = new ArrayList<Entry>();
-            recyclerAdapter = new EntryCardRecyclerAdapter(cardList);
+            recyclerAdapter = new EntryCardRecyclerAdapter(cardList,EntryCardRecyclerAdapter.listAC);
             StaticTool.setSourceCardRecyclerView(recyclerAdapter,view);
             StaticTool.opPosition=-1;
             StaticTool.opId=null;

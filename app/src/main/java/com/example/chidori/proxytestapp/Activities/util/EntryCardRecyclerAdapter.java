@@ -26,6 +26,10 @@ import java.util.List;
 public class EntryCardRecyclerAdapter extends RecyclerView.Adapter<EntryCardRecyclerAdapter.ViewHolder>{
     private Context context;
     private List<Entry> cardList;
+    private int option;
+
+    public static final int tabAC = 0;
+    public static final int listAC = 1;
 
     static class ViewHolder extends RecyclerView.ViewHolder{
 
@@ -44,8 +48,9 @@ public class EntryCardRecyclerAdapter extends RecyclerView.Adapter<EntryCardRecy
         }
     }
 
-    public EntryCardRecyclerAdapter(List<Entry> list) {
+    public EntryCardRecyclerAdapter(List<Entry> list,int option) {
         this.cardList = list;
+        this.option = option;
     }
 
     @NonNull
@@ -118,7 +123,15 @@ public class EntryCardRecyclerAdapter extends RecyclerView.Adapter<EntryCardRecy
                     Toast.makeText(context, "请选择收藏夹", Toast.LENGTH_SHORT).show();
                 }
                 else {
-                    TabFragment.getTabACPresenter().doAddEntry(input,StaticTool.opId);
+                    switch (option){
+                        case tabAC:{
+                            TabFragment.getTabACPresenter().doAddEntry(input,StaticTool.opId);
+                            break;
+                        }
+                        case listAC:{
+                            break;
+                        }
+                    }
                 }
             }
         }).setNegativeButton("取消", null).show();
