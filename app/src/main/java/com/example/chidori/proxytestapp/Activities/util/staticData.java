@@ -1,6 +1,6 @@
 package com.example.chidori.proxytestapp.Activities.util;
 
-import com.example.chidori.proxytestapp.Activities.entity.IntroCard;
+import com.example.chidori.proxytestapp.Activities.entity.EntryCard;
 import com.example.chidori.proxytestapp.Activities.entity.StarCard;
 
 import java.util.ArrayList;
@@ -11,10 +11,10 @@ public class staticData {
     public static final int QBGX = 1;   //全部更新
     public static final int SCJ = 2;    //收藏夹
     public static List<String> starList = getTestStarList();
-    public static List<IntroCard> WDDRList = getTestIntroCardList();
+    public static List<EntryCard> WDDRList = getTestIntroCardList();
     public static List<StarCard> SCJList = getTestStarCardList();
 
-    public static List<IntroCard> getTestIntroCardList(){
+    public static List<EntryCard> getTestIntroCardList(){
         return WDDRList;
     }
 

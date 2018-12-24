@@ -1,39 +1,51 @@
 package com.example.chidori.proxytestapp.Activities;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import com.example.chidori.proxytestapp.Activities.entity.IntroCard;
-import com.example.chidori.proxytestapp.Activities.util.staticData;
+import com.example.chidori.proxytestapp.Activities.entity.GroupCard;
+import com.example.chidori.proxytestapp.Activities.util.StaticTool;
 import com.example.chidori.proxytestapp.R;
 
-public class ElseActivity extends AppCompatActivity {
+import de.hdodenhof.circleimageview.CircleImageView;
+
+public class GroupNewActivity extends AppCompatActivity {
+
+    private CircleImageView imageView;
+    private Button btn_newgroup;
+    private EditText editText;
     private Toolbar toolbar;
     private TextView toolbarTitle;
 
-    private IntroCard introCard = null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_else);
+        setContentView(R.layout.activity_group_new);
+
+        imageView = (CircleImageView) findViewById(R.id.image_grouphead);
+        btn_newgroup =(Button)findViewById(R.id.btn_new_group);
+        editText =(EditText)findViewById(R.id.edit_groupname);
 
         setToolbar();
-        toolbarTitle.setText("详细信息");
+        toolbarTitle.setText("新建小组");
 
-        Intent intent = getIntent();
-        int position = intent.getIntExtra("position", -1);
-        if (position >= 0) {
-            introCard = staticData.WDDRList.get(position);
-            toolbarTitle.setText(introCard.getTitle());
-
-        }
-
-
+        btn_newgroup.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //创建新小组
+                StaticTool.groupCardList.add(new GroupCard("addid",editText.getText().toString()));
+                Toast.makeText(GroupNewActivity.this, "小组创建成功", Toast.LENGTH_SHORT).show();
+                finish();
+            }
+        });
     }
 
     private void setToolbar(){
@@ -48,7 +60,6 @@ public class ElseActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // 绑定toolbar跟menu
         getMenuInflater().inflate(R.menu.toolbar, menu);
-        toolbar.getMenu().findItem(R.id.detail).setVisible(false);
         toolbar.getMenu().findItem(R.id.add).setVisible(false);
         return true;
     }
@@ -63,4 +74,5 @@ public class ElseActivity extends AppCompatActivity {
         }
         else return false;
     }
+
 }

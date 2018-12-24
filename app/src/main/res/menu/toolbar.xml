@@ -7,6 +7,7 @@
         android:icon="@drawable/add"
         android:orderInCategory="5"
         android:title="add"
+        android:visible="false"
         app:showAsAction="ifRoom"/>
 
     <item
@@ -14,6 +15,7 @@
         android:icon="@drawable/detail"
         android:orderInCategory="10"
         android:title="detail"
+        android:visible="false"
         app:showAsAction="ifRoom"/>
 
 </menu>

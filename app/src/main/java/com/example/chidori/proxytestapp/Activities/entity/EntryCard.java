@@ -1,10 +1,9 @@
 package com.example.chidori.proxytestapp.Activities.entity;
 
-public class IntroCard{
+public class EntryCard {
     private String title;
     private String detail;
-
-    public String getSourceId() {
+    public String getId() {
         return sourceId;
     }
 
@@ -23,11 +22,10 @@ public class IntroCard{
     private String sourceId;
     private String updateTime;
 
-    public IntroCard(String sourceId,String title,String detail, String updateTime){
-        this.sourceId = sourceId;
+    public EntryCard(String id, String title, String detail){
+        this.sourceId = id;
         this.title = title;
         this.detail = detail;
-        this.updateTime = updateTime;
     }
 
     public String getDetail() {

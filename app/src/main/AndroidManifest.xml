@@ -55,6 +55,9 @@
             tools:ignore="InnerclassSeparator" />
         <activity android:name=".Activities.ListActivity"
             tools:ignore="InnerclassSeparator" />
+        <activity android:name=".Activities.GroupNewActivity" />
+        <activity android:name=".Activities.GroupDetailActivity" />
+        <activity android:name=".Activities.TabActivity" />
 
     </application>
 
