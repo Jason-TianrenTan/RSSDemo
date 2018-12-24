@@ -1,5 +1,6 @@
 package com.example.chidori.proxytestapp.Presenter;
 
+import com.example.chidori.proxytestapp.Activities.entity.Collection;
 import com.example.chidori.proxytestapp.Activities.entity.Entry;
 import com.example.chidori.proxytestapp.Contract.Contract;
 import com.example.chidori.proxytestapp.Events.CollectionListEvent;
@@ -75,5 +76,9 @@ public class TabACPresenterImpl implements Contract.ITabACPresenter {
 
     public ArrayList<Entry> getEntries() {
         return model.getEntries();
+    }
+
+    public ArrayList<Collection> getCollections(){
+        return model.getCollections();
     }
 }

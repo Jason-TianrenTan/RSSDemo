@@ -155,7 +155,8 @@ public class MenuActivity extends AppCompatActivity implements Contract.IMenuVie
                     Toast.makeText(getBaseContext(), "输入不能为空", Toast.LENGTH_SHORT).show();
                 }
                 else {
-                    StaticTool.sourceCardList.add(new Source(UUID.randomUUID().toString(),input,"","",0,"",""));
+                    presenter.doAddRSSFromLink(input);
+                    //待修改
                 }
             }
         }).setNegativeButton("取消", null).show();
@@ -237,6 +238,13 @@ public class MenuActivity extends AppCompatActivity implements Contract.IMenuVie
 
     @Override
     public void onLinkResult(SaveRSSBean.ResResultBean bean) {
-
+        if(bean.isIsSuccess()){
+            StaticTool.sourceCardList.add(new Source(bean.getCurData().getSourceId(),bean.getCurData().getName(),
+                    bean.getCurData().getDescription(),bean.getCurData().getLink(),bean.getCurData().getType(),
+                    bean.getCurData().getCreateTime(),bean.getCurData().getUpdateTime()));
+        }
+        else {
+            Toast.makeText(MenuActivity.this, "添加订阅失败", Toast.LENGTH_SHORT).show();
+        }
     }
 }

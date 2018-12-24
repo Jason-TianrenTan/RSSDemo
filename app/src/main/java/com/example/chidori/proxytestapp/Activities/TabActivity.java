@@ -12,16 +12,15 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.chidori.proxytestapp.Activities.util.StaticTool;
 import com.example.chidori.proxytestapp.Activities.util.TabAdapter;
 import com.example.chidori.proxytestapp.Activities.util.TabFragment;
-import com.example.chidori.proxytestapp.Contract.Contract;
 import com.example.chidori.proxytestapp.R;
 
-public class TabActivity extends AppCompatActivity implements Contract.ITabACView{
+public class TabActivity extends AppCompatActivity{
     private Toolbar toolbar;
     private TextView toolbarTitle;
     private View view;
-    private String id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,9 +28,10 @@ public class TabActivity extends AppCompatActivity implements Contract.ITabACVie
         view = View.inflate(this,R.layout.activity_tabs,null);
         setContentView(view);
 
-        id = getIntent().getStringExtra("id");
+        StaticTool.opId = getIntent().getStringExtra("id");
         setToolbar();
         toolbarTitle.setText(getIntent().getStringExtra("title"));
+
         setTabs();
     }
 
@@ -60,8 +60,7 @@ public class TabActivity extends AppCompatActivity implements Contract.ITabACVie
             }
             case R.id.detail:{
                 Intent intent = new Intent(TabActivity.this,GroupDetailActivity.class);
-                intent.putExtra("id", id);
-                Toast.makeText(TabActivity.this, id, Toast.LENGTH_SHORT).show();
+                intent.putExtra("id", StaticTool.opId);
                 startActivity(intent);
                 return true;
             }
@@ -92,20 +91,5 @@ public class TabActivity extends AppCompatActivity implements Contract.ITabACVie
             tabs.getTabAt(i).setText(tabName[i]);
         }
         tabs.setTabMode(TabLayout.MODE_SCROLLABLE);
-    }
-
-    @Override
-    public void onGroupCollectionsRetrieved(String status) {
-
-    }
-
-    @Override
-    public void onGroupEntriesRetrieved(String status) {
-
-    }
-
-    @Override
-    public void onEntryAdded(String status) {
-
     }
 }

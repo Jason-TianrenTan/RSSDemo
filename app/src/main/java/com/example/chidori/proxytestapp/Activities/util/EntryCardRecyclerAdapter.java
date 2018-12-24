@@ -90,21 +90,15 @@ public class EntryCardRecyclerAdapter extends RecyclerView.Adapter<EntryCardRecy
                     ((ImageButton)v).setImageDrawable(ContextCompat.getDrawable(context,R.drawable.star));
                 }
                 else {
-                    boolean result = setInputDialog("添加到收藏夹","请选择收藏夹");
-                    if(result) {
-                        Toast.makeText(context, "收藏失败", Toast.LENGTH_SHORT).show();
-                        return;
-                    }
-                    Toast.makeText(context, "收藏成功", Toast.LENGTH_SHORT).show();
-                    holder.stared = true;
-                    StaticTool.starList.add(entryCard.getEntryId());
-                    ((ImageButton)v).setImageDrawable(ContextCompat.getDrawable(context,R.drawable.stared));
+                    StaticTool.opPosition = position;
+                    StaticTool.opId = entryCard.getCollectionId();
+                    setInputDialog("添加到收藏夹","请选择收藏夹");
                 }
             }
         });
     }
 
-    private boolean setInputDialog(String title,String message){
+    private void setInputDialog(String title,String message){
         AlertDialog.Builder dialog = new AlertDialog.Builder(context);
         dialog.setTitle(title).setMessage(message);
         View v = View.inflate(context,R.layout.view_dialog_collection_radio, null);
@@ -116,7 +110,6 @@ public class EntryCardRecyclerAdapter extends RecyclerView.Adapter<EntryCardRecy
         recyclerView.setAdapter(recyclerAdapter);
         dialog.setView(v);
 
-        final boolean[] result = {false};
         dialog.setPositiveButton("确定", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
 
@@ -125,13 +118,10 @@ public class EntryCardRecyclerAdapter extends RecyclerView.Adapter<EntryCardRecy
                     Toast.makeText(context, "请选择收藏夹", Toast.LENGTH_SHORT).show();
                 }
                 else {
-                    Toast.makeText(context, input, Toast.LENGTH_SHORT).show();
-                    //在收藏表中插入
-                    result[0] = true;
+                    TabFragment.getTabACPresenter().doAddEntry(input,StaticTool.opId);
                 }
             }
         }).setNegativeButton("取消", null).show();
-        return result[0];
     }
 
     @Override

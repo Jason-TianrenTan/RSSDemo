@@ -2,6 +2,7 @@ package com.example.chidori.proxytestapp.Presenter;
 
 
 import com.example.chidori.proxytestapp.Activities.entity.Collection;
+import com.example.chidori.proxytestapp.Activities.entity.Entry;
 import com.example.chidori.proxytestapp.Activities.entity.Source;
 import com.example.chidori.proxytestapp.Contract.Contract;
 import com.example.chidori.proxytestapp.Events.CollectionListEvent;
@@ -36,6 +37,10 @@ public class ListPresenterImpl implements Contract.IListPresenter {
 
     public ArrayList<Source> getSources() {
         return model.getSources();
+    }
+
+    public ArrayList<Entry> getEntries(){
+        return model.getEntries();
     }
 
     public void attachView(Contract.IListView view) {

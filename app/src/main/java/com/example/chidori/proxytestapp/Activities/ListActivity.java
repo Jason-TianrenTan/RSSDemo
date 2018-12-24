@@ -276,11 +276,7 @@ public class ListActivity extends AppCompatActivity implements Contract.IListVie
     @Override
     public void onEntriesBySourceRetrieved(String status) {
         if(status.equals("success")){
-            /*
-            *
-            *
-            * */
-            cardList = StaticTool.getTestEntryCardList();
+            cardList = presenter.getEntries();
             if(cardList==null) cardList = new ArrayList<Entry>();
             recyclerAdapter = new EntryCardRecyclerAdapter(cardList);
             StaticTool.setSourceCardRecyclerView(recyclerAdapter,view);
@@ -296,11 +292,7 @@ public class ListActivity extends AppCompatActivity implements Contract.IListVie
     @Override
     public void onEntriesByCollectionRetrieved(String status) {
         if(status.equals("success")){
-            /*
-             *
-             *
-             * */
-            cardList = StaticTool.getTestEntryCardList();
+            cardList = presenter.getEntries();
             if(cardList==null) cardList = new ArrayList<Entry>();
             recyclerAdapter = new EntryCardRecyclerAdapter(cardList);
             StaticTool.setSourceCardRecyclerView(recyclerAdapter,view);
@@ -318,6 +310,11 @@ public class ListActivity extends AppCompatActivity implements Contract.IListVie
         if(status.equals("success")){
             //Toast.makeText(ListActivity.this, "收藏", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    @Override
+    public void onCollectionCreated(String status) {
+
     }
 
     public static ListPresenterImpl getPresenter(){
