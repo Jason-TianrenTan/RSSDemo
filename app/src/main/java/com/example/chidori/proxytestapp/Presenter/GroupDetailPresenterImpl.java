@@ -3,6 +3,8 @@ package com.example.chidori.proxytestapp.Presenter;
 import com.example.chidori.proxytestapp.Contract.Contract;
 import com.example.chidori.proxytestapp.Model.GroupDetailModelImpl;
 
+import org.greenrobot.eventbus.EventBus;
+
 public class GroupDetailPresenterImpl implements Contract.IGroupDetailPresenter {
 
     GroupDetailModelImpl model;
@@ -15,6 +17,8 @@ public class GroupDetailPresenterImpl implements Contract.IGroupDetailPresenter 
 
     public GroupDetailPresenterImpl() {
         model = new GroupDetailModelImpl();
+        if (!EventBus.getDefault().isRegistered(this))
+            EventBus.getDefault().register(this);
     }
 
     @Override

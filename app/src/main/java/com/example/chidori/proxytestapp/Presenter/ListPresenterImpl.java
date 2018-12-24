@@ -12,6 +12,7 @@ import com.example.chidori.proxytestapp.Events.ModifyCollectionEvent;
 import com.example.chidori.proxytestapp.Events.SourceListEvent;
 import com.example.chidori.proxytestapp.Model.ListModelImpl;
 
+import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
@@ -19,6 +20,11 @@ import java.util.ArrayList;
 
 public class ListPresenterImpl implements Contract.IListPresenter {
 
+    public ListPresenterImpl() {
+        model = new ListModelImpl();
+        if (!EventBus.getDefault().isRegistered(this))
+            EventBus.getDefault().register(this);
+    }
     private ListModelImpl model;
 
     private Contract.IListView listView;
