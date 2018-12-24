@@ -6,6 +6,7 @@ import com.example.chidori.proxytestapp.Utils.Beans.CreateCollectionBean;
 import com.example.chidori.proxytestapp.Utils.Beans.CreateGroupBean;
 import com.example.chidori.proxytestapp.Utils.Beans.DeleteSourceBean;
 import com.example.chidori.proxytestapp.Utils.Beans.EntryListBean;
+import com.example.chidori.proxytestapp.Utils.Beans.GroupMemberBean;
 import com.example.chidori.proxytestapp.Utils.Beans.GroupModifyBean;
 import com.example.chidori.proxytestapp.Utils.Beans.LoginBean;
 import com.example.chidori.proxytestapp.Utils.Beans.ModifyCollectionBean;
@@ -20,6 +21,7 @@ import com.example.chidori.proxytestapp.Utils.Beans.SearchGroupBean;
 import com.example.chidori.proxytestapp.Utils.Beans.SourceListBean;
 import com.example.chidori.proxytestapp.Utils.Beans.UpdateBean;
 import com.example.chidori.proxytestapp.Utils.Beans.UpdateCollectionBean;
+import com.example.chidori.proxytestapp.Utils.Beans.UserDetailBean;
 import com.google.gson.JsonObject;
 
 import java.util.Map;
@@ -240,9 +242,25 @@ public interface RetrofitService {
     @GET("group/detail/name")
     Observable<SearchGroupBean> searchGroup(@QueryMap Map<String, String> map);
 
+
+    //获取小组成员信息
+    @Headers({
+            "Accept: application/json",
+    })
+    @GET("group/member")
+    Observable<GroupMemberBean> getGroupMembers(@QueryMap Map<String, String> map);
+
+
+    //根据userid获取用户信息
+    @Headers({
+            "Accept: application/json",
+    })
+    @GET("user/detail")
+    Observable<UserDetailBean> queryUserInfo(@QueryMap Map<String, String> map);
     //userid = 061583de-12be-4116-ac58-e7343aa7f024
     //collectionid = a6c04078-7da9-44e3-8817-0fb216cf830a
     //entryid = ""2da32695-2bf5-4308-b5ef-9a26e6f6c941""
     //空的 28084a85-6d10-4693-bd27-d031b2478bcf
     //sourceid = "586104ba-81a7-4682-89cd-7a6dfc09826d"
+    //groupid = "03eda6fc-10d3-435d-9a82-bc1fd7a8714f"
 }

@@ -112,4 +112,9 @@ public class ListModelImpl implements Contract.IListModel {
         new UniversalPresenter().AddEntryToCollection(collectionId, entryId);
     }
 
+    @Override
+    public void doCreateCollection(String name, String desc, int publicStatus) {
+        new UniversalPresenter().CreateCollection(name, desc, publicStatus, Config.userId);
+    }
+
 }

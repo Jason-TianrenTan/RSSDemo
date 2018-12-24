@@ -5,6 +5,7 @@ import com.example.chidori.proxytestapp.Activities.entity.Collection;
 import com.example.chidori.proxytestapp.Activities.entity.Source;
 import com.example.chidori.proxytestapp.Contract.Contract;
 import com.example.chidori.proxytestapp.Events.CollectionListEvent;
+import com.example.chidori.proxytestapp.Events.CreateCollectionEvent;
 import com.example.chidori.proxytestapp.Events.CreateGroupEvent;
 import com.example.chidori.proxytestapp.Events.DeleteSourceEvent;
 import com.example.chidori.proxytestapp.Events.EntryListEvent;
@@ -99,6 +100,13 @@ public class ListPresenterImpl implements Contract.IListPresenter {
         }
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onCollectionCreated(CreateCollectionEvent createCollectionEvent) {
+        if (createCollectionEvent.getResult().isIsSuccess())
+            listView.onCollectionCreated("success");
+        else listView.onCollectionCreated("failure");
+    }
+
 
     @Override
     public void doGetUserCollections() {
@@ -133,6 +141,11 @@ public class ListPresenterImpl implements Contract.IListPresenter {
     @Override
     public void doAddEntryToCollection(String collectionId, String entryId) {
         model.doAddEntryToCollection(collectionId, entryId);
+    }
+
+    @Override
+    public void doCreateCollection(String name, String desc, int publicStatus) {
+        model.doCreateCollection(name, desc, publicStatus);
     }
 
 }

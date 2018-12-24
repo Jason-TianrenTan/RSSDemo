@@ -1,5 +1,6 @@
 package com.example.chidori.proxytestapp.Contract;
 
+import com.example.chidori.proxytestapp.Activities.entity.GroupMember;
 import com.example.chidori.proxytestapp.Events.SaveRSSEvent;
 import com.example.chidori.proxytestapp.Events.UpdateAccountEvent;
 import com.example.chidori.proxytestapp.Utils.Beans.CollectionListBean;
@@ -103,6 +104,7 @@ public interface Contract {
         void onEntriesBySourceRetrieved(String status);
         void onEntriesByCollectionRetrieved(String status);
         void onEntryAddedToCollection(String status);
+        void onCollectionCreated(String status);
     }
 
     interface IListModel {
@@ -113,6 +115,7 @@ public interface Contract {
         void doGetEntriesBySource(String sourceId);
         void doGetEntriesByCollection(String collectionId);
         void doAddEntryToCollection(String collectionId, String entryId);
+        void doCreateCollection(String name, String desc, int publicStatus);
     }
 
     interface IListPresenter {
@@ -123,6 +126,7 @@ public interface Contract {
         void doGetEntriesBySource(String sourceId);
         void doGetEntriesByCollection(String collectionId);
         void doAddEntryToCollection(String collectionId, String entryId);
+        void doCreateCollection(String name, String desc, int publicStatus);
     }
 
 
@@ -211,4 +215,22 @@ public interface Contract {
     interface INavMenuPresenter {
         void doSearchGroup(String keyword);
     }
+
+
+    //TabActivity
+    interface ITabView {
+        void onGroupMembersResult(String status);
+        void onUserInfoResult(GroupMember member);
+    }
+
+    interface ITabModel {
+        void doGetGroupMembers(String groupId);
+        void doGetUserInfo(String userId);
+    }
+
+    interface ITabPresenter {
+        void doGetGroupMembers(String groupId);
+        void doGetUserInfo(String userId);//根据UserId获取成员信息
+    }
+
 }
