@@ -16,6 +16,7 @@ import com.example.chidori.proxytestapp.Utils.Beans.RegisterBean;
 
 import com.example.chidori.proxytestapp.Utils.Beans.SaveEntryBean;
 import com.example.chidori.proxytestapp.Utils.Beans.SaveRSSBean;
+import com.example.chidori.proxytestapp.Utils.Beans.SearchGroupBean;
 import com.example.chidori.proxytestapp.Utils.Beans.SourceListBean;
 import com.example.chidori.proxytestapp.Utils.Beans.UpdateBean;
 import com.example.chidori.proxytestapp.Utils.Beans.UpdateCollectionBean;
@@ -228,6 +229,13 @@ public interface RetrofitService {
     })
     @POST("user/enterGroup")
     Observable<GroupModifyBean> quitGroup(@Body JsonObject jsonObject);
+
+    //搜索
+    @Headers({
+            "Accept: application/json",
+    })
+    @GET("group/detail/name")
+    Observable<SearchGroupBean> searchGroup(@Body JsonObject jsonObject);
 
     //userid = 061583de-12be-4116-ac58-e7343aa7f024
     //collectionid = a6c04078-7da9-44e3-8817-0fb216cf830a

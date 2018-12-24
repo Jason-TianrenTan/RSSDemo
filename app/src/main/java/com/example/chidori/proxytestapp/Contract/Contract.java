@@ -146,6 +146,69 @@ public interface Contract {
 
     interface IGroupDetailModel {
         void doEnterGroup(String groupId);
-        void doQuitGroup(String status);
+        void doQuitGroup(String groupId);
+    }
+
+    interface IGroupDetailPresenter {
+        void doEnterGroup(String groupId);
+        void doQuitGroup(String groupId);
+    }
+
+
+    //TabFragment：
+    //属于NavigationFragment的home界面
+    interface INavigationHomeView {
+        void onSourceGet(String status);
+        void onSourceDeleted(String status);
+        void onPublicEntriesRetrieved(String status);
+        void onEntryAdded(String status);//给收藏夹添加文章
+    }
+
+    interface INavigationHomeModel {
+        void doGetSources(int type);
+        void deleteSource(String sourceId);
+        void doGetPublicEntries();
+        void doAddEntry(String collectionId, String entryId);
+    }
+
+    interface INavigationHomePresenter {
+        void doGetSources(int type);//获取某一用户某一(0,1)类型的来源
+        void deleteSource(String sourceId);//根据sourceId删除source
+        void doGetPublicEntries();//获取全部公开的文章(手机)response1
+        void doAddEntry(String collectionId, String entryId);//添加文章到收藏夹
+    }
+
+
+    //属于TabActivity
+    interface ITabACView {
+        void onGroupCollectionsRetrieved(String status);//小组内收藏夹
+        void onGroupEntriesRetrieved(String status);
+        void onEntryAdded(String status);//给收藏夹添加文章
+    }
+
+    interface ITabACModel {
+        void doGetGroupEntries(String groupId);//小组内公开
+        void doGetGroupCollections(String groupId);//小组内收藏夹
+        void doAddEntry(String collectionId, String entryId);//收藏
+    }
+
+    interface ITabACPresenter {
+        void doGetGroupEntries(String groupId);//小组内公开
+        void doGetGroupCollections(String groupId);//小组内收藏夹
+        void doAddEntry(String collectionId, String entryId);//收藏
+    }
+
+
+    //NavigationFragment (属于MenuActivity)
+    interface INavMenuView {
+        void onGroupSearchResult(String status);
+    }
+
+    interface INavMenuModel {
+        void doSearchGroup(String keyword);
+    }
+
+    interface INavMenuPresenter {
+        void doSearchGroup(String keyword);
     }
 }

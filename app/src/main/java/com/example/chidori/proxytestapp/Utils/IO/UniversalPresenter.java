@@ -7,6 +7,7 @@ import com.example.chidori.proxytestapp.Events.CreateGroupEvent;
 import com.example.chidori.proxytestapp.Events.DeleteSourceEvent;
 import com.example.chidori.proxytestapp.Events.EntryListEvent;
 import com.example.chidori.proxytestapp.Events.GroupModifyEvent;
+import com.example.chidori.proxytestapp.Events.GroupResultEvent;
 import com.example.chidori.proxytestapp.Events.LoginEvent;
 import com.example.chidori.proxytestapp.Events.ModifyCollectionEvent;
 import com.example.chidori.proxytestapp.Events.RefreshSourceEvent;
@@ -29,6 +30,7 @@ import com.example.chidori.proxytestapp.Utils.Beans.RefreshSourceBean;
 import com.example.chidori.proxytestapp.Utils.Beans.RegisterBean;
 import com.example.chidori.proxytestapp.Utils.Beans.SaveEntryBean;
 import com.example.chidori.proxytestapp.Utils.Beans.SaveRSSBean;
+import com.example.chidori.proxytestapp.Utils.Beans.SearchGroupBean;
 import com.example.chidori.proxytestapp.Utils.Beans.SourceListBean;
 import com.example.chidori.proxytestapp.Utils.Beans.UpdateBean;
 import com.example.chidori.proxytestapp.Utils.Beans.UpdateCollectionBean;
@@ -1330,6 +1332,53 @@ public class UniversalPresenter extends BasePresenter {
                     public void onNext(GroupModifyBean.ResResultBean result) {
                         System.out.println("result: " + result.isIsSuccess());
                         EventBus.getDefault().post(new GroupModifyEvent(result.isIsSuccess(), GroupModifyEvent.EventType.QUIT));
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        e.printStackTrace();
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
+    }
+
+
+    //搜索小组
+    public void SearchGroup(String keyword) {
+
+        JsonObject wrapper = new JsonObject();
+        try {
+            JsonObject jsonObject = new JsonObject();
+            wrapper.add("reqParam", jsonObject);
+            jsonObject.addProperty("name", keyword);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        ApiManager.getInstance()
+                .getRSSRetrofitService()
+                .searchGroup(wrapper)
+                .map(new Function<SearchGroupBean, SearchGroupBean.ResResultBean>() {
+                    @Override
+                    public SearchGroupBean.ResResultBean apply(SearchGroupBean bean) {
+                        return bean.getResResult();
+                    }
+                }).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<SearchGroupBean.ResResultBean>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                        addDisposable(d);
+                    }
+
+                    @Override
+                    public void onNext(SearchGroupBean.ResResultBean result) {
+                        System.out.println("result: " + result.isIsSuccess());
+                        EventBus.getDefault().post(new GroupResultEvent(result));
                     }
 
                     @Override
