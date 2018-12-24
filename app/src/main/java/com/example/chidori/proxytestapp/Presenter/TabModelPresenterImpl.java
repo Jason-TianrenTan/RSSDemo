@@ -26,6 +26,10 @@ public class TabModelPresenterImpl implements Contract.ITabPresenter {
             EventBus.getDefault().register(this);
     }
 
+    public void attachView(Contract.ITabView view) {
+        tabView = view;
+    }
+
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onGroupMemberResult(GroupMemberEvent groupMemberEvent) {
         if (groupMemberEvent.getResult().isIsSuccess()) {

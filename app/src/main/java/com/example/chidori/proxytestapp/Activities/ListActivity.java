@@ -19,12 +19,14 @@ import android.widget.Toast;
 
 import com.example.chidori.proxytestapp.Activities.entity.Collection;
 import com.example.chidori.proxytestapp.Activities.entity.Entry;
+import com.example.chidori.proxytestapp.Activities.entity.Group;
 import com.example.chidori.proxytestapp.Activities.entity.Source;
 import com.example.chidori.proxytestapp.Activities.util.CollectionCardRecyclerAdapter;
 import com.example.chidori.proxytestapp.Activities.util.GroupCardRecyclerAdapter;
 import com.example.chidori.proxytestapp.Activities.util.EntryCardRecyclerAdapter;
 import com.example.chidori.proxytestapp.Activities.util.SourceCardRecyclerAdapter;
 import com.example.chidori.proxytestapp.Activities.util.StaticTool;
+import com.example.chidori.proxytestapp.Config;
 import com.example.chidori.proxytestapp.Contract.Contract;
 import com.example.chidori.proxytestapp.Presenter.ListPresenterImpl;
 import com.example.chidori.proxytestapp.R;
@@ -112,13 +114,6 @@ public class ListActivity extends AppCompatActivity implements Contract.IListVie
                 }
                 return true;
             }
-            case R.id.detail:{
-                Intent intent = new Intent(ListActivity.this,GroupDetailActivity.class);
-                intent.putExtra("id", id);
-                Toast.makeText(ListActivity.this, id, Toast.LENGTH_SHORT).show();
-                startActivity(intent);
-                return true;
-            }
         }
         return false;
     }
@@ -189,9 +184,7 @@ public class ListActivity extends AppCompatActivity implements Contract.IListVie
         switch (type){
             case group:{
                 toolbarTitle.setText("我的小组");
-                cardList = StaticTool.getTestGroupCardList();
-                recyclerAdapter = new GroupCardRecyclerAdapter(cardList);
-                StaticTool.setSourceCardRecyclerView(recyclerAdapter,view);
+                presenter.doGetUserGroups(Config.userId);
                 break;
             }
             case collection:{
@@ -206,12 +199,12 @@ public class ListActivity extends AppCompatActivity implements Contract.IListVie
             }
             case source_entry:{
                 toolbarTitle.setText(getIntent().getStringExtra("title"));
-                presenter.doGetEntriesBySource(StaticTool.opId);
+                presenter.doGetEntriesBySource(id);
                 break;
             }
             case collection_entry:{
                 toolbarTitle.setText(getIntent().getStringExtra("title"));
-                presenter.doGetEntriesByCollection(StaticTool.opId);
+                presenter.doGetEntriesByCollection(id);
                 break;
             }
         }
@@ -224,7 +217,7 @@ public class ListActivity extends AppCompatActivity implements Contract.IListVie
             cardList = presenter.getCollections();
             if(cardList==null) cardList = new ArrayList<Collection>();
             recyclerAdapter = new CollectionCardRecyclerAdapter(cardList,true);
-            StaticTool.setSourceCardRecyclerView(recyclerAdapter,view);
+            StaticTool.setCardRecyclerView(recyclerAdapter,view);
         }
         else {
             Toast.makeText(ListActivity.this, "获取收藏夹列表失败", Toast.LENGTH_SHORT).show();
@@ -236,14 +229,14 @@ public class ListActivity extends AppCompatActivity implements Contract.IListVie
     public void onCollectionDeleted(String status) {
 
         if(status.equals("success")){
-            presenter.deleteCollection(StaticTool.opId);
+            presenter.deleteCollection(id);
             StaticTool.collectionCardList.remove(StaticTool.opPosition);
-            StaticTool.opPosition = -1;
-            recyclerAdapter.notifyDataSetChanged();
+            recyclerAdapter.notifyItemChanged(StaticTool.opPosition);
             Toast.makeText(ListActivity.this, "删除成功", Toast.LENGTH_SHORT).show();
 
         }
         else Toast.makeText(ListActivity.this, "删除失败", Toast.LENGTH_SHORT).show();
+        StaticTool.opPosition = -1;
     }
 
     @Override
@@ -251,8 +244,8 @@ public class ListActivity extends AppCompatActivity implements Contract.IListVie
         if(status.equals("success")){
             cardList = presenter.getSources();
             if(cardList==null) cardList = new ArrayList<Source>();
-            recyclerAdapter = new SourceCardRecyclerAdapter(cardList);
-            StaticTool.setSourceCardRecyclerView(recyclerAdapter,view);
+            recyclerAdapter = new SourceCardRecyclerAdapter(cardList,SourceCardRecyclerAdapter.list);
+            StaticTool.setCardRecyclerView(recyclerAdapter,view);
         }
         else {
             Toast.makeText(ListActivity.this, "获得订阅列表失败", Toast.LENGTH_SHORT).show();
@@ -263,15 +256,15 @@ public class ListActivity extends AppCompatActivity implements Contract.IListVie
     @Override
     public void onSourceDeleted(String status) {
         if(status.equals("success")){
-            presenter.deleteSource(StaticTool.opId);
+            presenter.deleteSource(id);
             StaticTool.sourceCardList.remove(StaticTool.opPosition);
-            StaticTool.opPosition=-1;
-            recyclerAdapter.notifyDataSetChanged();
+            recyclerAdapter.notifyItemChanged(StaticTool.opPosition);
             Toast.makeText(ListActivity.this, "删除成功", Toast.LENGTH_SHORT).show();
         }
         else {
             Toast.makeText(ListActivity.this, "删除失败", Toast.LENGTH_SHORT).show();
         }
+        StaticTool.opPosition = -1;
 
     }
 
@@ -281,14 +274,13 @@ public class ListActivity extends AppCompatActivity implements Contract.IListVie
             cardList = presenter.getEntries();
             if(cardList==null) cardList = new ArrayList<Entry>();
             recyclerAdapter = new EntryCardRecyclerAdapter(cardList,EntryCardRecyclerAdapter.listAC);
-            StaticTool.setSourceCardRecyclerView(recyclerAdapter,view);
-            StaticTool.opPosition=-1;
-            StaticTool.opId=null;
+            StaticTool.setCardRecyclerView(recyclerAdapter,view);
         }
         else {
             Toast.makeText(ListActivity.this, "获得文章失败", Toast.LENGTH_SHORT).show();
             cardList = new ArrayList<Entry>();
         }
+        StaticTool.opPosition = -1;
     }
 
     @Override
@@ -297,22 +289,25 @@ public class ListActivity extends AppCompatActivity implements Contract.IListVie
             cardList = presenter.getEntries();
             if(cardList==null) cardList = new ArrayList<Entry>();
             recyclerAdapter = new EntryCardRecyclerAdapter(cardList,EntryCardRecyclerAdapter.listAC);
-            StaticTool.setSourceCardRecyclerView(recyclerAdapter,view);
-            StaticTool.opPosition=-1;
-            StaticTool.opId=null;
+            StaticTool.setCardRecyclerView(recyclerAdapter,view);
         }
         else {
             Toast.makeText(ListActivity.this, "获得文章失败", Toast.LENGTH_SHORT).show();
             cardList =new ArrayList<Entry>();
         }
+        StaticTool.opPosition = -1;
     }
 
     @Override
     public void onEntryAddedToCollection(String status) {
         if(status.equals("success")){
-            //Toast.makeText(ListActivity.this, "收藏", Toast.LENGTH_SHORT).show();
-
+            Toast.makeText(ListActivity.this, "收藏成功", Toast.LENGTH_SHORT).show();
+            recyclerAdapter.notifyItemChanged(StaticTool.opPosition);
+            StaticTool.starList.add(id);
         }
+        else Toast.makeText(ListActivity.this, "收藏失败", Toast.LENGTH_SHORT).show();
+        //zzzz
+        StaticTool.opPosition = -1;
     }
 
     @Override
@@ -327,6 +322,22 @@ public class ListActivity extends AppCompatActivity implements Contract.IListVie
             Toast.makeText(ListActivity.this, "收藏夹创建失败", Toast.LENGTH_SHORT).show();
         }
     }
+
+    @Override
+    public void onUserGroupsRetrieved(String status){
+        if(status.equals("success")){
+            cardList = presenter.getUserGroups();
+            if(cardList==null) cardList = new ArrayList<Group>();
+            recyclerAdapter = new GroupCardRecyclerAdapter(cardList);
+            StaticTool.setCardRecyclerView(recyclerAdapter,view);
+        }
+        else {
+            Toast.makeText(ListActivity.this, "获得小组失败", Toast.LENGTH_SHORT).show();
+            cardList =new ArrayList<Group>();
+        }
+        StaticTool.opPosition = -1;
+    }
+
 
     public static ListPresenterImpl getPresenter(){
         return presenter;

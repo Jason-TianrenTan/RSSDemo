@@ -72,14 +72,22 @@ public interface Contract {
 
     interface IMenuView {
         void onLinkResult(SaveRSSBean.ResResultBean bean);
+        void onUserCollectionsCall(String status);
+        void onEntriesByCollectionRetrieved(String success);
     }
 
     interface IMenuModel {
         void doAddRSSFromLink(String link);
+        void doGetUserCollections();
+
+        void doGetEntriesByCollection(String collectionId);
     }
 
     interface IMenuPresenter {
         void doAddRSSFromLink(String link);
+        void doGetUserCollections();
+
+        void doGetEntriesByCollection(String collectionId);
     }
 
 
@@ -105,6 +113,7 @@ public interface Contract {
         void onEntriesByCollectionRetrieved(String status);
         void onEntryAddedToCollection(String status);
         void onCollectionCreated(String status);
+        void onUserGroupsRetrieved(String status);
     }
 
     interface IListModel {
@@ -116,6 +125,7 @@ public interface Contract {
         void doGetEntriesByCollection(String collectionId);
         void doAddEntryToCollection(String collectionId, String entryId);
         void doCreateCollection(String name, String desc, int publicStatus);
+        void doGetUserGroups(String userId);
     }
 
     interface IListPresenter {
@@ -127,6 +137,7 @@ public interface Contract {
         void doGetEntriesByCollection(String collectionId);
         void doAddEntryToCollection(String collectionId, String entryId);
         void doCreateCollection(String name, String desc, int publicStatus);
+        void doGetUserGroups(String userId);
     }
 
 

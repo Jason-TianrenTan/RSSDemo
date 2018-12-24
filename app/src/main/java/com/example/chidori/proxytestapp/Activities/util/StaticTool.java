@@ -16,12 +16,12 @@ import java.util.List;
 import java.util.UUID;
 
 public class StaticTool {
-    public static List<String> starList = getTestStarList();
-    public static List<Collection> collectionCardList = getTestCollectionCardList();
+    public static List<String> starList = new ArrayList<>();
+    public static List<Collection> collectionCardList = new ArrayList<>();
     public static List<Group> groupCardList = getTestGroupCardList();
     public static List<Source> sourceCardList = getTestSourceCardList();
     public static int opPosition = -1;
-    public static String opId;
+    public static String temp;
 
     public static List<Entry> getTestEntryCardList(){
         List<Entry> entryCardList = new ArrayList<>();
@@ -29,13 +29,6 @@ public class StaticTool {
             entryCardList.add(new Entry("id"+i, "title"+i, "", "", "", "", "来源name", "", "",""));
         }
         return entryCardList;
-    }
-
-    public static List<String> getTestStarList() {
-        starList = new ArrayList<>();
-        starList.add("id1");
-        starList.add("id3");
-        return starList;
     }
 
     public static List<Collection> getTestCollectionCardList(){
@@ -62,7 +55,7 @@ public class StaticTool {
         return memberList;
     }
 
-    public static void setSourceCardRecyclerView(RecyclerView.Adapter recyclerAdapter, View view){
+    public static void setCardRecyclerView(RecyclerView.Adapter recyclerAdapter, View view){
         RecyclerView recyclerView=(RecyclerView)view.findViewById(R.id.recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext(),LinearLayoutManager.VERTICAL,false));
         recyclerView.setAdapter(recyclerAdapter);

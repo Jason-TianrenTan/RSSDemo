@@ -7,7 +7,6 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.SearchView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,12 +15,20 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.example.chidori.proxytestapp.Activities.ListActivity;
+import com.example.chidori.proxytestapp.Activities.LoginActivity;
 import com.example.chidori.proxytestapp.Activities.entity.Group;
+import com.example.chidori.proxytestapp.Contract.Contract;
+import com.example.chidori.proxytestapp.Presenter.NavMenuPresenterImpl;
 import com.example.chidori.proxytestapp.R;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class NavigationFragment extends Fragment {
+public class NavigationFragment extends Fragment implements Contract.INavMenuView {
+
+    private NavMenuPresenterImpl presenter;
+    private View view;
+    private List cardList;
 
     public static NavigationFragment newInstance(int info) {
         NavigationFragment fragment = new NavigationFragment();
@@ -36,22 +43,20 @@ public class NavigationFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         int info = getArguments().getInt("info");
-        View view = null;
         switch (info){
             case 0:{
-                Log.e("here","进入主页");
                 view = inflater.inflate(R.layout.fragment_tabs, null);
                 setHome(view);
                 break;
             }
             case 1:{
-                Log.e("here","进入小组");
                 view = inflater.inflate(R.layout.fragment_group, container,false);
+                presenter = new NavMenuPresenterImpl();
+                presenter.attachView(this);
                 setGroup(view);
                 break;
             }
             case 2:{
-                Log.e("here","进入我的");
                 view = inflater.inflate(R.layout.fragment_user, null);
                 setUser(view);
                 break;
@@ -94,12 +99,7 @@ public class NavigationFragment extends Fragment {
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                Toast.makeText(getContext(), query, Toast.LENGTH_SHORT).show();
-                //搜索活动
-                //cardList = ...(query);
-                List<Group> cardList = StaticTool.getTestGroupCardList();
-                GroupCardRecyclerAdapter recyclerAdapter = new GroupCardRecyclerAdapter(cardList);
-                StaticTool.setSourceCardRecyclerView(recyclerAdapter,view);
+                presenter.doSearchGroup(query);
                 return true;
             }
 
@@ -116,8 +116,9 @@ public class NavigationFragment extends Fragment {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                Intent intent=new Intent(getContext(),LoginActivity.class);
-//                startActivity(intent);
+                Intent intent=new Intent(getContext(),LoginActivity.class);
+                startActivity(intent);
+                getActivity().finish();
             }
         });
 
@@ -152,4 +153,18 @@ public class NavigationFragment extends Fragment {
         });
     }
 
+    @Override
+    public void onGroupSearchResult(String status) {
+        if(status.equals("success")){
+            cardList = presenter.getGroups();
+            if(cardList==null) cardList = new ArrayList<Group>();
+            GroupCardRecyclerAdapter recyclerAdapter = new GroupCardRecyclerAdapter(cardList);
+            StaticTool.setCardRecyclerView(recyclerAdapter,view);
+        }
+        else {
+            Toast.makeText(getContext(), "获得文章失败", Toast.LENGTH_SHORT).show();
+            cardList = new ArrayList<Group>();
+        }
+        StaticTool.opPosition=-1;
+    }
 }

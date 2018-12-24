@@ -37,6 +37,18 @@ public class GroupDetailActivity extends AppCompatActivity implements Contract.I
         view = View.inflate(this,R.layout.activity_group_detail,null);
         setContentView(view);
 
+        id = getIntent().getStringExtra("id");
+        TextView title = (TextView) findViewById(R.id.group_detail_name);
+        title.setText(getIntent().getStringExtra("title"));
+
+        presenter = new GroupDetailPresenterImpl();
+        presenter.attachView(this);
+
+        presenter_1 = new TabModelPresenterImpl();
+        presenter_1.attachView(this);
+
+        presenter_1.doGetGroupMembers(id);
+
         setToolbar();
         toolbarTitle.setText("小组详情");
 
@@ -49,17 +61,14 @@ public class GroupDetailActivity extends AppCompatActivity implements Contract.I
             public void onClick(View v) {
                 if(state) {
                     //退出小组
-                    presenter.doQuitGroup(StaticTool.opId);
+                    presenter.doQuitGroup(id);
                 }
                 else {
                     //加入小组
-                    presenter.doEnterGroup(StaticTool.opId);
+                    presenter.doEnterGroup(id);
                 }
             }
         });
-
-        id = getIntent().getStringExtra("id");
-        presenter_1.doGetGroupMembers(StaticTool.opId);
     }
 
     private void setToolbar(){
@@ -95,8 +104,6 @@ public class GroupDetailActivity extends AppCompatActivity implements Contract.I
             Toast.makeText(GroupDetailActivity.this, "加入小组成功", Toast.LENGTH_SHORT).show();
             btn.setText("退出小组");
             state = true;
-            StaticTool.opId=null;
-            StaticTool.opPosition=-1;
         }
         else{
             Toast.makeText(GroupDetailActivity.this, "退出小组失败", Toast.LENGTH_SHORT).show();
@@ -109,8 +116,6 @@ public class GroupDetailActivity extends AppCompatActivity implements Contract.I
             Toast.makeText(GroupDetailActivity.this, "退出小组成功", Toast.LENGTH_SHORT).show();
             btn.setText("加入小组");
             state = false;
-            StaticTool.opId=null;
-            StaticTool.opPosition=-1;
         }
         else{
             Toast.makeText(GroupDetailActivity.this, "退出小组失败", Toast.LENGTH_SHORT).show();
@@ -122,11 +127,11 @@ public class GroupDetailActivity extends AppCompatActivity implements Contract.I
         if(status.equals("success")){
             List<GroupMember> cardList=presenter_1.getMembers();
             UserCardRecyclerAdapter recyclerAdapter = new UserCardRecyclerAdapter(cardList);
-            StaticTool.setSourceCardRecyclerView(recyclerAdapter,view);
+            StaticTool.setCardRecyclerView(recyclerAdapter,view);
             Toast.makeText(GroupDetailActivity.this, "小组成员", Toast.LENGTH_SHORT).show();
         }
         else {
-            Toast.makeText(GroupDetailActivity.this, "小组成员-1", Toast.LENGTH_SHORT).show();
+            Toast.makeText(GroupDetailActivity.this, "获取小组成员失败", Toast.LENGTH_SHORT).show();
         }
 
     }

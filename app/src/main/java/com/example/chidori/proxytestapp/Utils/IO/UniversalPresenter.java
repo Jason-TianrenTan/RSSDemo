@@ -19,6 +19,7 @@ import com.example.chidori.proxytestapp.Events.SourceListEvent;
 import com.example.chidori.proxytestapp.Events.UpdateAccountEvent;
 import com.example.chidori.proxytestapp.Events.UpdateCollectionEvent;
 import com.example.chidori.proxytestapp.Events.UserDetailEvent;
+import com.example.chidori.proxytestapp.Events.UserGroupsEvent;
 import com.example.chidori.proxytestapp.Utils.Beans.AddSourceBean;
 import com.example.chidori.proxytestapp.Utils.Beans.CollectionListBean;
 import com.example.chidori.proxytestapp.Utils.Beans.CreateCollectionBean;
@@ -38,6 +39,7 @@ import com.example.chidori.proxytestapp.Utils.Beans.SourceListBean;
 import com.example.chidori.proxytestapp.Utils.Beans.UpdateBean;
 import com.example.chidori.proxytestapp.Utils.Beans.UpdateCollectionBean;
 import com.example.chidori.proxytestapp.Utils.Beans.UserDetailBean;
+import com.example.chidori.proxytestapp.Utils.Beans.UserGroupsBean;
 import com.google.gson.JsonObject;
 
 import org.greenrobot.eventbus.EventBus;
@@ -1256,7 +1258,7 @@ public class UniversalPresenter extends BasePresenter {
                     @Override
                     public void onNext(GroupModifyBean.ResResultBean result) {
                         System.out.println("result: " + result.isIsSuccess());
-                        EventBus.getDefault().post(new GroupModifyEvent(result.isIsSuccess(), GroupModifyEvent.EventType.ENTER));
+                        EventBus.getDefault().post(new GroupModifyEvent(result.isIsSuccess(), GroupModifyEvent.EventType.ENTER,result));
                     }
 
                     @Override
@@ -1306,7 +1308,7 @@ public class UniversalPresenter extends BasePresenter {
                     @Override
                     public void onNext(GroupModifyBean.ResResultBean result) {
                         System.out.println("result: " + result.isIsSuccess());
-                        EventBus.getDefault().post(new GroupModifyEvent(result.isIsSuccess(), GroupModifyEvent.EventType.QUIT));
+                        EventBus.getDefault().post(new GroupModifyEvent(result.isIsSuccess(), GroupModifyEvent.EventType.QUIT,result));
                     }
 
                     @Override
@@ -1348,6 +1350,49 @@ public class UniversalPresenter extends BasePresenter {
                     public void onNext(SearchGroupBean.ResResultBean result) {
                         System.out.println("result: " + result.isIsSuccess());
                         EventBus.getDefault().post(new GroupResultEvent(result));
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        e.printStackTrace();
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
+    }
+
+
+    //根据userid获取所在小组
+    public void GetUserGroups(String userId) {
+        JsonObject jsonObject = new JsonObject(), userObject = new JsonObject();
+        jsonObject.addProperty("device", "mobile");
+        userObject.addProperty("userId", userId);
+        HashMap<String, String> wrapper = new HashMap<>();
+        wrapper.put("reqParam", jsonObject.toString());
+        wrapper.put("reqUserInfo", userObject.toString());
+        ApiManager.getInstance()
+                .getRSSRetrofitService()
+                .GetUserGroups(wrapper)
+                .map(new Function<UserGroupsBean, UserGroupsBean.ResResultBean>() {
+                    @Override
+                    public UserGroupsBean.ResResultBean apply(UserGroupsBean bean) {
+                        return bean.getResResult();
+                    }
+                }).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<UserGroupsBean.ResResultBean>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                        addDisposable(d);
+                    }
+
+                    @Override
+                    public void onNext(UserGroupsBean.ResResultBean result) {
+                        System.out.println("result: " + result.isIsSuccess());
+                        EventBus.getDefault().post(new UserGroupsEvent(result));
                     }
 
                     @Override

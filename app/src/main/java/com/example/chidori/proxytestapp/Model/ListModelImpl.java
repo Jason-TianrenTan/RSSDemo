@@ -2,12 +2,15 @@ package com.example.chidori.proxytestapp.Model;
 
 import com.example.chidori.proxytestapp.Activities.entity.Collection;
 import com.example.chidori.proxytestapp.Activities.entity.Entry;
+import com.example.chidori.proxytestapp.Activities.entity.Group;
 import com.example.chidori.proxytestapp.Activities.entity.Source;
 import com.example.chidori.proxytestapp.Config;
 import com.example.chidori.proxytestapp.Contract.Contract;
 import com.example.chidori.proxytestapp.Utils.Beans.CollectionListBean;
 import com.example.chidori.proxytestapp.Utils.Beans.EntryListBean;
+import com.example.chidori.proxytestapp.Utils.Beans.GroupMemberBean;
 import com.example.chidori.proxytestapp.Utils.Beans.SourceListBean;
+import com.example.chidori.proxytestapp.Utils.Beans.UserGroupsBean;
 import com.example.chidori.proxytestapp.Utils.IO.UniversalPresenter;
 
 import java.util.ArrayList;
@@ -52,8 +55,22 @@ public class ListModelImpl implements Contract.IListModel {
         }
     }
 
+    public void setupUserGroups(UserGroupsBean.ResResultBean bean) {
+        userGroups = new ArrayList<>();
+        ArrayList<UserGroupsBean.ResResultBean.CurDataBean> curDatas = new ArrayList<>(bean.getCurData());
+        for (UserGroupsBean.ResResultBean.CurDataBean curData : curDatas) {
+            userGroups.add(new Group(curData.getGroupId(), curData.getName(), curData.getGroupNum(),
+                    curData.getDescription(), curData.getUserId(), curData.getCreateTime(), curData.getUpdateTime()));
+        }
+    }
+
     private ArrayList<Collection> collections;
 
+    public ArrayList<Group> getUserGroups() {
+        return userGroups;
+    }
+
+    private ArrayList<Group> userGroups;
 
     public ArrayList<Entry> getEntries() {
         return entries;
@@ -115,6 +132,11 @@ public class ListModelImpl implements Contract.IListModel {
     @Override
     public void doCreateCollection(String name, String desc, int publicStatus) {
         new UniversalPresenter().CreateCollection(name, desc, publicStatus, Config.userId);
+    }
+
+    @Override
+    public void doGetUserGroups(String userId) {
+        new UniversalPresenter().GetUserGroups(userId);
     }
 
 }

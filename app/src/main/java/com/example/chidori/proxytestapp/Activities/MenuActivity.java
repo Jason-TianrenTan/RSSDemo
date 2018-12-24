@@ -21,7 +21,11 @@ import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.chidori.proxytestapp.Activities.entity.Collection;
+import com.example.chidori.proxytestapp.Activities.entity.Entry;
 import com.example.chidori.proxytestapp.Activities.entity.Source;
+import com.example.chidori.proxytestapp.Activities.util.CollectionCardRecyclerAdapter;
+import com.example.chidori.proxytestapp.Activities.util.EntryCardRecyclerAdapter;
 import com.example.chidori.proxytestapp.Activities.util.NavigationFragment;
 import com.example.chidori.proxytestapp.Activities.util.StaticTool;
 import com.example.chidori.proxytestapp.Contract.Contract;
@@ -29,6 +33,8 @@ import com.example.chidori.proxytestapp.Presenter.MenuPresenterImpl;
 import com.example.chidori.proxytestapp.R;
 import com.example.chidori.proxytestapp.Utils.Beans.SaveRSSBean;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.UUID;
@@ -56,6 +62,7 @@ public class MenuActivity extends AppCompatActivity implements Contract.IMenuVie
 
         presenter = new MenuPresenterImpl();
         presenter.attachView(this);
+        presenter.doGetUserCollections();
 
         current = 0;
         toolbarTitle.setText("主页");
@@ -156,7 +163,6 @@ public class MenuActivity extends AppCompatActivity implements Contract.IMenuVie
                 }
                 else {
                     presenter.doAddRSSFromLink(input);
-                    //待修改
                 }
             }
         }).setNegativeButton("取消", null).show();
@@ -245,6 +251,35 @@ public class MenuActivity extends AppCompatActivity implements Contract.IMenuVie
         }
         else {
             Toast.makeText(MenuActivity.this, "添加订阅失败", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @Override
+    public void onUserCollectionsCall(String status) {
+        if(status.equals("success")){
+            List<Collection> list = presenter.getCollections();
+            if(list==null) return;
+            StaticTool.collectionCardList = list;
+            for(Collection c:list){
+                presenter.doGetEntriesByCollection(c.getCollectionId());
+            }
+        }
+        else {
+            Toast.makeText(MenuActivity.this, "获取收藏夹列表失败", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @Override
+    public void onEntriesByCollectionRetrieved(String success) {
+        if(success.equals("success")){
+            List<Entry> list = presenter.getEntries();
+            if(list==null) return;
+            for(Entry e:list){
+                StaticTool.starList.add(e.getEntryId());
+            }
+        }
+        else {
+            Toast.makeText(MenuActivity.this, "获得文章失败", Toast.LENGTH_SHORT).show();
         }
     }
 }

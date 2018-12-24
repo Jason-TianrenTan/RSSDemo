@@ -24,6 +24,7 @@ public class CollectionCardRecyclerAdapter extends RecyclerView.Adapter<Collecti
     private Context context;
     private List<Collection> cardList;
     private boolean option;
+    private String opId;
 
     static class ViewHolder extends RecyclerView.ViewHolder{
 
@@ -66,7 +67,6 @@ public class CollectionCardRecyclerAdapter extends RecyclerView.Adapter<Collecti
                 intent.putExtra("id", collectionCard.getCollectionId());
                 Toast.makeText(context, collectionCard.getCollectionId(), Toast.LENGTH_SHORT).show();
                 StaticTool.opPosition=position;
-                StaticTool.opId=collectionCard.getCollectionId();
                 context.startActivity(intent);
             }
         });
@@ -75,7 +75,7 @@ public class CollectionCardRecyclerAdapter extends RecyclerView.Adapter<Collecti
             public boolean onLongClick(View v) {
                 if(option){
                     StaticTool.opPosition = position;
-                    StaticTool.opId = collectionCard.getCollectionId();
+                    opId = collectionCard.getCollectionId();
                     setDeleteDialog(collectionCard.getName());
                 }
                 return true;
@@ -91,7 +91,7 @@ public class CollectionCardRecyclerAdapter extends RecyclerView.Adapter<Collecti
                 .setMessage("是否删除收藏夹:"+name)
                 .setPositiveButton("确定", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        ListActivity.getPresenter().deleteCollection(StaticTool.opId);
+                        ListActivity.getPresenter().deleteCollection(opId);
                     }
                 })
                 .setNegativeButton("取消", null)

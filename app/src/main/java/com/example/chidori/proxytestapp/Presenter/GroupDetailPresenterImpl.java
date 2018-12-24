@@ -1,9 +1,13 @@
 package com.example.chidori.proxytestapp.Presenter;
 
 import com.example.chidori.proxytestapp.Contract.Contract;
+import com.example.chidori.proxytestapp.Events.CreateGroupEvent;
+import com.example.chidori.proxytestapp.Events.GroupModifyEvent;
 import com.example.chidori.proxytestapp.Model.GroupDetailModelImpl;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 public class GroupDetailPresenterImpl implements Contract.IGroupDetailPresenter {
 
@@ -19,6 +23,13 @@ public class GroupDetailPresenterImpl implements Contract.IGroupDetailPresenter 
         model = new GroupDetailModelImpl();
         if (!EventBus.getDefault().isRegistered(this))
             EventBus.getDefault().register(this);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onGroupEntered(GroupModifyEvent groupModifyEvent) {
+        if (groupModifyEvent.getResult().isIsSuccess())
+            detailView.onGroupEntered("success");
+        else detailView.onGroupEntered("failure");
     }
 
     @Override

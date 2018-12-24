@@ -135,7 +135,7 @@
                 android:layout_weight="1"
                 android:gravity="left|center"
                 android:textSize="16sp"
-                android:text="我的导入"
+                android:text="我的订阅"
                 android:textColor="#666666" />
         </LinearLayout>
 

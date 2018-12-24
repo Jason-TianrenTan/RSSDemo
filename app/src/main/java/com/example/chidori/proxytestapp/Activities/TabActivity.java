@@ -21,6 +21,7 @@ public class TabActivity extends AppCompatActivity{
     private Toolbar toolbar;
     private TextView toolbarTitle;
     private View view;
+    private String id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,7 +29,7 @@ public class TabActivity extends AppCompatActivity{
         view = View.inflate(this,R.layout.activity_tabs,null);
         setContentView(view);
 
-        StaticTool.opId = getIntent().getStringExtra("id");
+        id = getIntent().getStringExtra("id");
         setToolbar();
         toolbarTitle.setText(getIntent().getStringExtra("title"));
 
@@ -60,7 +61,8 @@ public class TabActivity extends AppCompatActivity{
             }
             case R.id.detail:{
                 Intent intent = new Intent(TabActivity.this,GroupDetailActivity.class);
-                intent.putExtra("id", StaticTool.opId);
+                intent.putExtra("id", id);
+                intent.putExtra("title",toolbarTitle.getText());
                 startActivity(intent);
                 return true;
             }
@@ -77,10 +79,12 @@ public class TabActivity extends AppCompatActivity{
 
         TabFragment tab1 = new TabFragment();
         tab1.setOption(TabFragment.group_collection);
+        tab1.setId(id);
         tab_adapter.addFragment(tab1);
         tabs.addTab(tabs.newTab());
         TabFragment tab2 = new TabFragment();
         tab2.setOption(TabFragment.group_entry);
+        tab2.setId(id);
         tab_adapter.addFragment(tab2);
         tabs.addTab(tabs.newTab());
 

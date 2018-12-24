@@ -3,6 +3,7 @@ package com.example.chidori.proxytestapp.Presenter;
 
 import com.example.chidori.proxytestapp.Activities.entity.Collection;
 import com.example.chidori.proxytestapp.Activities.entity.Entry;
+import com.example.chidori.proxytestapp.Activities.entity.Group;
 import com.example.chidori.proxytestapp.Activities.entity.Source;
 import com.example.chidori.proxytestapp.Contract.Contract;
 import com.example.chidori.proxytestapp.Events.CollectionListEvent;
@@ -12,6 +13,7 @@ import com.example.chidori.proxytestapp.Events.DeleteSourceEvent;
 import com.example.chidori.proxytestapp.Events.EntryListEvent;
 import com.example.chidori.proxytestapp.Events.ModifyCollectionEvent;
 import com.example.chidori.proxytestapp.Events.SourceListEvent;
+import com.example.chidori.proxytestapp.Events.UserGroupsEvent;
 import com.example.chidori.proxytestapp.Model.ListModelImpl;
 
 import org.greenrobot.eventbus.EventBus;
@@ -42,6 +44,8 @@ public class ListPresenterImpl implements Contract.IListPresenter {
     public ArrayList<Entry> getEntries(){
         return model.getEntries();
     }
+
+    public ArrayList<Group> getUserGroups() { return model.getUserGroups(); }
 
     public void attachView(Contract.IListView view) {
         listView = view;
@@ -112,6 +116,12 @@ public class ListPresenterImpl implements Contract.IListPresenter {
         else listView.onCollectionCreated("failure");
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onUserGroupsRetrieved(UserGroupsEvent userGroupsEvent) {
+        if (userGroupsEvent.getResult().isIsSuccess())
+            listView.onCollectionCreated("success");
+        else listView.onCollectionCreated("failure");
+    }
 
     @Override
     public void doGetUserCollections() {
@@ -151,6 +161,11 @@ public class ListPresenterImpl implements Contract.IListPresenter {
     @Override
     public void doCreateCollection(String name, String desc, int publicStatus) {
         model.doCreateCollection(name, desc, publicStatus);
+    }
+
+    @Override
+    public void doGetUserGroups(String userId) {
+        model.doGetUserGroups(userId);
     }
 
 }

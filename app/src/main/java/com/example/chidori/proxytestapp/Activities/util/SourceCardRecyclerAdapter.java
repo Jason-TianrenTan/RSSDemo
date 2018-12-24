@@ -23,6 +23,11 @@ import java.util.List;
 public class SourceCardRecyclerAdapter extends RecyclerView.Adapter<SourceCardRecyclerAdapter.ViewHolder> {
     private Context context;
     private List<Source> cardList;
+    private int option;
+    private String opId;
+
+    public static final int home = 0;
+    public static final int list = 1;
 
     static class ViewHolder extends RecyclerView.ViewHolder{
 
@@ -36,8 +41,9 @@ public class SourceCardRecyclerAdapter extends RecyclerView.Adapter<SourceCardRe
         }
     }
 
-    public SourceCardRecyclerAdapter(List<Source> list) {
+    public SourceCardRecyclerAdapter(List<Source> list,int option) {
         this.cardList = list;
+        this.option = option;
     }
 
     @NonNull
@@ -60,7 +66,7 @@ public class SourceCardRecyclerAdapter extends RecyclerView.Adapter<SourceCardRe
                 intent.putExtra("type",ListActivity.source_entry);
                 intent.putExtra("id", sourceCard.getSourceId());
                 intent.putExtra("title",sourceCard.getName());
-                StaticTool.opId=sourceCard.getSourceId();
+                opId=sourceCard.getSourceId();
                 StaticTool.opPosition=position;
                 context.startActivity(intent);
             }
@@ -69,7 +75,7 @@ public class SourceCardRecyclerAdapter extends RecyclerView.Adapter<SourceCardRe
             @Override
             public boolean onLongClick(View v) {
                 setDialog(position);
-                StaticTool.opId=sourceCard.getSourceId();
+                opId=sourceCard.getSourceId();
                 StaticTool.opPosition=position;
                 return true;
             }
@@ -83,8 +89,17 @@ public class SourceCardRecyclerAdapter extends RecyclerView.Adapter<SourceCardRe
                 .setMessage("是否取消订阅:"+cardList.get(position).getName())
                 .setPositiveButton("确定", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        StaticTool.sourceCardList.remove(position);
-                        notifyDataSetChanged();
+                        switch (option){
+                            case home:{
+                                TabFragment.getHomePresenter().deleteSource(opId);
+                                break;
+                            }
+                            case list:{
+                                ListActivity.getPresenter().deleteSource(opId);
+                                break;
+                            }
+                        }
+
                     }
                 })
                 .setNegativeButton("取消", null)

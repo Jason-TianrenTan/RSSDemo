@@ -50,7 +50,7 @@ public class UserCardRecyclerAdapter extends RecyclerView.Adapter<UserCardRecycl
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         final GroupMember groupCard = cardList.get(position);
-        holder.card_id.setText(groupCard.getUserId());
+        holder.card_id.setText(groupCard.getUsername());
     }
 
 

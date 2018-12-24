@@ -17,6 +17,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.chidori.proxytestapp.Activities.ListActivity;
 import com.example.chidori.proxytestapp.Activities.ReaderActivity;
 import com.example.chidori.proxytestapp.Activities.entity.Entry;
 import com.example.chidori.proxytestapp.R;
@@ -30,6 +31,7 @@ public class EntryCardRecyclerAdapter extends RecyclerView.Adapter<EntryCardRecy
 
     public static final int tabAC = 0;
     public static final int listAC = 1;
+    public static final int home = 2;
 
     static class ViewHolder extends RecyclerView.ViewHolder{
 
@@ -88,15 +90,25 @@ public class EntryCardRecyclerAdapter extends RecyclerView.Adapter<EntryCardRecy
             @Override
             public void onClick(View v) {
                 if(holder.stared){
-                    //从收藏表中删除
                     Toast.makeText(context, "取消收藏", Toast.LENGTH_SHORT).show();
-                    holder.stared = false;
-                    StaticTool.starList.remove(entryCard.getEntryId());
-                    ((ImageButton)v).setImageDrawable(ContextCompat.getDrawable(context,R.drawable.star));
+                    switch (option){
+                        case tabAC:{
+                            //TabFragment.getTabACPresenter()
+                            break;
+                        }
+                        case listAC:{
+                            //ListActivity.getPresenter()
+                            break;
+                        }
+                        case home:{
+                            //TabFragment.getHomePresenter()
+                            break;
+                        }
+                    }
                 }
                 else {
                     StaticTool.opPosition = position;
-                    StaticTool.opId = entryCard.getCollectionId();
+                    StaticTool.temp = entryCard.getEntryId();
                     setInputDialog("添加到收藏夹","请选择收藏夹");
                 }
             }
@@ -125,10 +137,15 @@ public class EntryCardRecyclerAdapter extends RecyclerView.Adapter<EntryCardRecy
                 else {
                     switch (option){
                         case tabAC:{
-                            TabFragment.getTabACPresenter().doAddEntry(input,StaticTool.opId);
+                            TabFragment.getTabACPresenter().doAddEntry(input,StaticTool.temp);
                             break;
                         }
                         case listAC:{
+                            ListActivity.getPresenter().doAddEntryToCollection(input,StaticTool.temp);
+                            break;
+                        }
+                        case home:{
+                            TabFragment.getHomePresenter().doAddEntry(input,StaticTool.temp);
                             break;
                         }
                     }
