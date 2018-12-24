@@ -147,27 +147,27 @@ public class ListActivity extends AppCompatActivity {
 
         View finalV = v;
         dialog.setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        EditText et = (EditText) finalV.findViewById(R.id.dialog_input);
-                        String input = et.getText().toString();
-                        if (input.equals("")) {
-                            Toast.makeText(getBaseContext(), "输入不能为空", Toast.LENGTH_SHORT).show();
+            public void onClick(DialogInterface dialog, int which) {
+                EditText et = (EditText) finalV.findViewById(R.id.dialog_input);
+                String input = et.getText().toString();
+                if (input.equals("")) {
+                    Toast.makeText(getBaseContext(), "输入不能为空", Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    switch (type){
+                        case source:{
+                            StaticTool.sourceCardList.add(new SourceCard("id",input));
+                            break;
                         }
-                        else {
-                            switch (type){
-                                case source:{
-                                    StaticTool.sourceCardList.add(new SourceCard("id",input));
-                                    break;
-                                }
-                                case collection:{
-                                    RadioGroup r = (RadioGroup) finalV.findViewById(R.id.dialog_radio);
-                                    StaticTool.collectionCardList.add(new CollectionCard("id",input,r.getCheckedRadioButtonId()));
-                                    break;
-                                }
-                            }
+                        case collection:{
+                            RadioGroup r = (RadioGroup) finalV.findViewById(R.id.dialog_radio);
+                            StaticTool.collectionCardList.add(new CollectionCard("id",input,r.getCheckedRadioButtonId()));
+                            break;
                         }
                     }
-                }).setNegativeButton("取消", null).show();
+                }
+            }
+        }).setNegativeButton("取消", null).show();
     }
 
     private void setCardList(){
