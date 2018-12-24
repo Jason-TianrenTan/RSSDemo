@@ -50,7 +50,6 @@ public class GroupNewActivity extends AppCompatActivity implements Contract.IGro
             public void onClick(View view) {
                 //创建新小组
                 presenter.doCreateGroup(editText.getText().toString(),"");
-                btn_newgroup.setClickable(false);
             }
         });
     }
@@ -86,10 +85,10 @@ public class GroupNewActivity extends AppCompatActivity implements Contract.IGro
     public void onGroupCreated(String status) {
         if(status.equals("success")){
             StaticTool.groupCardList.add(new Group(UUID.randomUUID().toString(),editText.getText().toString(),"","","","",""));
+            btn_newgroup.setClickable(false);
             Toast.makeText(GroupNewActivity.this, "小组创建成功", Toast.LENGTH_SHORT).show();
             ListActivity.getRecyclerAdapter().notifyDataSetChanged();
             finish();
-
         }
         else {
             Toast.makeText(GroupNewActivity.this, "小组创建失败", Toast.LENGTH_SHORT).show();

@@ -59,6 +59,8 @@ public class GroupCardRecyclerAdapter extends RecyclerView.Adapter<GroupCardRecy
                 Intent intent = new Intent(context,TabActivity.class);
                 intent.putExtra("title",groupCard.getName());
                 intent.putExtra("id", groupCard.getGroupId());
+                StaticTool.opId=groupCard.getGroupId();
+                StaticTool.opPosition=position;
                 context.startActivity(intent);
             }
         });

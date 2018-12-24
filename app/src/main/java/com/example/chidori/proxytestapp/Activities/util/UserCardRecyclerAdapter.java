@@ -10,14 +10,14 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.chidori.proxytestapp.Activities.entity.UserCard;
+import com.example.chidori.proxytestapp.Activities.entity.GroupMember;
 import com.example.chidori.proxytestapp.R;
 
 import java.util.List;
 
 public class UserCardRecyclerAdapter extends RecyclerView.Adapter<UserCardRecyclerAdapter.ViewHolder> {
     private Context context;
-    private List<UserCard> cardList;
+    private List<GroupMember> cardList;
 
     static class ViewHolder extends RecyclerView.ViewHolder{
 
@@ -33,7 +33,7 @@ public class UserCardRecyclerAdapter extends RecyclerView.Adapter<UserCardRecycl
         }
     }
 
-    public UserCardRecyclerAdapter(List<UserCard> list) {
+    public UserCardRecyclerAdapter(List<GroupMember> list) {
         this.cardList = list;
     }
 
@@ -49,8 +49,8 @@ public class UserCardRecyclerAdapter extends RecyclerView.Adapter<UserCardRecycl
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        final UserCard groupCard = cardList.get(position);
-        holder.card_id.setText(groupCard.getId());
+        final GroupMember groupCard = cardList.get(position);
+        holder.card_id.setText(groupCard.getUserId());
     }
 
 

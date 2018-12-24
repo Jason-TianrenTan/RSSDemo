@@ -7,8 +7,8 @@ import android.view.View;
 import com.example.chidori.proxytestapp.Activities.entity.Collection;
 import com.example.chidori.proxytestapp.Activities.entity.Entry;
 import com.example.chidori.proxytestapp.Activities.entity.Group;
+import com.example.chidori.proxytestapp.Activities.entity.GroupMember;
 import com.example.chidori.proxytestapp.Activities.entity.Source;
-import com.example.chidori.proxytestapp.Activities.entity.UserCard;
 import com.example.chidori.proxytestapp.R;
 
 import java.util.ArrayList;
@@ -50,9 +50,9 @@ public class StaticTool {
         return groupCardList;
     }
 
-    public static List<UserCard> getTestUserCardList(){
-        List<UserCard> memberList = new ArrayList<>();
-        for(int i=0;i<6;i++) memberList.add(new UserCard(UUID.randomUUID().toString(),"用户"+i));
+    public static List<GroupMember> getTestUserCardList(){
+        List<GroupMember> memberList = new ArrayList<>();
+        for(int i=0;i<6;i++) memberList.add(new GroupMember(UUID.randomUUID().toString(),"用户"+i,0,"","",""));
         return memberList;
     }
 

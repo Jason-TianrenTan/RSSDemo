@@ -45,6 +45,8 @@ public class ListActivity extends AppCompatActivity implements Contract.IListVie
     private int type = -1;
     private String id;
     private View view;
+    private RadioGroup r;
+    private String input;
 
     private List cardList;
     private static RecyclerView.Adapter recyclerAdapter;
@@ -162,7 +164,7 @@ public class ListActivity extends AppCompatActivity implements Contract.IListVie
         dialog.setPositiveButton("确定", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 EditText et = (EditText) finalV.findViewById(R.id.dialog_input);
-                String input = et.getText().toString();
+                input = et.getText().toString();
                 if (input.equals("")) {
                     Toast.makeText(getBaseContext(), "输入不能为空", Toast.LENGTH_SHORT).show();
                 }
@@ -173,8 +175,8 @@ public class ListActivity extends AppCompatActivity implements Contract.IListVie
                             break;
                         }
                         case collection:{
-                            RadioGroup r = (RadioGroup) finalV.findViewById(R.id.dialog_radio);
-                            StaticTool.collectionCardList.add(new Collection("id",input,"",r.getCheckedRadioButtonId(),"",""));
+                            r = (RadioGroup) finalV.findViewById(R.id.dialog_radio);
+                            presenter.doCreateCollection(input,"",r.getCheckedRadioButtonId());
                             break;
                         }
                     }
@@ -309,12 +311,21 @@ public class ListActivity extends AppCompatActivity implements Contract.IListVie
     public void onEntryAddedToCollection(String status) {
         if(status.equals("success")){
             //Toast.makeText(ListActivity.this, "收藏", Toast.LENGTH_SHORT).show();
+
         }
     }
 
     @Override
     public void onCollectionCreated(String status) {
-
+        if(status.equals("success")){
+            StaticTool.collectionCardList.add(new Collection("id",input,"",r.getCheckedRadioButtonId(),"",""));
+            Toast.makeText(ListActivity.this, "收藏夹创建成功", Toast.LENGTH_SHORT).show();
+            ListActivity.getRecyclerAdapter().notifyDataSetChanged();
+            finish();
+        }
+        else {
+            Toast.makeText(ListActivity.this, "收藏夹创建失败", Toast.LENGTH_SHORT).show();
+        }
     }
 
     public static ListPresenterImpl getPresenter(){

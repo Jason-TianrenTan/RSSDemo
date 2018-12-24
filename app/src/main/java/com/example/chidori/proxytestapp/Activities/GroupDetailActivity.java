@@ -10,35 +10,35 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.chidori.proxytestapp.Activities.entity.UserCard;
+import com.example.chidori.proxytestapp.Activities.entity.GroupMember;
 import com.example.chidori.proxytestapp.Activities.util.StaticTool;
 import com.example.chidori.proxytestapp.Activities.util.UserCardRecyclerAdapter;
 import com.example.chidori.proxytestapp.Contract.Contract;
+import com.example.chidori.proxytestapp.Presenter.GroupDetailPresenterImpl;
+import com.example.chidori.proxytestapp.Presenter.TabModelPresenterImpl;
 import com.example.chidori.proxytestapp.R;
 
 import java.util.List;
 
-public class GroupDetailActivity extends AppCompatActivity implements Contract.IGroupDetailView{
+public class GroupDetailActivity extends AppCompatActivity implements Contract.IGroupDetailView,Contract.ITabView {
     private Toolbar toolbar;
     private TextView toolbarTitle;
+    private View view;
     private Button btn;
     private String id;
     private boolean state = false;
 
+    private GroupDetailPresenterImpl presenter;
+    private TabModelPresenterImpl presenter_1;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        View view = View.inflate(this,R.layout.activity_group_detail,null);
+        view = View.inflate(this,R.layout.activity_group_detail,null);
         setContentView(view);
 
         setToolbar();
         toolbarTitle.setText("小组详情");
-
-        id = getIntent().getStringExtra("id");
-
-        List<UserCard> cardList = StaticTool.getTestUserCardList();
-        UserCardRecyclerAdapter recyclerAdapter = new UserCardRecyclerAdapter(cardList);
-        StaticTool.setSourceCardRecyclerView(recyclerAdapter,view);
 
         btn = (Button)findViewById(R.id.group_delete);
         if(state) btn.setText("退出小组");
@@ -49,19 +49,17 @@ public class GroupDetailActivity extends AppCompatActivity implements Contract.I
             public void onClick(View v) {
                 if(state) {
                     //退出小组
-                    Toast.makeText(GroupDetailActivity.this, "退出小组成功", Toast.LENGTH_SHORT).show();
-                    btn.setText("加入小组");
-                    state = false;
+                    presenter.doQuitGroup(StaticTool.opId);
                 }
                 else {
                     //加入小组
-                    Toast.makeText(GroupDetailActivity.this, "加入小组成功", Toast.LENGTH_SHORT).show();
-                    btn.setText("退出小组");
-                    state = true;
+                    presenter.doEnterGroup(StaticTool.opId);
                 }
             }
         });
 
+        id = getIntent().getStringExtra("id");
+        presenter_1.doGetGroupMembers(StaticTool.opId);
     }
 
     private void setToolbar(){
@@ -93,11 +91,48 @@ public class GroupDetailActivity extends AppCompatActivity implements Contract.I
 
     @Override
     public void onGroupEntered(String status) {
-
+        if(status.equals("success")){
+            Toast.makeText(GroupDetailActivity.this, "加入小组成功", Toast.LENGTH_SHORT).show();
+            btn.setText("退出小组");
+            state = true;
+            StaticTool.opId=null;
+            StaticTool.opPosition=-1;
+        }
+        else{
+            Toast.makeText(GroupDetailActivity.this, "退出小组失败", Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override
     public void onGroupQuit(String status) {
+        if(status.equals("success")){
+            Toast.makeText(GroupDetailActivity.this, "退出小组成功", Toast.LENGTH_SHORT).show();
+            btn.setText("加入小组");
+            state = false;
+            StaticTool.opId=null;
+            StaticTool.opPosition=-1;
+        }
+        else{
+            Toast.makeText(GroupDetailActivity.this, "退出小组失败", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @Override
+    public void onGroupMembersResult(String status) {
+        if(status.equals("success")){
+            List<GroupMember> cardList=presenter_1.getMembers();
+            UserCardRecyclerAdapter recyclerAdapter = new UserCardRecyclerAdapter(cardList);
+            StaticTool.setSourceCardRecyclerView(recyclerAdapter,view);
+            Toast.makeText(GroupDetailActivity.this, "小组成员", Toast.LENGTH_SHORT).show();
+        }
+        else {
+            Toast.makeText(GroupDetailActivity.this, "小组成员-1", Toast.LENGTH_SHORT).show();
+        }
+
+    }
+
+    @Override
+    public void onUserInfoResult(GroupMember member) {
 
     }
 }
