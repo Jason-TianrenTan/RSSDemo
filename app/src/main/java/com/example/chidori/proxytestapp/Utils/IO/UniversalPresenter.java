@@ -38,6 +38,8 @@ import com.google.gson.JsonObject;
 
 import org.greenrobot.eventbus.EventBus;
 
+import java.util.HashMap;
+
 import io.reactivex.Observer;
 import io.reactivex.Scheduler;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -299,18 +301,14 @@ public class UniversalPresenter extends BasePresenter {
     //
     public void GetEntryListPublicToAll(String from) {
 
-        JsonObject wrapper = new JsonObject();
-        try {
-            JsonObject jsonObject = new JsonObject();
-            wrapper.add("reqParam", jsonObject);
-            jsonObject.addProperty("device", "mobile");
-            jsonObject.addProperty("from", from);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        HashMap<String, String> map = new HashMap<>();
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("device", "mobile");
+        jsonObject.addProperty("from", "all");
+        map.put("reqParam", jsonObject.toString());
         ApiManager.getInstance()
                 .getRSSRetrofitService()
-                .getPublicEntriesToAll(wrapper)
+                .getPublicEntriesToAll(map)
                 .map(new Function<EntryListBean, EntryListBean.ResResultBean>() {
                     @Override
                     public EntryListBean.ResResultBean apply(EntryListBean bean) {
@@ -345,16 +343,16 @@ public class UniversalPresenter extends BasePresenter {
 
     //
     public void GetEntryListPublicToGroup(String from) {
-
-        JsonObject wrapper = new JsonObject();
+        JsonObject jsonObject = null;
         try {
-            JsonObject jsonObject = new JsonObject();
-            wrapper.add("reqParam", jsonObject);
+            jsonObject = new JsonObject();
             jsonObject.addProperty("device", "mobile");
             jsonObject.addProperty("from", from);
         } catch (Exception e) {
             e.printStackTrace();
         }
+        HashMap<String, String> wrapper = new HashMap<>();
+        wrapper.put("reqParam", jsonObject.toString());
         ApiManager.getInstance()
                 .getRSSRetrofitService()
                 .getPublicEntriesToGroup(wrapper)
@@ -392,17 +390,11 @@ public class UniversalPresenter extends BasePresenter {
 
     //根据来源获取文章
     public void GetEntryListBySource(String sourceId) {
-
-        JsonObject wrapper = new JsonObject();
-        try {
-            JsonObject jsonObject = new JsonObject();
-            wrapper.add("reqParam", jsonObject);
-            jsonObject.addProperty("sourceId", sourceId);
-            jsonObject.addProperty("device", "mobile");
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("sourceId", sourceId);
+        jsonObject.addProperty("device", "mobile");
+        HashMap<String, String> wrapper = new HashMap<>();
+        wrapper.put("reqParam", jsonObject.toString());
         ApiManager.getInstance()
                 .getRSSRetrofitService()
                 .getEntriesBySource(wrapper)
@@ -441,16 +433,11 @@ public class UniversalPresenter extends BasePresenter {
     //根据来源获取文章
     public void GetEntryOfCollection(String collectionId) {
 
-        JsonObject wrapper = new JsonObject();
-        try {
-            JsonObject jsonObject = new JsonObject();
-            wrapper.add("reqParam", jsonObject);
-            jsonObject.addProperty("collectionId", collectionId);
-            jsonObject.addProperty("device", "mobile");
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("collectionId", collectionId);
+        jsonObject.addProperty("device", "mobile");
+        HashMap<String, String> wrapper = new HashMap<>();
+        wrapper.put("reqParam", jsonObject.toString());
         ApiManager.getInstance()
                 .getRSSRetrofitService()
                 .getEntriesOfCollection(wrapper)
@@ -721,16 +708,12 @@ public class UniversalPresenter extends BasePresenter {
 
     //获取指定publicStatus状态的Collections
     public void GetCollections(int publicStatus, String userId) {
-        JsonObject wrapper = new JsonObject();
-        try {
-            JsonObject jsonObject = new JsonObject();
-            wrapper.add("reqParam", jsonObject);
-            jsonObject.addProperty("publicStatus", publicStatus);
-            jsonObject.addProperty("userId", userId);
-            jsonObject.addProperty("device", "mobile");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("publicStatus", publicStatus);
+        jsonObject.addProperty("userId", userId);
+        jsonObject.addProperty("device", "mobile");
+        HashMap<String, String> wrapper = new HashMap<>();
+        wrapper.put("reqParam", jsonObject.toString());
         ApiManager.getInstance()
                 .getRSSRetrofitService()
                 .getCollectionList(wrapper)
@@ -768,14 +751,10 @@ public class UniversalPresenter extends BasePresenter {
 
     //获取所有Public的收藏夹
     public void GetAllPublicCollections() {
-        JsonObject wrapper = new JsonObject();
-        try {
-            JsonObject jsonObject = new JsonObject();
-            wrapper.add("reqParam", jsonObject);
-            jsonObject.addProperty("device", "mobile");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("device", "mobile");
+        HashMap<String, String> wrapper = new HashMap<>();
+        wrapper.put("reqParam", jsonObject.toString());
         ApiManager.getInstance()
                 .getRSSRetrofitService()
                 .getAllPublic(wrapper)
@@ -813,15 +792,11 @@ public class UniversalPresenter extends BasePresenter {
 
     //获取所有小组内Public的收藏夹
     public void GetGroupPublicCollections(String groupId) {
-        JsonObject wrapper = new JsonObject();
-        try {
-            JsonObject jsonObject = new JsonObject();
-            wrapper.add("reqParam", jsonObject);
-            jsonObject.addProperty("groupId", groupId);
-            jsonObject.addProperty("device", "mobile");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("groupId", groupId);
+        jsonObject.addProperty("device", "mobile");
+        HashMap<String, String> wrapper = new HashMap<>();
+        wrapper.put("reqParam", jsonObject.toString());
         ApiManager.getInstance()
                 .getRSSRetrofitService()
                 .getGroupPublic(wrapper)
@@ -1007,18 +982,14 @@ public class UniversalPresenter extends BasePresenter {
     //通过type获取源
     public void GetSources(int type, String userId) {
 
-        JsonObject wrapper = new JsonObject();
-        try {
-            JsonObject jsonObject = new JsonObject();
-            wrapper.add("reqParam", jsonObject);
-            jsonObject.addProperty("type", type);
-
-            JsonObject userObject = new JsonObject();
-            userObject.addProperty("userId", userId);
-            wrapper.add("reqUserInfo", userObject);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("type", type);
+        jsonObject.addProperty("device", "mobile");
+        JsonObject userObject = new JsonObject();
+        userObject.addProperty("userId", userId);
+        HashMap<String, String> wrapper = new HashMap<>();
+        wrapper.put("reqParam", jsonObject.toString());
+        wrapper.put("reqUserInfo", userObject.toString());
         ApiManager.getInstance()
                 .getRSSRetrofitService()
                 .getSources(wrapper)
@@ -1349,16 +1320,10 @@ public class UniversalPresenter extends BasePresenter {
 
     //搜索小组
     public void SearchGroup(String keyword) {
-
-        JsonObject wrapper = new JsonObject();
-        try {
-            JsonObject jsonObject = new JsonObject();
-            wrapper.add("reqParam", jsonObject);
-            jsonObject.addProperty("name", keyword);
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("name", keyword);
+        HashMap<String, String> wrapper = new HashMap<>();
+        wrapper.put("reqParam", jsonObject.toString());
         ApiManager.getInstance()
                 .getRSSRetrofitService()
                 .searchGroup(wrapper)

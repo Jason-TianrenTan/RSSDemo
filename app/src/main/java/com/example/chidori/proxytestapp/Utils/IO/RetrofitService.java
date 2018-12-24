@@ -22,11 +22,14 @@ import com.example.chidori.proxytestapp.Utils.Beans.UpdateBean;
 import com.example.chidori.proxytestapp.Utils.Beans.UpdateCollectionBean;
 import com.google.gson.JsonObject;
 
+import java.util.Map;
+
 import io.reactivex.Observable;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.Headers;
 import retrofit2.http.POST;
+import retrofit2.http.QueryMap;
 
 public interface RetrofitService {
 
@@ -70,13 +73,13 @@ public interface RetrofitService {
             "Accept: application/json",
     })
     @GET("entry/list/publicToAll")
-    Observable<EntryListBean> getPublicEntriesToAll(@Body JsonObject jsonObject);
+    Observable<EntryListBean> getPublicEntriesToAll(@QueryMap Map<String, String> map);
 
     @Headers({
             "Accept: application/json",
     })
     @GET("entry/list/publicToGroup")
-    Observable<EntryListBean> getPublicEntriesToGroup(@Body JsonObject jsonObject);
+    Observable<EntryListBean> getPublicEntriesToGroup(@QueryMap Map<String, String> map);
 
     @Headers({
             "Accept: application/json",
@@ -118,33 +121,33 @@ public interface RetrofitService {
             "Accept: application/json",
     })
     @GET("collection/list")
-    Observable<CollectionListBean> getCollectionList(@Body JsonObject jsonObject);
+    Observable<CollectionListBean> getCollectionList(@QueryMap Map<String, String> map);
 
     @Headers({
             "Accept: application/json",
     })
     @GET("collection/list/allPublic")
-    Observable<CollectionListBean> getAllPublic(@Body JsonObject jsonObject);
+    Observable<CollectionListBean> getAllPublic(@QueryMap Map<String, String> map);
 
     @Headers({
             "Accept: application/json",
     })
     @GET("collection/list/groupPublic")
-    Observable<CollectionListBean> getGroupPublic(@Body JsonObject jsonObject);
+    Observable<CollectionListBean> getGroupPublic(@QueryMap Map<String, String> map);
 
     //通过来源获取所有文章
     @Headers({
             "Accept: application/json",
     })
     @GET("entry/list/source")
-    Observable<EntryListBean> getEntriesBySource(@Body JsonObject jsonObject);
+    Observable<EntryListBean> getEntriesBySource(@QueryMap Map<String, String> map);
 
     //收藏夹下全部文章
     @Headers({
             "Accept: application/json",
     })
-    @GET("entry/list/source")
-    Observable<EntryListBean> getEntriesOfCollection(@Body JsonObject jsonObject);
+    @GET("entry/list/collection")
+    Observable<EntryListBean> getEntriesOfCollection(@QueryMap Map<String, String> map);
 
 
     //保存文章（通过链接）
@@ -183,7 +186,7 @@ public interface RetrofitService {
             "Accept: application/json",
     })
     @GET("source/list")
-    Observable<SourceListBean> getSources(@Body JsonObject jsonObject);
+    Observable<SourceListBean> getSources(@QueryMap Map<String, String> map);
 
 
     //刷新单个RSS源
@@ -235,7 +238,7 @@ public interface RetrofitService {
             "Accept: application/json",
     })
     @GET("group/detail/name")
-    Observable<SearchGroupBean> searchGroup(@Body JsonObject jsonObject);
+    Observable<SearchGroupBean> searchGroup(@QueryMap Map<String, String> map);
 
     //userid = 061583de-12be-4116-ac58-e7343aa7f024
     //collectionid = a6c04078-7da9-44e3-8817-0fb216cf830a

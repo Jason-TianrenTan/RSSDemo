@@ -18,6 +18,7 @@ import com.example.chidori.proxytestapp.Events.LoginEvent;
 import com.example.chidori.proxytestapp.Presenter.LoginPresenterImpl;
 import com.example.chidori.proxytestapp.R;
 import com.example.chidori.proxytestapp.Utils.Beans.LoginBean;
+import com.example.chidori.proxytestapp.Utils.IO.UniversalPresenter;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
