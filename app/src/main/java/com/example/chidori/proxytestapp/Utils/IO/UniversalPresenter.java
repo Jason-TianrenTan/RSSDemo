@@ -6,6 +6,7 @@ import com.example.chidori.proxytestapp.Events.CreateCollectionEvent;
 import com.example.chidori.proxytestapp.Events.CreateGroupEvent;
 import com.example.chidori.proxytestapp.Events.DeleteSourceEvent;
 import com.example.chidori.proxytestapp.Events.EntryListEvent;
+import com.example.chidori.proxytestapp.Events.GroupMemberEvent;
 import com.example.chidori.proxytestapp.Events.GroupModifyEvent;
 import com.example.chidori.proxytestapp.Events.GroupResultEvent;
 import com.example.chidori.proxytestapp.Events.LoginEvent;
@@ -17,12 +18,14 @@ import com.example.chidori.proxytestapp.Events.SaveRSSEvent;
 import com.example.chidori.proxytestapp.Events.SourceListEvent;
 import com.example.chidori.proxytestapp.Events.UpdateAccountEvent;
 import com.example.chidori.proxytestapp.Events.UpdateCollectionEvent;
+import com.example.chidori.proxytestapp.Events.UserDetailEvent;
 import com.example.chidori.proxytestapp.Utils.Beans.AddSourceBean;
 import com.example.chidori.proxytestapp.Utils.Beans.CollectionListBean;
 import com.example.chidori.proxytestapp.Utils.Beans.CreateCollectionBean;
 import com.example.chidori.proxytestapp.Utils.Beans.CreateGroupBean;
 import com.example.chidori.proxytestapp.Utils.Beans.DeleteSourceBean;
 import com.example.chidori.proxytestapp.Utils.Beans.EntryListBean;
+import com.example.chidori.proxytestapp.Utils.Beans.GroupMemberBean;
 import com.example.chidori.proxytestapp.Utils.Beans.GroupModifyBean;
 import com.example.chidori.proxytestapp.Utils.Beans.LoginBean;
 import com.example.chidori.proxytestapp.Utils.Beans.ModifyCollectionBean;
@@ -34,6 +37,7 @@ import com.example.chidori.proxytestapp.Utils.Beans.SearchGroupBean;
 import com.example.chidori.proxytestapp.Utils.Beans.SourceListBean;
 import com.example.chidori.proxytestapp.Utils.Beans.UpdateBean;
 import com.example.chidori.proxytestapp.Utils.Beans.UpdateCollectionBean;
+import com.example.chidori.proxytestapp.Utils.Beans.UserDetailBean;
 import com.google.gson.JsonObject;
 
 import org.greenrobot.eventbus.EventBus;
@@ -1344,6 +1348,88 @@ public class UniversalPresenter extends BasePresenter {
                     public void onNext(SearchGroupBean.ResResultBean result) {
                         System.out.println("result: " + result.isIsSuccess());
                         EventBus.getDefault().post(new GroupResultEvent(result));
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        e.printStackTrace();
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
+    }
+
+
+    //小组成员信息
+    public void GetGroupMembers(String groupId) {
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("groupId", groupId);
+        HashMap<String, String> wrapper = new HashMap<>();
+        wrapper.put("reqParam", jsonObject.toString());
+        ApiManager.getInstance()
+                .getRSSRetrofitService()
+                .getGroupMembers(wrapper)
+                .map(new Function<GroupMemberBean, GroupMemberBean.ResResultBean>() {
+                    @Override
+                    public GroupMemberBean.ResResultBean apply(GroupMemberBean bean) {
+                        return bean.getResResult();
+                    }
+                }).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<GroupMemberBean.ResResultBean>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                        addDisposable(d);
+                    }
+
+                    @Override
+                    public void onNext(GroupMemberBean.ResResultBean result) {
+                        System.out.println("result: " + result.isIsSuccess());
+                        EventBus.getDefault().post(new GroupMemberEvent(result));
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        e.printStackTrace();
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
+    }
+
+
+    //userid->用户信息
+    public void QueryUserInfo(String userId) {
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("userId", userId);
+        HashMap<String, String> wrapper = new HashMap<>();
+        wrapper.put("reqUserInfo", jsonObject.toString());
+        ApiManager.getInstance()
+                .getRSSRetrofitService()
+                .queryUserInfo(wrapper)
+                .map(new Function<UserDetailBean, UserDetailBean.ResResultBean>() {
+                    @Override
+                    public UserDetailBean.ResResultBean apply(UserDetailBean bean) {
+                        return bean.getResResult();
+                    }
+                }).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<UserDetailBean.ResResultBean>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                        addDisposable(d);
+                    }
+
+                    @Override
+                    public void onNext(UserDetailBean.ResResultBean result) {
+                        System.out.println("result: " + result.isIsSuccess());
+                        EventBus.getDefault().post(new UserDetailEvent(result));
                     }
 
                     @Override

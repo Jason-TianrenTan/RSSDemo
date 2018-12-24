@@ -14,9 +14,10 @@ import android.widget.Toast;
 
 import com.example.chidori.proxytestapp.Activities.util.TabAdapter;
 import com.example.chidori.proxytestapp.Activities.util.TabFragment;
+import com.example.chidori.proxytestapp.Contract.Contract;
 import com.example.chidori.proxytestapp.R;
 
-public class TabActivity extends AppCompatActivity {
+public class TabActivity extends AppCompatActivity implements Contract.ITabACView{
     private Toolbar toolbar;
     private TextView toolbarTitle;
     private View view;
@@ -91,5 +92,20 @@ public class TabActivity extends AppCompatActivity {
             tabs.getTabAt(i).setText(tabName[i]);
         }
         tabs.setTabMode(TabLayout.MODE_SCROLLABLE);
+    }
+
+    @Override
+    public void onGroupCollectionsRetrieved(String status) {
+
+    }
+
+    @Override
+    public void onGroupEntriesRetrieved(String status) {
+
+    }
+
+    @Override
+    public void onEntryAdded(String status) {
+
     }
 }

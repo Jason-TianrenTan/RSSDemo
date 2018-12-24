@@ -13,11 +13,12 @@ import android.widget.Toast;
 import com.example.chidori.proxytestapp.Activities.entity.UserCard;
 import com.example.chidori.proxytestapp.Activities.util.StaticTool;
 import com.example.chidori.proxytestapp.Activities.util.UserCardRecyclerAdapter;
+import com.example.chidori.proxytestapp.Contract.Contract;
 import com.example.chidori.proxytestapp.R;
 
 import java.util.List;
 
-public class GroupDetailActivity extends AppCompatActivity {
+public class GroupDetailActivity extends AppCompatActivity implements Contract.IGroupDetailView{
     private Toolbar toolbar;
     private TextView toolbarTitle;
     private Button btn;
@@ -88,5 +89,15 @@ public class GroupDetailActivity extends AppCompatActivity {
             return true;
         }
         else return false;
+    }
+
+    @Override
+    public void onGroupEntered(String status) {
+
+    }
+
+    @Override
+    public void onGroupQuit(String status) {
+
     }
 }
