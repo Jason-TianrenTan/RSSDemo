@@ -32,8 +32,9 @@ public class TabModelPresenterImpl implements Contract.ITabPresenter {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onGroupMemberResult(GroupMemberEvent groupMemberEvent) {
-        if (groupMemberEvent.getResult().isIsSuccess()) {
-            model.setupMembers(groupMemberEvent.getResult());
+        GroupMemberBean.ResResultBean result = groupMemberEvent.getResult();
+        if (result.isIsSuccess()) {
+            model.setupMembers(result);
             tabView.onGroupMembersResult("success");
         } else tabView.onGroupMembersResult("failure");
     }

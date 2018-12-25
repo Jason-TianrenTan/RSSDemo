@@ -189,7 +189,10 @@ public class ListActivity extends AppCompatActivity implements Contract.IListVie
             }
             case collection:{
                 toolbarTitle.setText("我的收藏");
-                presenter.doGetUserCollections();
+                //presenter.doGetUserCollections();
+                cardList = StaticTool.collectionCardList;
+                recyclerAdapter = new CollectionCardRecyclerAdapter(cardList,true);
+                StaticTool.setCardRecyclerView(recyclerAdapter,view);
                 break;
             }
             case source:{
@@ -213,16 +216,16 @@ public class ListActivity extends AppCompatActivity implements Contract.IListVie
     @Override
     public void onUserCollectionsCall(String status) {
 
-        if(status.equals("success")){
-            cardList = presenter.getCollections();
-            if(cardList==null) cardList = new ArrayList<Collection>();
-            recyclerAdapter = new CollectionCardRecyclerAdapter(cardList,true);
-            StaticTool.setCardRecyclerView(recyclerAdapter,view);
-        }
-        else {
-            Toast.makeText(ListActivity.this, "获取收藏夹列表失败", Toast.LENGTH_SHORT).show();
-            cardList = new ArrayList<Collection>();
-        }
+//        if(status.equals("success")){
+//            cardList = StaticTool.collectionCardList;
+//            if(cardList==null) cardList = new ArrayList<Collection>();
+//            recyclerAdapter = new CollectionCardRecyclerAdapter(cardList,true);
+//            StaticTool.setCardRecyclerView(recyclerAdapter,view);
+//        }
+//        else {
+//            Toast.makeText(ListActivity.this, "获取收藏夹列表失败", Toast.LENGTH_SHORT).show();
+//            cardList = new ArrayList<Collection>();
+//        }
     }
 
     @Override
@@ -336,6 +339,11 @@ public class ListActivity extends AppCompatActivity implements Contract.IListVie
             cardList =new ArrayList<Group>();
         }
         StaticTool.opPosition = -1;
+    }
+
+    @Override
+    public void onEntryRemoved(String status) {
+
     }
 
 

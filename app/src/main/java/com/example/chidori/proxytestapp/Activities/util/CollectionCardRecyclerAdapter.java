@@ -65,7 +65,6 @@ public class CollectionCardRecyclerAdapter extends RecyclerView.Adapter<Collecti
                 intent.putExtra("type",ListActivity.collection_entry);
                 intent.putExtra("title",collectionCard.getName());
                 intent.putExtra("id", collectionCard.getCollectionId());
-                Toast.makeText(context, collectionCard.getCollectionId(), Toast.LENGTH_SHORT).show();
                 StaticTool.opPosition=position;
                 context.startActivity(intent);
             }

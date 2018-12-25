@@ -161,6 +161,7 @@ public class LoginActivity extends AppCompatActivity implements Contract.ILoginV
              //RESULT_OK为Activity系统常量，状态码为-1
              // 表示此页面下的内容操作成功将data返回到上一页面，如果是用back返回过去的则不存在用setResult传递data值
              setResult(RESULT_OK, data);
+             Config.username = bean.getCurData().getUsername();
              Config.userId = bean.getCurData().getUserId();
              Config.email = bean.getCurData().getEmail();
              Config.phone = bean.getCurData().getPhone();

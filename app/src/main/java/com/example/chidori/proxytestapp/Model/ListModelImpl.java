@@ -33,7 +33,10 @@ public class ListModelImpl implements Contract.IListModel {
                     curData.getDescription(), curData.getPublicStatus(),
                     curData.getCreateTime(), curData.getUpdateTime()));
         }
+
     }
+
+
 
     public void setupSources(SourceListBean.ResResultBean bean) {
         sources = new ArrayList<>();
@@ -63,6 +66,7 @@ public class ListModelImpl implements Contract.IListModel {
                     curData.getDescription(), curData.getUserId(), curData.getCreateTime(), curData.getUpdateTime()));
         }
     }
+
 
     private ArrayList<Collection> collections;
 
@@ -137,6 +141,11 @@ public class ListModelImpl implements Contract.IListModel {
     @Override
     public void doGetUserGroups(String userId) {
         new UniversalPresenter().GetUserGroups(userId);
+    }
+
+    @Override
+    public void removeEntry(String entryId) {
+        new UniversalPresenter().RemoveEntry(entryId);
     }
 
 }

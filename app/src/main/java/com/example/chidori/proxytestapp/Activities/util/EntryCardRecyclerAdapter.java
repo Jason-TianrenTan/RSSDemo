@@ -92,15 +92,15 @@ public class EntryCardRecyclerAdapter extends RecyclerView.Adapter<EntryCardRecy
                     Toast.makeText(context, "取消收藏", Toast.LENGTH_SHORT).show();
                     switch (option){
                         case tabAC:{
-                            //TabFragment.getTabACPresenter()
+                            TabFragment.getTabACPresenter().doAddEntry(entryCard.getCollectionId(),StaticTool.temp);
                             break;
                         }
                         case listAC:{
-                            //ListActivity.getPresenter()
+                            ListActivity.getPresenter().doAddEntryToCollection(entryCard.getCollectionId(),entryCard.getEntryId());
                             break;
                         }
                         case home:{
-                            //TabFragment.getHomePresenter()
+                            TabFragment.getHomePresenter().doAddEntry(entryCard.getCollectionId(),StaticTool.temp);
                             break;
                         }
                     }

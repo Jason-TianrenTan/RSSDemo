@@ -10,9 +10,14 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class ApiManager {
 
     private RetrofitService myApi;
-    private static ApiManager sApiManager;
+
 
     private RetrofitService defApi;
+
+
+    private static ApiManager sApiManager;
+
+    private ApiManager() { }
 
     //get instance of api
     public static ApiManager getInstance() {
