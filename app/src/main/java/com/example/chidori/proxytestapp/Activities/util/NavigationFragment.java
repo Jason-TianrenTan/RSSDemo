@@ -12,11 +12,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.chidori.proxytestapp.Activities.ListActivity;
 import com.example.chidori.proxytestapp.Activities.LoginActivity;
 import com.example.chidori.proxytestapp.Activities.entity.Group;
+import com.example.chidori.proxytestapp.Config;
 import com.example.chidori.proxytestapp.Contract.Contract;
 import com.example.chidori.proxytestapp.Presenter.NavMenuPresenterImpl;
 import com.example.chidori.proxytestapp.R;
@@ -118,10 +120,11 @@ public class NavigationFragment extends Fragment implements Contract.INavMenuVie
             public void onClick(View v) {
                 Intent intent=new Intent(getContext(),LoginActivity.class);
                 startActivity(intent);
-                getActivity().finish();
             }
         });
 
+        TextView tx = (TextView)view.findViewById(R.id.textView);
+        tx.setText(Config.username);
         LinearLayout my_import=(LinearLayout)view.findViewById(R.id.my_source);
         my_import.setOnClickListener(new View.OnClickListener() {
             @Override
