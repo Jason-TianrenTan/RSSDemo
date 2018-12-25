@@ -404,12 +404,8 @@ public class UniversalPresenter extends BasePresenter {
         ApiManager.getInstance()
                 .getRSSRetrofitService()
                 .getEntriesBySource(wrapper)
-                .map(new Function<EntryListBean, EntryListBean.ResResultBean>() {
-                    @Override
-                    public EntryListBean.ResResultBean apply(EntryListBean bean) {
-                        return bean.getResResult();
-                    }
-                }).subscribeOn(Schedulers.io())
+                .map(bean ->bean.getResResult())
+                .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<EntryListBean.ResResultBean>() {
                     @Override
@@ -419,7 +415,6 @@ public class UniversalPresenter extends BasePresenter {
 
                     @Override
                     public void onNext(EntryListBean.ResResultBean result) {
-                        System.out.println("result: " + result.isIsSuccess());
                         EventBus.getDefault().post(new EntryListEvent(result, EntryListEvent.EventType.LIST_BY_SOURCE));
                     }
 
@@ -644,7 +639,6 @@ public class UniversalPresenter extends BasePresenter {
 
                     @Override
                     public void onNext(ModifyCollectionBean.ResResultBean result) {
-                        System.out.println("result: " + result.isIsSuccess());
                         EventBus.getDefault().post(new ModifyCollectionEvent(result, ModifyCollectionEvent.EventType.ADD_ENTRY));
                     }
 

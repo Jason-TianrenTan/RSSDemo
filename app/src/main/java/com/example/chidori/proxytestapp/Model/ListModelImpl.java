@@ -33,7 +33,10 @@ public class ListModelImpl implements Contract.IListModel {
                     curData.getDescription(), curData.getPublicStatus(),
                     curData.getCreateTime(), curData.getUpdateTime()));
         }
+
     }
+
+
 
     public void setupSources(SourceListBean.ResResultBean bean) {
         sources = new ArrayList<>();
