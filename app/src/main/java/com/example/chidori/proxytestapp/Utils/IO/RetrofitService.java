@@ -266,6 +266,13 @@ public interface RetrofitService {
     })
     @GET("user/detail")
     Observable<UserDetailBean> queryUserInfo(@QueryMap Map<String, String> map);
+
+    //取消收藏
+    @Headers({
+            "Accept: application/json",
+    })
+    @POST("collection/removeEntry")
+    Observable<ModifyCollectionBean> removeEntry(@Body JsonObject jsonObject);
     //userid = 061583de-12be-4116-ac58-e7343aa7f024
     //collectionid = a6c04078-7da9-44e3-8817-0fb216cf830a
     //entryid = ""2da32695-2bf5-4308-b5ef-9a26e6f6c941""

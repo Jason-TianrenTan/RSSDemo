@@ -9,7 +9,8 @@ public class ModifyCollectionEvent {
         CLEAR, //清除收藏夹
         ADD_ENTRY, //添加文章
         MOVE_ENTRY,//移动文章
-        DELETE//删除收藏夹
+        DELETE,//删除收藏夹
+        REMOVE//移除文章
     }
 
     public EventType getType() {
