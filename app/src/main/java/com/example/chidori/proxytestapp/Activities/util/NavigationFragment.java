@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -162,7 +164,9 @@ public class NavigationFragment extends Fragment implements Contract.INavMenuVie
             cardList = presenter.getGroups();
             if(cardList==null) cardList = new ArrayList<Group>();
             GroupCardRecyclerAdapter recyclerAdapter = new GroupCardRecyclerAdapter(cardList);
-            StaticTool.setCardRecyclerView(recyclerAdapter,view);
+            RecyclerView recyclerView=(RecyclerView)view.findViewById(R.id.recycler_view);
+            recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext(),LinearLayoutManager.VERTICAL,false));
+            recyclerView.setAdapter(recyclerAdapter);
         }
         else {
             Toast.makeText(getContext(), "获得文章失败", Toast.LENGTH_SHORT).show();

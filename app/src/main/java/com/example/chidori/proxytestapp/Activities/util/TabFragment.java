@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -68,7 +69,9 @@ public class TabFragment extends Fragment implements Contract.ITabACView,Contrac
             }
         }
 
-        StaticTool.setCardRecyclerView(recyclerAdapter,view);
+        RecyclerView recyclerView=(RecyclerView)view.findViewById(R.id.recycler_view);
+        recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext(),LinearLayoutManager.VERTICAL,false));
+        recyclerView.setAdapter(recyclerAdapter);
 
         swipeRefresh = (SwipeRefreshLayout)view.findViewById(R.id.swipe_refresh);
         swipeRefresh.setColorSchemeResources(R.color.colorPrimary);
@@ -124,7 +127,7 @@ public class TabFragment extends Fragment implements Contract.ITabACView,Contrac
             cardList = tabACPresenter.getCollections();
             if(cardList==null) cardList = new ArrayList<Collection>();
             recyclerAdapter = new CollectionCardRecyclerAdapter(cardList,true);
-            StaticTool.setCardRecyclerView(recyclerAdapter,view);
+            RecyclerView recyclerView=(RecyclerView)view.findViewById(R.id.recycler_view);         recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext(),LinearLayoutManager.VERTICAL,false));         recyclerView.setAdapter(recyclerAdapter);
         }
         else {
             Toast.makeText(getContext(), "获取收藏夹列表失败", Toast.LENGTH_SHORT).show();
@@ -139,7 +142,7 @@ public class TabFragment extends Fragment implements Contract.ITabACView,Contrac
             cardList = homePresenter.getEntries();
             if(cardList==null) cardList = new ArrayList<Entry>();
             recyclerAdapter = new EntryCardRecyclerAdapter(cardList,EntryCardRecyclerAdapter.tabAC);
-            StaticTool.setCardRecyclerView(recyclerAdapter,view);
+            RecyclerView recyclerView=(RecyclerView)view.findViewById(R.id.recycler_view);         recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext(),LinearLayoutManager.VERTICAL,false));         recyclerView.setAdapter(recyclerAdapter);
         }
         else {
             Toast.makeText(getContext(), "获得文章失败", Toast.LENGTH_SHORT).show();
@@ -154,7 +157,9 @@ public class TabFragment extends Fragment implements Contract.ITabACView,Contrac
             cardList = homePresenter.getSources();
             if(cardList==null) cardList = new ArrayList<Source>();
             recyclerAdapter = new SourceCardRecyclerAdapter(cardList,SourceCardRecyclerAdapter.home);
-            StaticTool.setCardRecyclerView(recyclerAdapter,view);
+            RecyclerView recyclerView=(RecyclerView)view.findViewById(R.id.recycler_view);
+            recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext(),LinearLayoutManager.VERTICAL,false));
+            recyclerView.setAdapter(recyclerAdapter);
         }
         else {
             Toast.makeText(getContext(), "获得订阅列表失败", Toast.LENGTH_SHORT).show();
@@ -182,7 +187,7 @@ public class TabFragment extends Fragment implements Contract.ITabACView,Contrac
             cardList = tabACPresenter.getEntries();
             if(cardList==null) cardList = new ArrayList<Entry>();
             recyclerAdapter = new EntryCardRecyclerAdapter(cardList,EntryCardRecyclerAdapter.tabAC);
-            StaticTool.setCardRecyclerView(recyclerAdapter,view);
+            RecyclerView recyclerView=(RecyclerView)view.findViewById(R.id.recycler_view);         recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext(),LinearLayoutManager.VERTICAL,false));         recyclerView.setAdapter(recyclerAdapter);
         }
         else {
             Toast.makeText(getContext(), "获得文章失败", Toast.LENGTH_SHORT).show();

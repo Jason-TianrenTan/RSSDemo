@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -192,7 +193,9 @@ public class ListActivity extends AppCompatActivity implements Contract.IListVie
                 //presenter.doGetUserCollections();
                 cardList = StaticTool.collectionCardList;
                 recyclerAdapter = new CollectionCardRecyclerAdapter(cardList,true);
-                StaticTool.setCardRecyclerView(recyclerAdapter,view);
+                RecyclerView recyclerView=(RecyclerView)view.findViewById(R.id.recycler_view);
+                recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext(),LinearLayoutManager.VERTICAL,false));
+                recyclerView.setAdapter(recyclerAdapter);
                 break;
             }
             case source:{
@@ -220,7 +223,7 @@ public class ListActivity extends AppCompatActivity implements Contract.IListVie
 //            cardList = StaticTool.collectionCardList;
 //            if(cardList==null) cardList = new ArrayList<Collection>();
 //            recyclerAdapter = new CollectionCardRecyclerAdapter(cardList,true);
-//            StaticTool.setCardRecyclerView(recyclerAdapter,view);
+//            RecyclerView recyclerView=(RecyclerView)view.findViewById(R.id.recycler_view);         recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext(),LinearLayoutManager.VERTICAL,false));         recyclerView.setAdapter(recyclerAdapter);
 //        }
 //        else {
 //            Toast.makeText(ListActivity.this, "获取收藏夹列表失败", Toast.LENGTH_SHORT).show();
@@ -248,7 +251,9 @@ public class ListActivity extends AppCompatActivity implements Contract.IListVie
             cardList = presenter.getSources();
             if(cardList==null) cardList = new ArrayList<Source>();
             recyclerAdapter = new SourceCardRecyclerAdapter(cardList,SourceCardRecyclerAdapter.list);
-            StaticTool.setCardRecyclerView(recyclerAdapter,view);
+            RecyclerView recyclerView=(RecyclerView)view.findViewById(R.id.recycler_view);
+            recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext(),LinearLayoutManager.VERTICAL,false));
+            recyclerView.setAdapter(recyclerAdapter);
         }
         else {
             Toast.makeText(ListActivity.this, "获得订阅列表失败", Toast.LENGTH_SHORT).show();
@@ -277,7 +282,9 @@ public class ListActivity extends AppCompatActivity implements Contract.IListVie
             cardList = presenter.getEntries();
             if(cardList==null) cardList = new ArrayList<Entry>();
             recyclerAdapter = new EntryCardRecyclerAdapter(cardList,EntryCardRecyclerAdapter.listAC);
-            StaticTool.setCardRecyclerView(recyclerAdapter,view);
+            RecyclerView recyclerView=(RecyclerView)view.findViewById(R.id.recycler_view);
+            recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext(),LinearLayoutManager.VERTICAL,false));
+            recyclerView.setAdapter(recyclerAdapter);
         }
         else {
             Toast.makeText(ListActivity.this, "获得文章失败", Toast.LENGTH_SHORT).show();
@@ -292,7 +299,9 @@ public class ListActivity extends AppCompatActivity implements Contract.IListVie
             cardList = presenter.getEntries();
             if(cardList==null) cardList = new ArrayList<Entry>();
             recyclerAdapter = new EntryCardRecyclerAdapter(cardList,EntryCardRecyclerAdapter.listAC);
-            StaticTool.setCardRecyclerView(recyclerAdapter,view);
+            RecyclerView recyclerView=(RecyclerView)view.findViewById(R.id.recycler_view);
+            recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext(),LinearLayoutManager.VERTICAL,false));
+            recyclerView.setAdapter(recyclerAdapter);
         }
         else {
             Toast.makeText(ListActivity.this, "获得文章失败", Toast.LENGTH_SHORT).show();
@@ -316,10 +325,12 @@ public class ListActivity extends AppCompatActivity implements Contract.IListVie
     @Override
     public void onCollectionCreated(String status) {
         if(status.equals("success")){
-            StaticTool.collectionCardList.add(new Collection("id",input,"",r.getCheckedRadioButtonId(),"",""));
-            Toast.makeText(ListActivity.this, "收藏夹创建成功", Toast.LENGTH_SHORT).show();
-            ListActivity.getRecyclerAdapter().notifyDataSetChanged();
-            finish();
+            if (r != null) {
+                StaticTool.collectionCardList.add(new Collection("id", input, "", r.getCheckedRadioButtonId(), "", ""));
+                Toast.makeText(ListActivity.this, "收藏夹创建成功", Toast.LENGTH_SHORT).show();
+                ListActivity.getRecyclerAdapter().notifyDataSetChanged();
+                finish();
+            }
         }
         else {
             Toast.makeText(ListActivity.this, "收藏夹创建失败", Toast.LENGTH_SHORT).show();
@@ -332,7 +343,9 @@ public class ListActivity extends AppCompatActivity implements Contract.IListVie
             cardList = presenter.getUserGroups();
             if(cardList==null) cardList = new ArrayList<Group>();
             recyclerAdapter = new GroupCardRecyclerAdapter(cardList);
-            StaticTool.setCardRecyclerView(recyclerAdapter,view);
+            RecyclerView recyclerView=(RecyclerView)view.findViewById(R.id.recycler_view);
+            recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext(),LinearLayoutManager.VERTICAL,false));
+            recyclerView.setAdapter(recyclerAdapter);
         }
         else {
             Toast.makeText(ListActivity.this, "获得小组失败", Toast.LENGTH_SHORT).show();

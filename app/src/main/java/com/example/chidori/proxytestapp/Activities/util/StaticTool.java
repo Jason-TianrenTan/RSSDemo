@@ -55,9 +55,4 @@ public class StaticTool {
         return memberList;
     }
 
-    public static void setCardRecyclerView(RecyclerView.Adapter recyclerAdapter, View view){
-        RecyclerView recyclerView=(RecyclerView)view.findViewById(R.id.recycler_view);
-        recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext(),LinearLayoutManager.VERTICAL,false));
-        recyclerView.setAdapter(recyclerAdapter);
-    }
 }

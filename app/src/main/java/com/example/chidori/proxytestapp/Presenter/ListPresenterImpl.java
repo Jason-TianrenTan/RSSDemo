@@ -122,9 +122,11 @@ public class ListPresenterImpl implements Contract.IListPresenter {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onUserGroupsRetrieved(UserGroupsEvent userGroupsEvent) {
-        if (userGroupsEvent.getResult().isIsSuccess())
-            listView.onCollectionCreated("success");
-        else listView.onCollectionCreated("failure");
+        if (userGroupsEvent.getResult().isIsSuccess()) {
+            model.setupUserGroups(userGroupsEvent.getResult());
+            listView.onUserGroupsRetrieved("success");
+        }
+        else listView.onUserGroupsRetrieved("failure");
     }
 
 

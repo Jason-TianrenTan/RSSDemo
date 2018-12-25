@@ -2,6 +2,8 @@ package com.example.chidori.proxytestapp.Activities;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -127,7 +129,9 @@ public class GroupDetailActivity extends AppCompatActivity implements Contract.I
         if(status.equals("success")){
             List<GroupMember> cardList=presenter_1.getMembers();
             UserCardRecyclerAdapter recyclerAdapter = new UserCardRecyclerAdapter(cardList);
-            StaticTool.setCardRecyclerView(recyclerAdapter,view);
+            RecyclerView recyclerView=(RecyclerView)view.findViewById(R.id.recycler_view);
+            recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext(),LinearLayoutManager.VERTICAL,false));
+            recyclerView.setAdapter(recyclerAdapter);
             Toast.makeText(GroupDetailActivity.this, "小组成员", Toast.LENGTH_SHORT).show();
         }
         else {
