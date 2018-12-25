@@ -15,10 +15,12 @@ public interface Contract {
     //阅读器
     interface IReaderView {
         void onTitleFound(String title);
+        void onEntryAdded(String status);
     }
 
     interface IReaderModel {
         void doLoadURL(String url);
+        void doAddToCollection(String link, String collectionId, String description, String title);
     }
 
     interface IReaderPresenter {
@@ -26,6 +28,7 @@ public interface Contract {
         String getTitle();
         String getNickname();
         void setTitle(String title);
+        void doAddToCollection(String link, String collectionId, String description, String title);
     }
 
 

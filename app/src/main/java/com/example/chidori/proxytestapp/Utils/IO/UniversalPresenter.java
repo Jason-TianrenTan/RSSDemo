@@ -887,6 +887,8 @@ public class UniversalPresenter extends BasePresenter {
     //通过链接保存文章
     public void SaveEntryFromLink(String link, String collectionId, String description, String title) {
 
+        System.out.println("link = " + link);
+        System.out.println("collectionid = "  +collectionId);
         JsonObject wrapper = new JsonObject();
         try {
             JsonObject jsonObject = new JsonObject();

@@ -73,8 +73,7 @@ public class EntryCardRecyclerAdapter extends RecyclerView.Adapter<EntryCardRecy
             @Override
             public void onClick(final View v) {
                 Intent intent = new Intent(context, ReaderActivity.class);
-                intent.putExtra("id", entryCard.getEntryId());
-                Toast.makeText(context, entryCard.getEntryId(), Toast.LENGTH_SHORT).show();
+                intent.putExtra("link", entryCard.getEntryLink());
                 context.startActivity(intent);
             }
         });

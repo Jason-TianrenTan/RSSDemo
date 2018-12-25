@@ -1,13 +1,17 @@
 package com.example.chidori.proxytestapp.Activities;
 
 import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.webkit.JsResult;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
@@ -16,6 +20,9 @@ import android.webkit.WebViewClient;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.chidori.proxytestapp.Activities.util.CollectionRadioRecyclerAdapter;
+import com.example.chidori.proxytestapp.Activities.util.StaticTool;
+import com.example.chidori.proxytestapp.Activities.util.TabFragment;
 import com.example.chidori.proxytestapp.Contract.Contract;
 import com.example.chidori.proxytestapp.Presenter.ReaderPresenterImpl;
 import com.example.chidori.proxytestapp.R;
@@ -31,12 +38,21 @@ public class ReaderActivity extends AppCompatActivity implements Contract.IReade
     @BindView(R.id.toolbar) Toolbar toolbar;
     @BindView(R.id.page_title) TextView titleTextView;
 
-    Contract.IReaderPresenter presenter;
-    String testURL = "https://blog.csdn.net/baidu_33634330/article/details/77680289";
+    String currentLink = "";
+    ReaderPresenterImpl presenter;
 
     @Override
     public void onTitleFound(String title) {
         titleTextView.setText(title);
+    }
+
+    @Override
+    public void onEntryAdded(String status) {
+        if (status.equals("success")) {
+            Toast.makeText(this, "收藏成功", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(this, "未知错误", Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override
@@ -48,15 +64,14 @@ public class ReaderActivity extends AppCompatActivity implements Contract.IReade
         initPresenter();
         initWebView();
 
-        //测试
-        test();
+        Intent intent = getIntent();
+        if (intent != null) {
+            String url = intent.getStringExtra("link");
+            currentLink = url;
+            webView.loadUrl(url);
+        }
     }
 
-
-
-    private void test() {
-        UniversalPresenter testPresenter = new UniversalPresenter();
-    }
 
     private void initPresenter() {
         presenter = new ReaderPresenterImpl();
@@ -73,7 +88,28 @@ public class ReaderActivity extends AppCompatActivity implements Contract.IReade
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_favorite:
-                Toast.makeText(this, "已添加到收藏夹", Toast.LENGTH_SHORT).show();
+                AlertDialog.Builder dialog = new AlertDialog.Builder(ReaderActivity.this);
+                dialog.setTitle("选择收藏夹").setMessage("选择要添加进入的收藏夹");
+                View v = View.inflate(ReaderActivity.this, R.layout.view_dialog_collection_radio, null);
+
+                CollectionRadioRecyclerAdapter recyclerAdapter = new CollectionRadioRecyclerAdapter(StaticTool.collectionCardList);
+
+                RecyclerView recyclerView = (RecyclerView) v.findViewById(R.id.recycler_view);
+                recyclerView.setLayoutManager(new LinearLayoutManager(ReaderActivity.this, LinearLayoutManager.VERTICAL, false));
+                recyclerView.setAdapter(recyclerAdapter);
+                dialog.setView(v);
+
+                dialog.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+
+                        String input = recyclerAdapter.getCheckedCollectionId();
+                        if (input == null) {
+                            Toast.makeText(ReaderActivity.this, "请选择收藏夹", Toast.LENGTH_SHORT).show();
+                        } else {
+                            presenter.doAddToCollection(presenter.getLink(), input, "来自" + presenter.getNickname(), presenter.getTitle());
+                        }
+                    }
+                }).setNegativeButton("取消", null).show();
                 break;
         }
         return true;
@@ -81,7 +117,6 @@ public class ReaderActivity extends AppCompatActivity implements Contract.IReade
 
 
     private void initWebView() {
-        webView.loadUrl(testURL);
         webView.setWebViewClient(new WebViewClient(){
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
@@ -127,6 +162,7 @@ public class ReaderActivity extends AppCompatActivity implements Contract.IReade
         String action = intent.getAction();
         if (Intent.ACTION_SEND.equals(action)) {
             String url = intent.getStringExtra(Intent.EXTRA_TEXT);
+            currentLink = url;
             webView.loadUrl(url);
             presenter.doLoadURL(url);
         }

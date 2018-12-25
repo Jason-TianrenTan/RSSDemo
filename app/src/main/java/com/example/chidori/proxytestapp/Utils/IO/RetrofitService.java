@@ -157,7 +157,7 @@ public interface RetrofitService {
     @Headers({
             "Accept: application/json",
     })
-    @POST("source/other")
+    @POST("entry")
     Observable<SaveEntryBean> saveEntryFromLink(@Body JsonObject jsonObject);
 
 

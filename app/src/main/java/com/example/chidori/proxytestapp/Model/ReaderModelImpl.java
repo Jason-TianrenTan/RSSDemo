@@ -3,6 +3,7 @@ package com.example.chidori.proxytestapp.Model;
 
 import com.example.chidori.proxytestapp.Contract.Contract;
 import com.example.chidori.proxytestapp.Events.URLEvent;
+import com.example.chidori.proxytestapp.Utils.IO.UniversalPresenter;
 
 import org.greenrobot.eventbus.EventBus;
 import org.jsoup.Jsoup;
@@ -33,6 +34,11 @@ public class ReaderModelImpl implements Contract.IReaderModel {
     private String nickname = "网页";
     private String titleName = "来自网页";
 
+    private String link = "";
+
+    public String getLink() {
+        return link;
+    }
     @Override
     public void doLoadURL(String url) {
         new Thread(()-> {
@@ -51,6 +57,7 @@ public class ReaderModelImpl implements Contract.IReaderModel {
                 e.printStackTrace();
             }
             if (document != null) {
+                link = url;
                 if (url.contains("blog.csdn.net")) {//CSDN
                     nickname = "CSDN";
                 } else if (url.contains("www.jianshu.com")) {
@@ -65,5 +72,10 @@ public class ReaderModelImpl implements Contract.IReaderModel {
             }
         }).start();
 
+    }
+
+    @Override
+    public void doAddToCollection(String link, String collectionId, String description, String title) {
+        new UniversalPresenter().SaveEntryFromLink(link, collectionId, description, title);
     }
 }
