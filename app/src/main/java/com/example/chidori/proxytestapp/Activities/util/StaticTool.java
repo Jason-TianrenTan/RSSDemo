@@ -16,12 +16,14 @@ import java.util.List;
 import java.util.UUID;
 
 public class StaticTool {
-    public static List<String> starList = new ArrayList<>();
+    public static List<String> myEntryIdList = new ArrayList<>();
+    public static List<String> myGroupIdList = new ArrayList<>();
+
     public static List<Collection> collectionCardList = new ArrayList<>();
-    public static List<Group> groupCardList = getTestGroupCardList();
-    public static List<Source> sourceCardList = getTestSourceCardList();
+    public static List<Source> sourceCardList = new ArrayList<>();
+
     public static int opPosition = -1;
-    public static String temp;
+    public static String opString;
 
     public static List<Entry> getTestEntryCardList(){
         List<Entry> entryCardList = new ArrayList<>();

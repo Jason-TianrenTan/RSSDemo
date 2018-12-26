@@ -1,4 +1,4 @@
-package com.example.chidori.proxytestapp.Activities.util;
+package com.example.chidori.proxytestapp.Activities.adapter;
 
 import android.content.Context;
 import android.support.annotation.NonNull;

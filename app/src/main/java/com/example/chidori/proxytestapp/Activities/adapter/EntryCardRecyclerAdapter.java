@@ -1,4 +1,4 @@
-package com.example.chidori.proxytestapp.Activities.util;
+package com.example.chidori.proxytestapp.Activities.adapter;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -17,9 +17,13 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.chidori.proxytestapp.Activities.ListActivity;
+import com.example.chidori.proxytestapp.Activities.EntryByCollectionActivity;
+import com.example.chidori.proxytestapp.Activities.EntryBySourceActivity;
 import com.example.chidori.proxytestapp.Activities.ReaderActivity;
 import com.example.chidori.proxytestapp.Activities.entity.Entry;
+import com.example.chidori.proxytestapp.Activities.fragment.GroupEntryFragmentView;
+import com.example.chidori.proxytestapp.Activities.fragment.PublicEntryFragment;
+import com.example.chidori.proxytestapp.Activities.util.StaticTool;
 import com.example.chidori.proxytestapp.R;
 
 import java.util.List;
@@ -29,9 +33,10 @@ public class EntryCardRecyclerAdapter extends RecyclerView.Adapter<EntryCardRecy
     private List<Entry> cardList;
     private int option;
 
-    public static final int tabAC = 0;
-    public static final int listAC = 1;
-    public static final int home = 2;
+    public static final int source_entry = 0;
+    public static final int collection_entry = 1;
+    public static final int group_entry = 2;
+    public static final int public_entry = 3;
 
     static class ViewHolder extends RecyclerView.ViewHolder{
 
@@ -81,7 +86,7 @@ public class EntryCardRecyclerAdapter extends RecyclerView.Adapter<EntryCardRecy
         holder.card_title.setText(entryCard.getTitle());
         holder.card_detail.setText(entryCard.getSourceName());
 
-        holder.stared = StaticTool.starList.contains(entryCard.getEntryId());
+        holder.stared = StaticTool.myEntryIdList.contains(entryCard.getEntryId());
         if(holder.stared) holder.card_star_btn.setImageDrawable(ContextCompat.getDrawable(context,R.drawable.stared));
         else holder.card_star_btn.setImageDrawable(ContextCompat.getDrawable(context,R.drawable.star));
 
@@ -91,23 +96,27 @@ public class EntryCardRecyclerAdapter extends RecyclerView.Adapter<EntryCardRecy
                 if(holder.stared){
                     Toast.makeText(context, "取消收藏", Toast.LENGTH_SHORT).show();
                     switch (option){
-                        case tabAC:{
-                            TabFragment.getTabACPresenter().doAddEntry(entryCard.getCollectionId(),StaticTool.temp);
+                        case source_entry:{
+                            EntryBySourceActivity.getPresenter().doAddEntryToCollection(entryCard.getCollectionId(),StaticTool.opString);
                             break;
                         }
-                        case listAC:{
-                            ListActivity.getPresenter().doAddEntryToCollection(entryCard.getCollectionId(),entryCard.getEntryId());
+                        case collection_entry:{
+                            EntryByCollectionActivity.getPresenter().doAddEntryToCollection(entryCard.getCollectionId(),entryCard.getEntryId());
                             break;
                         }
-                        case home:{
-                            TabFragment.getHomePresenter().doAddEntry(entryCard.getCollectionId(),StaticTool.temp);
+                        case group_entry:{
+                            GroupEntryFragmentView.getPresenter().doAddEntryToCollection(entryCard.getCollectionId(),StaticTool.opString);
+                            break;
+                        }
+                        case public_entry:{
+                            PublicEntryFragment.getPresenter().doAddEntryToCollection(entryCard.getCollectionId(),StaticTool.opString);
                             break;
                         }
                     }
                 }
                 else {
                     StaticTool.opPosition = position;
-                    StaticTool.temp = entryCard.getEntryId();
+                    StaticTool.opString = entryCard.getEntryId();
                     setInputDialog("添加到收藏夹","请选择收藏夹");
                 }
             }
@@ -135,16 +144,20 @@ public class EntryCardRecyclerAdapter extends RecyclerView.Adapter<EntryCardRecy
                 }
                 else {
                     switch (option){
-                        case tabAC:{
-                            TabFragment.getTabACPresenter().doAddEntry(input,StaticTool.temp);
+                        case source_entry:{
+                            EntryBySourceActivity.getPresenter().doAddEntryToCollection(input,StaticTool.opString);
                             break;
                         }
-                        case listAC:{
-                            ListActivity.getPresenter().doAddEntryToCollection(input,StaticTool.temp);
+                        case collection_entry:{
+                            EntryByCollectionActivity.getPresenter().doAddEntryToCollection(input,StaticTool.opString);
                             break;
                         }
-                        case home:{
-                            TabFragment.getHomePresenter().doAddEntry(input,StaticTool.temp);
+                        case group_entry:{
+                            GroupEntryFragmentView.getPresenter().doAddEntryToCollection(input,StaticTool.opString);
+                            break;
+                        }
+                        case public_entry:{
+                            PublicEntryFragment.getPresenter().doAddEntryToCollection(input,StaticTool.opString);
                             break;
                         }
                     }
@@ -156,5 +169,10 @@ public class EntryCardRecyclerAdapter extends RecyclerView.Adapter<EntryCardRecy
     @Override
     public int getItemCount() {
         return cardList.size();
+    }
+
+    public void resetCardList(List<Entry> list){
+        this.cardList = list;
+        notifyDataSetChanged();
     }
 }

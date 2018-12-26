@@ -1,4 +1,4 @@
-package com.example.chidori.proxytestapp.Activities.util;
+package com.example.chidori.proxytestapp.Activities.adapter;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;

@@ -10,14 +10,13 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.example.chidori.proxytestapp.Activities.util.StaticTool;
-import com.example.chidori.proxytestapp.Activities.util.TabAdapter;
-import com.example.chidori.proxytestapp.Activities.util.TabFragment;
+import com.example.chidori.proxytestapp.Activities.fragment.GroupCollectionFragment;
+import com.example.chidori.proxytestapp.Activities.fragment.GroupEntryFragmentView;
+import com.example.chidori.proxytestapp.Activities.adapter.TabAdapter;
 import com.example.chidori.proxytestapp.R;
 
-public class TabActivity extends AppCompatActivity{
+public class GroupTabActivity extends AppCompatActivity{
     private Toolbar toolbar;
     private TextView toolbarTitle;
     private View view;
@@ -60,7 +59,7 @@ public class TabActivity extends AppCompatActivity{
                 return true;
             }
             case R.id.detail:{
-                Intent intent = new Intent(TabActivity.this,GroupDetailActivity.class);
+                Intent intent = new Intent(GroupTabActivity.this,GroupDetailActivity.class);
                 intent.putExtra("id", id);
                 intent.putExtra("title",toolbarTitle.getText());
                 startActivity(intent);
@@ -77,13 +76,12 @@ public class TabActivity extends AppCompatActivity{
 
         String[] tabName = {"收藏夹","内容"};
 
-        TabFragment tab1 = new TabFragment();
-        tab1.setOption(TabFragment.group_collection);
+        GroupCollectionFragment tab1 = new GroupCollectionFragment();
         tab1.setId(id);
         tab_adapter.addFragment(tab1);
         tabs.addTab(tabs.newTab());
-        TabFragment tab2 = new TabFragment();
-        tab2.setOption(TabFragment.group_entry);
+
+        GroupEntryFragmentView tab2 = new GroupEntryFragmentView();
         tab2.setId(id);
         tab_adapter.addFragment(tab2);
         tabs.addTab(tabs.newTab());

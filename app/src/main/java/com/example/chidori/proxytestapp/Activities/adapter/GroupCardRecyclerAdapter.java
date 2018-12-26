@@ -1,4 +1,4 @@
-package com.example.chidori.proxytestapp.Activities.util;
+package com.example.chidori.proxytestapp.Activities.adapter;
 
 import android.content.Context;
 import android.content.Intent;
@@ -10,9 +10,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.example.chidori.proxytestapp.Activities.TabActivity;
+import com.example.chidori.proxytestapp.Activities.GroupTabActivity;
 import com.example.chidori.proxytestapp.Activities.entity.Group;
 import com.example.chidori.proxytestapp.R;
 
@@ -56,7 +55,7 @@ public class GroupCardRecyclerAdapter extends RecyclerView.Adapter<GroupCardRecy
         holder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
-                Intent intent = new Intent(context,TabActivity.class);
+                Intent intent = new Intent(context,GroupTabActivity.class);
                 intent.putExtra("title",groupCard.getName());
                 intent.putExtra("id", groupCard.getGroupId());
                 context.startActivity(intent);
@@ -70,6 +69,11 @@ public class GroupCardRecyclerAdapter extends RecyclerView.Adapter<GroupCardRecy
     @Override
     public int getItemCount() {
         return cardList.size();
+    }
+
+    public void resetCardList(List<Group> list){
+        this.cardList = list;
+        notifyDataSetChanged();
     }
 }
 

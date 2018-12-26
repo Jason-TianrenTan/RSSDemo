@@ -1,4 +1,4 @@
-package com.example.chidori.proxytestapp.Activities.util;
+package com.example.chidori.proxytestapp.Activities.adapter;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -15,7 +15,7 @@ import com.example.chidori.proxytestapp.R;
 
 import java.util.List;
 
-public class UserCardRecyclerAdapter extends RecyclerView.Adapter<UserCardRecyclerAdapter.ViewHolder> {
+public class GroupMemberCardRecyclerAdapter extends RecyclerView.Adapter<GroupMemberCardRecyclerAdapter.ViewHolder> {
     private Context context;
     private List<GroupMember> cardList;
 
@@ -33,18 +33,18 @@ public class UserCardRecyclerAdapter extends RecyclerView.Adapter<UserCardRecycl
         }
     }
 
-    public UserCardRecyclerAdapter(List<GroupMember> list) {
+    public GroupMemberCardRecyclerAdapter(List<GroupMember> list) {
         this.cardList = list;
     }
 
     @NonNull
     @Override
-    public UserCardRecyclerAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public GroupMemberCardRecyclerAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         if (context == null){
             context = parent.getContext();
         }
         View view= LayoutInflater.from(context).inflate(R.layout.card_user,parent,false);
-        return new UserCardRecyclerAdapter.ViewHolder(view);
+        return new GroupMemberCardRecyclerAdapter.ViewHolder(view);
     }
 
     @Override
@@ -57,6 +57,11 @@ public class UserCardRecyclerAdapter extends RecyclerView.Adapter<UserCardRecycl
     @Override
     public int getItemCount() {
         return cardList.size();
+    }
+
+    public void resetCardList(List<GroupMember> list){
+        this.cardList = list;
+        notifyDataSetChanged();
     }
 }
 

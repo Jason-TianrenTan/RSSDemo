@@ -3,6 +3,7 @@ package com.example.chidori.proxytestapp.Activities;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.net.Uri;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -22,11 +23,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.chidori.proxytestapp.Activities.entity.Collection;
-import com.example.chidori.proxytestapp.Activities.entity.Entry;
 import com.example.chidori.proxytestapp.Activities.entity.Source;
-import com.example.chidori.proxytestapp.Activities.util.CollectionCardRecyclerAdapter;
-import com.example.chidori.proxytestapp.Activities.util.EntryCardRecyclerAdapter;
-import com.example.chidori.proxytestapp.Activities.util.NavigationFragment;
+import com.example.chidori.proxytestapp.Activities.fragment.NavHomeFragment;
+import com.example.chidori.proxytestapp.Activities.fragment.NavSearchFragment;
+import com.example.chidori.proxytestapp.Activities.fragment.NavUserFragment;
 import com.example.chidori.proxytestapp.Activities.util.StaticTool;
 import com.example.chidori.proxytestapp.Contract.Contract;
 import com.example.chidori.proxytestapp.Presenter.MenuPresenterImpl;
@@ -37,22 +37,27 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.UUID;
 
 
 public class MenuActivity extends AppCompatActivity implements Contract.IMenuView {
     private static Toolbar toolbar;
     private static TextView toolbarTitle;
-    private static BottomNavigationView navigation;
+
+    private BottomNavigationView navigation;
     private static FragmentManager fragmentManager;
+    private static NavHomeFragment homeFragment;
+    private static NavSearchFragment searchFragment;
+    private static NavUserFragment userFragment;
+
     private static int current;
-    private static NavigationFragment home;
-    private static NavigationFragment group;
-    private static NavigationFragment user;
+    private static final int home = 0;
+    private static final int search = 1;
+    private static final int user = 2;
+
     private boolean isExit=false;
     private static String path;
 
-    private MenuPresenterImpl presenter;
+    private static MenuPresenterImpl presenter = new MenuPresenterImpl();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,15 +65,14 @@ public class MenuActivity extends AppCompatActivity implements Contract.IMenuVie
         setContentView(R.layout.activity_menu);
         setToolbar();
 
-        presenter = new MenuPresenterImpl();
         presenter.attachView(this);
         presenter.doGetUserCollections();
 
         current = 0;
         toolbarTitle.setText("主页");
-        home = NavigationFragment.newInstance(current);
+        homeFragment = new NavHomeFragment();
         fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction().add(R.id.menu_container, home).show(home).commit();
+        fragmentManager.beginTransaction().add(R.id.menu_container, homeFragment).show(homeFragment).commit();
 
         setNavigation();
     }
@@ -92,11 +96,11 @@ public class MenuActivity extends AppCompatActivity implements Contract.IMenuVie
     public boolean onOptionsItemSelected(MenuItem item) {
         if(item.getItemId() == R.id.add){
             switch (current){
-                case 0:{
+                case home:{
                     setPopMenu(findViewById(R.id.add));
                     return true;
                 }
-                case 1:{
+                case search:{
                     Intent intent = new Intent(MenuActivity.this, GroupNewActivity.class);
                     startActivity(intent);
                     return true;
@@ -115,7 +119,7 @@ public class MenuActivity extends AppCompatActivity implements Contract.IMenuVie
             public boolean onMenuItemClick(MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.input_link:{
-                        setInputDialog("导入link","请输入link");
+                        setInputDialog();
                         return true;
                     }
                     case R.id.input_opml:{
@@ -141,28 +145,27 @@ public class MenuActivity extends AppCompatActivity implements Contract.IMenuVie
             Uri uri = data.getData();
             Log.e("uri", uri.toString());
             path = uri.getPath();
-            Toast.makeText(this, path, Toast.LENGTH_SHORT).show();
+//            presenter.doAddRSSFromLink(path);
         }
     }
 
-    private void setInputDialog(String title,String message){
+    private void setInputDialog(){
         Context context = this;
 
-        android.support.v7.app.AlertDialog.Builder dialog = new android.support.v7.app.AlertDialog.Builder(context);
-        dialog.setTitle(title).setMessage(message);
-        View v = View.inflate(context,R.layout.view_dialog_source, null);
-        dialog.setView(v);
+        AlertDialog.Builder dialog = new AlertDialog.Builder(context);
+        dialog.setTitle("导入link").setMessage("请输入link");
+        View finalV = View.inflate(context,R.layout.view_dialog_source, null);
+        dialog.setView(finalV);
 
-        View finalV = v;
         dialog.setPositiveButton("确定", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 EditText et = (EditText) finalV.findViewById(R.id.dialog_input);
-                String input = et.getText().toString();
-                if (input.equals("")) {
+                path = et.getText().toString();
+                if (path.equals("")) {
                     Toast.makeText(getBaseContext(), "输入不能为空", Toast.LENGTH_SHORT).show();
                 }
                 else {
-                    presenter.doAddRSSFromLink(input);
+                    presenter.doAddRSSFromLink(path);
                 }
             }
         }).setNegativeButton("取消", null).show();
@@ -181,45 +184,50 @@ public class MenuActivity extends AppCompatActivity implements Contract.IMenuVie
     private static boolean setCurrent(int itemId){
         FragmentTransaction transaction = fragmentManager.beginTransaction();
         switch (itemId) {
-            case R.id.navigation_home:
-                if (current == 0) return true;
-                current = 0;
-                if(group!=null) transaction.hide(group);
-                if(user!=null) transaction.hide(user);
-                transaction.show(home).commit();
+            case R.id.navigation_home:{
+                if (current == home) return true;
+                current = home;
+                if(searchFragment !=null) transaction.hide(searchFragment);
+                if(userFragment !=null) transaction.hide(userFragment);
+                transaction.show(homeFragment).commit();
                 toolbarTitle.setText("主页");
                 toolbar.getMenu().findItem(R.id.add).setVisible(true);
                 return true;
-
-            case R.id.navigation_group:
-                if (current == 1) return true;
-                current = 1;
-                if(home!=null) transaction.hide(home);
-                if(user!=null) transaction.hide(user);
-                if (group == null) {
-                    group = NavigationFragment.newInstance(current);
-                    transaction.add(R.id.menu_container,group).commit();
+            }
+            case R.id.navigation_group:{
+                if (current == search) return true;
+                current = search;
+                if(homeFragment !=null) transaction.hide(homeFragment);
+                if(userFragment !=null) transaction.hide(userFragment);
+                if (searchFragment == null) {
+                    searchFragment = new NavSearchFragment();
+                    transaction.add(R.id.menu_container, searchFragment).commit();
                 }
-                else transaction.show(group).commit();
-                toolbarTitle.setText("我的小组");
+                else transaction.show(searchFragment).commit();
+                toolbarTitle.setText("搜索小组");
                 toolbar.getMenu().findItem(R.id.add).setVisible(true);
                 return true;
-
-            case R.id.navigation_user:
-                if (current == 2) return true;
-                current = 2;
-                if(home!=null) transaction.hide(home);
-                if(group!=null) transaction.hide(group);
-                if (user == null) {
-                    user = NavigationFragment.newInstance(current);
-                    transaction.add(R.id.menu_container,user).commit();
+            }
+            case R.id.navigation_user:{
+                if (current == user) return true;
+                current = user;
+                if(homeFragment !=null) transaction.hide(homeFragment);
+                if(searchFragment !=null) transaction.hide(searchFragment);
+                if (userFragment == null) {
+                    userFragment = new NavUserFragment();
+                    transaction.add(R.id.menu_container, userFragment).commit();
                 }
-                else transaction.show(user).commit();
+                else transaction.show(userFragment).commit();
                 toolbarTitle.setText("用户设置");
                 toolbar.getMenu().findItem(R.id.add).setVisible(false);
                 return true;
+            }
         }
         return false;
+    }
+
+    public static MenuPresenterImpl getPresenter(){
+        return presenter;
     }
 
     @Override
@@ -248,6 +256,7 @@ public class MenuActivity extends AppCompatActivity implements Contract.IMenuVie
             StaticTool.sourceCardList.add(new Source(bean.getCurData().getSourceId(),bean.getCurData().getName(),
                     bean.getCurData().getDescription(),bean.getCurData().getLink(),bean.getCurData().getType(),
                     bean.getCurData().getCreateTime(),bean.getCurData().getUpdateTime()));
+            Toast.makeText(MenuActivity.this, "添加订阅成功", Toast.LENGTH_SHORT).show();
         }
         else {
             Toast.makeText(MenuActivity.this, "添加订阅失败", Toast.LENGTH_SHORT).show();
@@ -260,26 +269,9 @@ public class MenuActivity extends AppCompatActivity implements Contract.IMenuVie
             List<Collection> list = presenter.getCollections();
             if(list==null) return;
             StaticTool.collectionCardList = list;
-            for(Collection c:list){
-                presenter.doGetEntriesByCollection(c.getCollectionId());
-            }
         }
         else {
             Toast.makeText(MenuActivity.this, "获取收藏夹列表失败", Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    @Override
-    public void onEntriesByCollectionRetrieved(String success) {
-        if(success.equals("success")){
-            List<Entry> list = presenter.getEntries();
-            if(list==null) return;
-            for(Entry e:list){
-                StaticTool.starList.add(e.getEntryId());
-            }
-        }
-        else {
-            Toast.makeText(MenuActivity.this, "获得文章失败", Toast.LENGTH_SHORT).show();
         }
     }
 }

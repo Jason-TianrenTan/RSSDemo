@@ -76,149 +76,181 @@ public interface Contract {
     interface IMenuView {
         void onLinkResult(SaveRSSBean.ResResultBean bean);
         void onUserCollectionsCall(String status);
-        void onEntriesByCollectionRetrieved(String success);
     }
 
     interface IMenuModel {
         void doAddRSSFromLink(String link);
         void doGetUserCollections();
-
-        void doGetEntriesByCollection(String collectionId);
     }
 
     interface IMenuPresenter {
         void doAddRSSFromLink(String link);
         void doGetUserCollections();
-
-        void doGetEntriesByCollection(String collectionId);
     }
 
+//    interface IListView {
+//        void onEntryRemoved(String status);
+//        void onUserInfoResult(GroupMember member);
+//    }
+//    interface IListModel {
+//        void removeEntry(String entryId);
+//        void doGetUserInfo(String userId);
+//    }
+//    interface IListPresenter {
+//        void removeEntry(String entryId);
+//        void doGetUserInfo(String userId);
+//    }
 
-    interface IFragmentsView {
-        void onEntriesResult();
-    }
-
-    interface IFramentsModel {
-
-    }
-
-    interface IFragmentsPresenter {
-
-    }
-
-
-    interface IListView {
-        void onUserCollectionsCall(String status);
-        void onCollectionDeleted(String status);
-        void onUserSourcesRetrieved(String status);
-        void onSourceDeleted(String status);
-        void onEntriesBySourceRetrieved(String status);
+    interface IEntryByCollectionActivityView {
         void onEntriesByCollectionRetrieved(String status);
-        void onEntryAddedToCollection(String status);
+        void onEntryAdded(String status);
+    }
+
+    interface IEntryByCollectionActivityModel{
+        void doGetEntriesByCollection(String collectionId);
+        void doAddEntryToCollection(String collectionId, String entryId);
+    }
+
+    interface IEntryByCollectionActivityPresenter {
+        void doGetEntriesByCollection(String collectionId);
+        void doAddEntryToCollection(String collectionId, String entryId);
+    }
+
+    interface IEntryBySourceActivityView {
+        void onEntriesBySourceRetrieved(String status);
+        void onEntryAdded(String status);
+    }
+
+    interface IEntryBySourceActivityModel {
+        void doGetEntriesBySource(String sourceId);
+        void doAddEntryToCollection(String collectionId, String entryId);
+    }
+
+    interface IEntryBySourceActivityPresenter {
+        void doGetEntriesBySource(String sourceId);
+        void doAddEntryToCollection(String collectionId, String entryId);
+    }
+
+    interface ICollectionView {
+        void onCollectionDeleted(String status);
         void onCollectionCreated(String status);
-        void onUserGroupsRetrieved(String status);
-        void onEntryRemoved(String status);
     }
 
-    interface IListModel {
-        void doGetUserCollections();
+    interface ICollectionModel {
         void deleteCollection(String collectionId);
-        void doGetUserSources();
-        void deleteSource(String sourceId);
-        void doGetEntriesBySource(String sourceId);
-        void doGetEntriesByCollection(String collectionId);
-        void doAddEntryToCollection(String collectionId, String entryId);
         void doCreateCollection(String name, String desc, int publicStatus);
-        void doGetUserGroups(String userId);
-        void removeEntry(String entryId);
     }
 
-    interface IListPresenter {
-        void doGetUserCollections();
+    interface ICollectionPresenter {
         void deleteCollection(String collectionId);
-        void doGetUserSources();
-        void deleteSource(String sourceId);
-        void doGetEntriesBySource(String sourceId);
-        void doGetEntriesByCollection(String collectionId);
-        void doAddEntryToCollection(String collectionId, String entryId);
         void doCreateCollection(String name, String desc, int publicStatus);
-        void doGetUserGroups(String userId);
-        void removeEntry(String entryId);
     }
 
+    interface ISourceView {
+        void onLinkResult(SaveRSSBean.ResResultBean bean);
+        void onSourceDeleted(String status);
+    }
+
+    interface ISourceModel {
+        void doAddRSSFromLink(String link);
+        void deleteSource(String sourceId);
+    }
+
+    interface ISourcePresenter {
+        void deleteSource(String sourceId);
+        void doAddRSSFromLink(String link);
+    }
 
     interface IGroupView {
+        void onUserGroupsRetrieved(String status);
         void onGroupCreated(String status);
     }
 
     interface IGroupModel {
         void doCreateGroup(String groupName, String desc);
+        void doGetUserGroups();
     }
 
     interface IGroupPresenter {
         void doCreateGroup(String groupName, String desc);
+        void doGetUserGroups();
     }
-
 
     interface IGroupDetailView {
         void onGroupEntered(String status);
         void onGroupQuit(String status);
+        void onGroupMembersResult(String status);
     }
 
     interface IGroupDetailModel {
         void doEnterGroup(String groupId);
         void doQuitGroup(String groupId);
+        void doGetGroupMembers(String groupId);
     }
 
     interface IGroupDetailPresenter {
         void doEnterGroup(String groupId);
         void doQuitGroup(String groupId);
+        void doGetGroupMembers(String groupId);
     }
 
-
-    //TabFragment：
-    //属于NavigationFragment的home界面
-    interface INavigationHomeView {
-        void onSourceGet(String status);
-        void onSourceDeleted(String status);
+    interface IPublicEntryFragmentView {
         void onPublicEntriesRetrieved(String status);
-        void onEntryAdded(String status);//给收藏夹添加文章
+        void onEntryAdded(String status);
     }
 
-    interface INavigationHomeModel {
-        void doGetSources(int type);
-        void deleteSource(String sourceId);
+    interface IPublicEntryFragmentModel {
         void doGetPublicEntries();
-        void doAddEntry(String collectionId, String entryId);
+        void doAddEntryToCollection(String collectionId, String entryId);
     }
 
-    interface INavigationHomePresenter {
-        void doGetSources(int type);//获取某一用户某一(0,1)类型的来源
-        void deleteSource(String sourceId);//根据sourceId删除source
+    interface IPublicEntryFragmentPresenter {
         void doGetPublicEntries();//获取全部公开的文章(手机)response1
-        void doAddEntry(String collectionId, String entryId);//添加文章到收藏夹
+        void doAddEntryToCollection(String collectionId, String entryId);//添加文章到收藏夹
     }
 
+    interface ISourceFragmentView {
+        void onSourceDeleted(String status);
+        void onUserSourcesRetrieved(String status);
+    }
 
-    //属于TabActivity
-    interface ITabACView {
-        void onGroupCollectionsRetrieved(String status);//小组内收藏夹
+    interface ISourceFragmentModel {
+        void deleteSource(String sourceId);
+        void doGetUserSources();
+    }
+
+    interface ISourceFragmentPresenter {
+        void deleteSource(String sourceId);//根据sourceId删除source
+
+        void doGetUserSources();
+    }
+
+    interface IGroupEntryFragmentView {
         void onGroupEntriesRetrieved(String status);
-        void onEntryAdded(String status);//给收藏夹添加文章
+        void onEntryAdded(String status);
     }
 
-    interface ITabACModel {
+    interface IGroupEntryFragmentModel {
         void doGetGroupEntries(String groupId);//小组内公开
-        void doGetGroupCollections(String groupId);//小组内收藏夹
         void doAddEntry(String collectionId, String entryId);//收藏
     }
 
-    interface ITabACPresenter {
+    interface IGroupEntryFragmentPresenter {
         void doGetGroupEntries(String groupId);//小组内公开
-        void doGetGroupCollections(String groupId);//小组内收藏夹
-        void doAddEntry(String collectionId, String entryId);//收藏
+        void doAddEntryToCollection(String collectionId, String entryId);//收藏
     }
 
+    interface IGroupCollectionFragmentView {
+        void onGroupCollectionsRetrieved(String status);
+    }
+
+    interface IGroupCollectionFragmentModel {
+        void doGetGroupCollections(String groupId);//小组内收藏夹
+    }
+
+    interface IGroupCollectionFragmentPresenter {
+        void doGetGroupCollections(String groupId);//小组内收藏夹
+    }
 
     //NavigationFragment.java.java (属于MenuActivity)
     interface INavMenuView {
@@ -231,23 +263,6 @@ public interface Contract {
 
     interface INavMenuPresenter {
         void doSearchGroup(String keyword);
-    }
-
-
-    //TabActivity
-    interface ITabView {
-        void onGroupMembersResult(String status);
-        void onUserInfoResult(GroupMember member);
-    }
-
-    interface ITabModel {
-        void doGetGroupMembers(String groupId);
-        void doGetUserInfo(String userId);
-    }
-
-    interface ITabPresenter {
-        void doGetGroupMembers(String groupId);
-        void doGetUserInfo(String userId);//根据UserId获取成员信息
     }
 
 }

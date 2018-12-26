@@ -13,25 +13,28 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.chidori.proxytestapp.Activities.entity.GroupMember;
+import com.example.chidori.proxytestapp.Activities.adapter.GroupMemberCardRecyclerAdapter;
 import com.example.chidori.proxytestapp.Activities.util.StaticTool;
-import com.example.chidori.proxytestapp.Activities.util.UserCardRecyclerAdapter;
+import com.example.chidori.proxytestapp.Config;
 import com.example.chidori.proxytestapp.Contract.Contract;
 import com.example.chidori.proxytestapp.Presenter.GroupDetailPresenterImpl;
-import com.example.chidori.proxytestapp.Presenter.TabModelPresenterImpl;
 import com.example.chidori.proxytestapp.R;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class GroupDetailActivity extends AppCompatActivity implements Contract.IGroupDetailView,Contract.ITabView {
+public class GroupDetailActivity extends AppCompatActivity implements Contract.IGroupDetailView {
     private Toolbar toolbar;
     private TextView toolbarTitle;
     private View view;
     private Button btn;
     private String id;
-    private boolean state = false;
+    private boolean state;
 
-    private GroupDetailPresenterImpl presenter;
-    private TabModelPresenterImpl presenter_1;
+    private List<GroupMember> cardList = new ArrayList<>();
+    private GroupMemberCardRecyclerAdapter recyclerAdapter = new GroupMemberCardRecyclerAdapter(cardList);
+
+    private GroupDetailPresenterImpl presenter = new GroupDetailPresenterImpl();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,19 +43,16 @@ public class GroupDetailActivity extends AppCompatActivity implements Contract.I
         setContentView(view);
 
         id = getIntent().getStringExtra("id");
-        TextView title = (TextView) findViewById(R.id.group_detail_name);
-        title.setText(getIntent().getStringExtra("title"));
+        TextView groupName = (TextView) findViewById(R.id.group_detail_name);
+        groupName.setText(getIntent().getStringExtra("title"));
 
-        presenter = new GroupDetailPresenterImpl();
         presenter.attachView(this);
-
-        presenter_1 = new TabModelPresenterImpl();
-        presenter_1.attachView(this);
-
-        presenter_1.doGetGroupMembers(id);
+        presenter.doGetGroupMembers(id);
 
         setToolbar();
         toolbarTitle.setText("小组详情");
+
+        state = StaticTool.myGroupIdList.contains(id);
 
         btn = (Button)findViewById(R.id.group_delete);
         if(state) btn.setText("退出小组");
@@ -71,6 +71,10 @@ public class GroupDetailActivity extends AppCompatActivity implements Contract.I
                 }
             }
         });
+
+        RecyclerView recyclerView=(RecyclerView)view.findViewById(R.id.recycler_view);
+        recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext(),LinearLayoutManager.VERTICAL,false));
+        recyclerView.setAdapter(recyclerAdapter);
     }
 
     private void setToolbar(){
@@ -104,6 +108,9 @@ public class GroupDetailActivity extends AppCompatActivity implements Contract.I
     public void onGroupEntered(String status) {
         if(status.equals("success")){
             Toast.makeText(GroupDetailActivity.this, "加入小组成功", Toast.LENGTH_SHORT).show();
+            cardList.add(new GroupMember(Config.userId,Config.username,Config.sex,Config.phone,Config.email,null));
+            recyclerAdapter.resetCardList(cardList);
+            StaticTool.myGroupIdList.add(id);
             btn.setText("退出小组");
             state = true;
         }
@@ -116,8 +123,8 @@ public class GroupDetailActivity extends AppCompatActivity implements Contract.I
     public void onGroupQuit(String status) {
         if(status.equals("success")){
             Toast.makeText(GroupDetailActivity.this, "退出小组成功", Toast.LENGTH_SHORT).show();
-            btn.setText("加入小组");
-            state = false;
+            StaticTool.myGroupIdList.remove(id);
+            finish();
         }
         else{
             Toast.makeText(GroupDetailActivity.this, "退出小组失败", Toast.LENGTH_SHORT).show();
@@ -127,21 +134,14 @@ public class GroupDetailActivity extends AppCompatActivity implements Contract.I
     @Override
     public void onGroupMembersResult(String status) {
         if(status.equals("success")){
-            List<GroupMember> cardList=presenter_1.getMembers();
-            UserCardRecyclerAdapter recyclerAdapter = new UserCardRecyclerAdapter(cardList);
-            RecyclerView recyclerView=(RecyclerView)view.findViewById(R.id.recycler_view);
-            recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext(),LinearLayoutManager.VERTICAL,false));
-            recyclerView.setAdapter(recyclerAdapter);
-            Toast.makeText(GroupDetailActivity.this, "小组成员", Toast.LENGTH_SHORT).show();
+            cardList = presenter.getMembers();
+            if(cardList==null) cardList = new ArrayList<>();
+            recyclerAdapter.resetCardList(cardList);
         }
         else {
             Toast.makeText(GroupDetailActivity.this, "获取小组成员失败", Toast.LENGTH_SHORT).show();
+            cardList = new ArrayList<>();
+            recyclerAdapter.resetCardList(cardList);
         }
-
-    }
-
-    @Override
-    public void onUserInfoResult(GroupMember member) {
-
     }
 }

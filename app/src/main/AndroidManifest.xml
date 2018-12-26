@@ -51,10 +51,14 @@
         </activity>
         <activity android:name=".Activities.RegisterActivity" />
         <activity android:name=".Activities.PasswordActivity" />
-        <activity android:name=".Activities.ListActivity"/>
         <activity android:name=".Activities.GroupNewActivity" />
         <activity android:name=".Activities.GroupDetailActivity" />
-        <activity android:name=".Activities.TabActivity" />
+        <activity android:name=".Activities.GroupTabActivity" />
+        <activity android:name=".Activities.GroupActivity" />
+        <activity android:name=".Activities.SourceActivity" />
+        <activity android:name=".Activities.EntryByCollectionActivity" />
+        <activity android:name=".Activities.CollectionActivity" />
+        <activity android:name=".Activities.EntryBySourceActivity" />
 
     </application>
 

@@ -20,13 +20,11 @@ import android.webkit.WebViewClient;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.chidori.proxytestapp.Activities.util.CollectionRadioRecyclerAdapter;
+import com.example.chidori.proxytestapp.Activities.adapter.CollectionRadioRecyclerAdapter;
 import com.example.chidori.proxytestapp.Activities.util.StaticTool;
-import com.example.chidori.proxytestapp.Activities.util.TabFragment;
 import com.example.chidori.proxytestapp.Contract.Contract;
 import com.example.chidori.proxytestapp.Presenter.ReaderPresenterImpl;
 import com.example.chidori.proxytestapp.R;
-import com.example.chidori.proxytestapp.Utils.IO.UniversalPresenter;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;

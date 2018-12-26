@@ -1,4 +1,4 @@
-package com.example.chidori.proxytestapp.Activities.util;
+package com.example.chidori.proxytestapp.Activities.adapter;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -12,10 +12,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.example.chidori.proxytestapp.Activities.ListActivity;
+import com.example.chidori.proxytestapp.Activities.EntryBySourceActivity;
+import com.example.chidori.proxytestapp.Activities.SourceActivity;
 import com.example.chidori.proxytestapp.Activities.entity.Source;
+import com.example.chidori.proxytestapp.Activities.fragment.NavHomeFragment;
+import com.example.chidori.proxytestapp.Activities.fragment.SourceFragment;
+import com.example.chidori.proxytestapp.Activities.util.StaticTool;
 import com.example.chidori.proxytestapp.R;
 
 import java.util.List;
@@ -62,12 +65,11 @@ public class SourceCardRecyclerAdapter extends RecyclerView.Adapter<SourceCardRe
         holder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
-                Intent intent = new Intent(context, ListActivity.class);
-                intent.putExtra("type",ListActivity.source_entry);
+                Intent intent = new Intent(context, EntryBySourceActivity.class);
                 intent.putExtra("id", sourceCard.getSourceId());
                 intent.putExtra("title",sourceCard.getName());
-                opId=sourceCard.getSourceId();
-                StaticTool.opPosition=position;
+                opId = sourceCard.getSourceId();
+                StaticTool.opPosition = position;
                 context.startActivity(intent);
             }
         });
@@ -75,8 +77,8 @@ public class SourceCardRecyclerAdapter extends RecyclerView.Adapter<SourceCardRe
             @Override
             public boolean onLongClick(View v) {
                 setDialog(position);
-                opId=sourceCard.getSourceId();
-                StaticTool.opPosition=position;
+                opId = sourceCard.getSourceId();
+                StaticTool.opPosition = position;
                 return true;
             }
         });
@@ -91,15 +93,14 @@ public class SourceCardRecyclerAdapter extends RecyclerView.Adapter<SourceCardRe
                     public void onClick(DialogInterface dialog, int which) {
                         switch (option){
                             case home:{
-                                TabFragment.getHomePresenter().deleteSource(opId);
+                                SourceFragment.getPresenter().deleteSource(opId);
                                 break;
                             }
                             case list:{
-                                ListActivity.getPresenter().deleteSource(opId);
+                                SourceActivity.getPresenter().deleteSource(opId);
                                 break;
                             }
                         }
-
                     }
                 })
                 .setNegativeButton("取消", null)
@@ -109,5 +110,10 @@ public class SourceCardRecyclerAdapter extends RecyclerView.Adapter<SourceCardRe
     @Override
     public int getItemCount() {
         return cardList.size();
+    }
+
+    public void resetCardList(List<Source> list){
+        this.cardList = list;
+        notifyDataSetChanged();
     }
 }

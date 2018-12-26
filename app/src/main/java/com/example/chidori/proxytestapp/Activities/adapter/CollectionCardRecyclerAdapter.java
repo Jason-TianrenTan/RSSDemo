@@ -1,4 +1,4 @@
-package com.example.chidori.proxytestapp.Activities.util;
+package com.example.chidori.proxytestapp.Activities.adapter;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -12,10 +12,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.example.chidori.proxytestapp.Activities.ListActivity;
+import com.example.chidori.proxytestapp.Activities.CollectionActivity;
+import com.example.chidori.proxytestapp.Activities.EntryByCollectionActivity;
 import com.example.chidori.proxytestapp.Activities.entity.Collection;
+import com.example.chidori.proxytestapp.Activities.util.StaticTool;
 import com.example.chidori.proxytestapp.R;
 
 import java.util.List;
@@ -61,8 +62,7 @@ public class CollectionCardRecyclerAdapter extends RecyclerView.Adapter<Collecti
         holder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
-                Intent intent = new Intent(context, ListActivity.class);
-                intent.putExtra("type",ListActivity.collection_entry);
+                Intent intent = new Intent(context, EntryByCollectionActivity.class);
                 intent.putExtra("title",collectionCard.getName());
                 intent.putExtra("id", collectionCard.getCollectionId());
                 StaticTool.opPosition=position;
@@ -90,7 +90,7 @@ public class CollectionCardRecyclerAdapter extends RecyclerView.Adapter<Collecti
                 .setMessage("是否删除收藏夹:"+name)
                 .setPositiveButton("确定", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        ListActivity.getPresenter().deleteCollection(opId);
+                        CollectionActivity.getPresenter().deleteCollection(opId);
                     }
                 })
                 .setNegativeButton("取消", null)
@@ -100,5 +100,10 @@ public class CollectionCardRecyclerAdapter extends RecyclerView.Adapter<Collecti
     @Override
     public int getItemCount() {
         return cardList.size();
+    }
+
+    public void resetCardList(List<Collection> list){
+        this.cardList = list;
+        notifyDataSetChanged();
     }
 }

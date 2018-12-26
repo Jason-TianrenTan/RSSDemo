@@ -2,10 +2,12 @@ package com.example.chidori.proxytestapp.Presenter;
 
 import com.example.chidori.proxytestapp.Activities.entity.Collection;
 import com.example.chidori.proxytestapp.Activities.entity.Entry;
+import com.example.chidori.proxytestapp.Activities.entity.Source;
 import com.example.chidori.proxytestapp.Contract.Contract;
 import com.example.chidori.proxytestapp.Events.CollectionListEvent;
 import com.example.chidori.proxytestapp.Events.EntryListEvent;
 import com.example.chidori.proxytestapp.Events.SaveRSSEvent;
+import com.example.chidori.proxytestapp.Events.SourceListEvent;
 import com.example.chidori.proxytestapp.Model.MenuModelImpl;
 
 import org.greenrobot.eventbus.EventBus;
@@ -31,19 +33,14 @@ public class MenuPresenterImpl implements Contract.IMenuPresenter {
         menuView = view;
     }
 
+    public ArrayList<Collection> getCollections() {
+        return model.getCollections();
+    }
+
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onRSSCall(SaveRSSEvent saveRSSEvent) {
         //处理登录结果
         menuView.onLinkResult(saveRSSEvent.getResult());
-    }
-    @Override
-    public void doAddRSSFromLink(String link) {
-        model.doAddRSSFromLink(link);
-    }
-
-    @Override
-    public void doGetUserCollections() {
-        model.doGetUserCollections();
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -54,27 +51,14 @@ public class MenuPresenterImpl implements Contract.IMenuPresenter {
         } else menuView.onUserCollectionsCall("failure");
     }
 
-    public ArrayList<Collection> getCollections() {
-        return model.getCollections();
+    @Override
+    public void doAddRSSFromLink(String link) {
+        model.doAddRSSFromLink(link);
     }
 
     @Override
-    public void doGetEntriesByCollection(String collectionId) {
-        model.doGetEntriesByCollection(collectionId);
-    }
-
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onEntriesGet(EntryListEvent entryListEvent) {
-        if (entryListEvent.getType() == EntryListEvent.EventType.LIST_COLLECTION) {
-            if (entryListEvent.getResult().isIsSuccess()) {
-                model.setupEntries(entryListEvent.getResult());
-                menuView.onEntriesByCollectionRetrieved("success");
-            } else menuView.onEntriesByCollectionRetrieved("failure");
-        }
-    }
-
-    public ArrayList<Entry> getEntries(){
-        return model.getEntries();
+    public void doGetUserCollections() {
+        model.doGetUserCollections();
     }
 
 }
