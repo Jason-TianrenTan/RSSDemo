@@ -431,7 +431,7 @@ public class UniversalPresenter extends BasePresenter {
     }
 
 
-    //根据来源获取文章
+    //根据收藏获取文章
     public void GetEntryOfCollection(String collectionId) {
 
         JsonObject jsonObject = new JsonObject();
@@ -458,7 +458,7 @@ public class UniversalPresenter extends BasePresenter {
                     @Override
                     public void onNext(EntryListBean.ResResultBean result) {
                         System.out.println("result: " + result.isIsSuccess());
-                        EventBus.getDefault().post(new EntryListEvent(result, EntryListEvent.EventType.LIST_BY_SOURCE));
+                        EventBus.getDefault().post(new EntryListEvent(result, EntryListEvent.EventType.LIST_COLLECTION));
                     }
 
                     @Override

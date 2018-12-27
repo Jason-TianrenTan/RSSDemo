@@ -73,7 +73,7 @@ public class SourceFragment extends Fragment implements Contract.ISourceFragment
     public void onSourceDeleted(String status) {
         if(status.equals("success")){
             StaticTool.sourceCardList.remove(StaticTool.opPosition);
-            recyclerAdapter.notifyItemChanged(StaticTool.opPosition);
+            recyclerAdapter.resetCardList(StaticTool.sourceCardList);
             Toast.makeText(getActivity(), "删除成功", Toast.LENGTH_SHORT).show();
         }
         else Toast.makeText(getActivity(), "删除失败", Toast.LENGTH_SHORT).show();

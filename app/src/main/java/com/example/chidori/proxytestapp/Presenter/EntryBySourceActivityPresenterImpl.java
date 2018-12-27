@@ -43,10 +43,12 @@ public class EntryBySourceActivityPresenterImpl implements Contract.IEntryBySour
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEntriesGet(EntryListEvent entryListEvent) {
-        if (entryListEvent.getResult().isIsSuccess()) {
-            model.setupEntries(entryListEvent.getResult());
-            entryBySourceActivityView.onEntriesBySourceRetrieved("success");
-        } else entryBySourceActivityView.onEntriesBySourceRetrieved("failure");
+        if (entryListEvent.getType() == EntryListEvent.EventType.LIST_BY_SOURCE){
+            if (entryListEvent.getResult().isIsSuccess()) {
+                model.setupEntries(entryListEvent.getResult());
+                entryBySourceActivityView.onEntriesBySourceRetrieved("success");
+            } else entryBySourceActivityView.onEntriesBySourceRetrieved("failure");
+        }
     }
 
     @Override

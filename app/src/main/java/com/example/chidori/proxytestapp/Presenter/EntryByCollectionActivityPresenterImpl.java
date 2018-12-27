@@ -43,10 +43,12 @@ public class EntryByCollectionActivityPresenterImpl implements Contract.IEntryBy
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEntriesGet(EntryListEvent entryListEvent) {
-        if (entryListEvent.getResult().isIsSuccess()) {
-            model.setupEntries(entryListEvent.getResult());
-            entryByCollectionActivityView.onEntriesByCollectionRetrieved("success");
-        } else entryByCollectionActivityView.onEntriesByCollectionRetrieved("failure");
+        if (entryListEvent.getType() == EntryListEvent.EventType.LIST_COLLECTION){
+            if (entryListEvent.getResult().isIsSuccess()) {
+                model.setupEntries(entryListEvent.getResult());
+                entryByCollectionActivityView.onEntriesByCollectionRetrieved("success");
+            } else entryByCollectionActivityView.onEntriesByCollectionRetrieved("failure");
+        }
     }
 
     @Override

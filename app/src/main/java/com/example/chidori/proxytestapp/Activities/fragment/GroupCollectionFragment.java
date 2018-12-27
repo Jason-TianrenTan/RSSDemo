@@ -25,7 +25,7 @@ public class GroupCollectionFragment extends Fragment implements Contract.IGroup
     private static GroupCollectionFragmentPresenterImpl presenter = new GroupCollectionFragmentPresenterImpl();
     private View view;
     private String id;
-    private List<Collection> cardList = new ArrayList<Collection>();
+    private List<Collection> cardList = new ArrayList<>();
     private CollectionCardRecyclerAdapter recyclerAdapter = new CollectionCardRecyclerAdapter(cardList,false);
 
     @Override

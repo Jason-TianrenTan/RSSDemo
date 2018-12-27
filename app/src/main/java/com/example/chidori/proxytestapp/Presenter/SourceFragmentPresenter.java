@@ -42,8 +42,7 @@ public class SourceFragmentPresenter implements Contract.ISourceFragmentPresente
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onSourcesGet(SourceListEvent sourceListEvent) {
-        boolean success = sourceListEvent.getResult().isIsSuccess();
-        if (success) {
+        if (sourceListEvent.getResult().isIsSuccess()) {
             model.setupSources(sourceListEvent.getResult());
             sourceFragmentView.onUserSourcesRetrieved("success");
         } else sourceFragmentView.onUserSourcesRetrieved("failure");

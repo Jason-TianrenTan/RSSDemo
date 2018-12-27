@@ -274,4 +274,13 @@ public class MenuActivity extends AppCompatActivity implements Contract.IMenuVie
             Toast.makeText(MenuActivity.this, "获取收藏夹列表失败", Toast.LENGTH_SHORT).show();
         }
     }
+
+//    if(status.equals("success")){
+//        List<String> list = presenter.getMyEntryIdList();
+//        if(list==null) return;
+//        StaticTool.myEntryIdList = list;
+//    }
+//        else {
+//        Toast.makeText(MenuActivity.this, "获取已收藏文章id失败", Toast.LENGTH_SHORT).show();
+//    }
 }

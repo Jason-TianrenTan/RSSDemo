@@ -105,9 +105,6 @@ public class GroupActivity extends AppCompatActivity implements Contract.IGroupV
     @Override
     public void onGroupCreated(String status) {
         if(status.equals("success")){
-            Group newItem = new Group(UUID.randomUUID().toString(),StaticTool.opString,"","","","","");
-            cardList.add(newItem);
-            recyclerAdapter.resetCardList(cardList);
             Toast.makeText(GroupActivity.this, "小组创建成功", Toast.LENGTH_SHORT).show();
         }
         else {

@@ -159,7 +159,7 @@ public class SourceActivity extends AppCompatActivity implements Contract.ISourc
             StaticTool.sourceCardList.add(new Source(bean.getCurData().getSourceId(),bean.getCurData().getName(),
                     bean.getCurData().getDescription(),bean.getCurData().getLink(),bean.getCurData().getType(),
                     bean.getCurData().getCreateTime(),bean.getCurData().getUpdateTime()));
-            recyclerAdapter.notifyDataSetChanged();
+            recyclerAdapter.resetCardList(StaticTool.sourceCardList);
         }
         else Toast.makeText(SourceActivity.this, "添加订阅失败", Toast.LENGTH_SHORT).show();
     }
@@ -168,7 +168,7 @@ public class SourceActivity extends AppCompatActivity implements Contract.ISourc
     public void onSourceDeleted(String status) {
         if(status.equals("success")){
             StaticTool.sourceCardList.remove(StaticTool.opPosition);
-            recyclerAdapter.notifyItemChanged(StaticTool.opPosition);
+            recyclerAdapter.resetCardList(StaticTool.sourceCardList);
             Toast.makeText(SourceActivity.this, "删除成功", Toast.LENGTH_SHORT).show();
         }
         else Toast.makeText(SourceActivity.this, "删除失败", Toast.LENGTH_SHORT).show();

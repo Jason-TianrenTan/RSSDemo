@@ -29,7 +29,7 @@ public class GroupDetailActivity extends AppCompatActivity implements Contract.I
     private View view;
     private Button btn;
     private String id;
-    private boolean state;
+    private boolean state = false;
 
     private List<GroupMember> cardList = new ArrayList<>();
     private GroupMemberCardRecyclerAdapter recyclerAdapter = new GroupMemberCardRecyclerAdapter(cardList);
@@ -46,27 +46,24 @@ public class GroupDetailActivity extends AppCompatActivity implements Contract.I
         TextView groupName = (TextView) findViewById(R.id.group_detail_name);
         groupName.setText(getIntent().getStringExtra("title"));
 
+        btn = (Button)findViewById(R.id.group_delete);
+        btn.setClickable(false);
+
         presenter.attachView(this);
         presenter.doGetGroupMembers(id);
 
         setToolbar();
         toolbarTitle.setText("小组详情");
 
-        state = StaticTool.myGroupIdList.contains(id);
-
-        btn = (Button)findViewById(R.id.group_delete);
-        if(state) btn.setText("退出小组");
-        else btn.setText("加入小组");
-
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(state) {
-                    //退出小组
+                    btn.setClickable(false);
                     presenter.doQuitGroup(id);
                 }
                 else {
-                    //加入小组
+                    btn.setClickable(false);
                     presenter.doEnterGroup(id);
                 }
             }
@@ -109,13 +106,13 @@ public class GroupDetailActivity extends AppCompatActivity implements Contract.I
         if(status.equals("success")){
             Toast.makeText(GroupDetailActivity.this, "加入小组成功", Toast.LENGTH_SHORT).show();
             cardList.add(new GroupMember(Config.userId,Config.username,Config.sex,Config.phone,Config.email,null));
-            recyclerAdapter.resetCardList(cardList);
-            StaticTool.myGroupIdList.add(id);
             btn.setText("退出小组");
             state = true;
+            recyclerAdapter.resetCardList(cardList);
+            btn.setClickable(true);
         }
         else{
-            Toast.makeText(GroupDetailActivity.this, "退出小组失败", Toast.LENGTH_SHORT).show();
+            Toast.makeText(GroupDetailActivity.this, "加入小组失败", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -123,7 +120,6 @@ public class GroupDetailActivity extends AppCompatActivity implements Contract.I
     public void onGroupQuit(String status) {
         if(status.equals("success")){
             Toast.makeText(GroupDetailActivity.this, "退出小组成功", Toast.LENGTH_SHORT).show();
-            StaticTool.myGroupIdList.remove(id);
             finish();
         }
         else{
@@ -137,6 +133,13 @@ public class GroupDetailActivity extends AppCompatActivity implements Contract.I
             cardList = presenter.getMembers();
             if(cardList==null) cardList = new ArrayList<>();
             recyclerAdapter.resetCardList(cardList);
+
+            for(GroupMember m:cardList){
+                if(m.getUserId().equals(Config.userId)) state = true;
+            }
+            if(state) btn.setText("退出小组");
+            else btn.setText("加入小组");
+            btn.setClickable(true);
         }
         else {
             Toast.makeText(GroupDetailActivity.this, "获取小组成员失败", Toast.LENGTH_SHORT).show();

@@ -38,16 +38,20 @@ public class GroupDetailPresenterImpl implements Contract.IGroupDetailPresenter 
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onGroupEntered(GroupModifyEvent groupModifyEvent) {
-        if (groupModifyEvent.getResult().isIsSuccess())
-            detailView.onGroupEntered("success");
-        else detailView.onGroupEntered("failure");
+        if(groupModifyEvent.getType()==GroupModifyEvent.EventType.ENTER){
+            if (groupModifyEvent.getResult().isIsSuccess())
+                detailView.onGroupEntered("success");
+            else detailView.onGroupEntered("failure");
+        }
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onGroupQuited(GroupModifyEvent groupModifyEvent){
-        if (groupModifyEvent.getResult().isIsSuccess())
-            detailView.onGroupQuit("success");
-        else detailView.onGroupQuit("failure");
+        if(groupModifyEvent.getType()==GroupModifyEvent.EventType.QUIT){
+            if (groupModifyEvent.getResult().isIsSuccess())
+                detailView.onGroupQuit("success");
+            else detailView.onGroupQuit("failure");
+        }
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)

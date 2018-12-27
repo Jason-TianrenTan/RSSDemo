@@ -39,16 +39,17 @@ public class MenuPresenterImpl implements Contract.IMenuPresenter {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onRSSCall(SaveRSSEvent saveRSSEvent) {
-        //处理登录结果
         menuView.onLinkResult(saveRSSEvent.getResult());
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onCollectionsCall(CollectionListEvent collectionListEvent) {
-        if (collectionListEvent.getResult().isIsSuccess()) {
-            model.setupCollections(collectionListEvent.getResult());
-            menuView.onUserCollectionsCall("success");
-        } else menuView.onUserCollectionsCall("failure");
+        if(collectionListEvent.getType()==CollectionListEvent.EventType.COLLECTION_LIST){
+            if (collectionListEvent.getResult().isIsSuccess()) {
+                model.setupCollections(collectionListEvent.getResult());
+                menuView.onUserCollectionsCall("success");
+            } else menuView.onUserCollectionsCall("failure");
+        }
     }
 
     @Override

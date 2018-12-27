@@ -17,7 +17,6 @@ import java.util.UUID;
 
 public class StaticTool {
     public static List<String> myEntryIdList = new ArrayList<>();
-    public static List<String> myGroupIdList = new ArrayList<>();
 
     public static List<Collection> collectionCardList = new ArrayList<>();
     public static List<Source> sourceCardList = new ArrayList<>();

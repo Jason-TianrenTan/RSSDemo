@@ -35,7 +35,6 @@ public class SourcePresenterImpl implements Contract.ISourcePresenter {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onRSSCall(SaveRSSEvent saveRSSEvent) {
-        //处理登录结果
         sourceView.onLinkResult(saveRSSEvent.getResult());
     }
 

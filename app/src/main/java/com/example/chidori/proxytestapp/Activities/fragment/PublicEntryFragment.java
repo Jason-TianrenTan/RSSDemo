@@ -90,8 +90,8 @@ public class PublicEntryFragment extends Fragment implements Contract.IPublicEnt
     public void onEntryAdded(String status) {
         if(status.equals("success")){
             Toast.makeText(getActivity(),"收藏成功", Toast.LENGTH_SHORT).show();
-            recyclerAdapter.notifyItemChanged(StaticTool.opPosition);
             StaticTool.myEntryIdList.add(StaticTool.opString);
+            recyclerAdapter.resetCardList(cardList);
         }
         else Toast.makeText(getActivity(),"收藏失败", Toast.LENGTH_SHORT).show();
     }

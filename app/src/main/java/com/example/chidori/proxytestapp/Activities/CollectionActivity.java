@@ -35,8 +35,7 @@ public class CollectionActivity extends AppCompatActivity implements Contract.IC
     private String input;
 
     private static CollectionPresenterImpl presenter = new CollectionPresenterImpl();
-    private List<Collection> cardList = StaticTool.collectionCardList;
-    private CollectionCardRecyclerAdapter recyclerAdapter = new CollectionCardRecyclerAdapter(cardList,true);
+    private CollectionCardRecyclerAdapter recyclerAdapter = new CollectionCardRecyclerAdapter(StaticTool.collectionCardList,true);
     private RecyclerView recyclerView;
 
     @Override
@@ -122,8 +121,7 @@ public class CollectionActivity extends AppCompatActivity implements Contract.IC
         if(status.equals("success")){
             Toast.makeText(CollectionActivity.this, "删除成功", Toast.LENGTH_SHORT).show();
             StaticTool.collectionCardList.remove(StaticTool.opPosition);
-            recyclerAdapter.notifyItemChanged(StaticTool.opPosition);
-
+            recyclerAdapter.resetCardList(StaticTool.collectionCardList);
         }
         else Toast.makeText(CollectionActivity.this, "删除失败", Toast.LENGTH_SHORT).show();
     }
@@ -131,9 +129,9 @@ public class CollectionActivity extends AppCompatActivity implements Contract.IC
     @Override
     public void onCollectionCreated(String status) {
         if(status.equals("success")){
-            StaticTool.collectionCardList.add(new Collection("id", input, "", index, "", ""));
             Toast.makeText(CollectionActivity.this, "收藏夹创建成功", Toast.LENGTH_SHORT).show();
-            recyclerAdapter.notifyDataSetChanged();
+            StaticTool.collectionCardList.add(new Collection("id", input, "", index, "", ""));
+            recyclerAdapter.resetCardList(StaticTool.collectionCardList);
         }
         else {
             Toast.makeText(CollectionActivity.this, "收藏夹创建失败", Toast.LENGTH_SHORT).show();
