@@ -348,10 +348,11 @@ public class UniversalPresenter extends BasePresenter {
 
 
     //
-    public void GetEntryListPublicToGroup(String from) {
+    public void GetEntryListPublicToGroup(String groupId, String from) {
         JsonObject jsonObject = null;
         try {
             jsonObject = new JsonObject();
+            jsonObject.addProperty("groupId", groupId);
             jsonObject.addProperty("device", "mobile");
             jsonObject.addProperty("from", from);
         } catch (Exception e) {

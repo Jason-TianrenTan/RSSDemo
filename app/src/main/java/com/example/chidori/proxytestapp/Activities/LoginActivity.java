@@ -48,6 +48,9 @@ public class LoginActivity extends AppCompatActivity implements Contract.ILoginV
 
         presenter = new LoginPresenterImpl();
         presenter.attachView(this);
+
+        et_phonenum.setText("root");
+        et_psw.setText("123456");
     }
 
     private void init() {

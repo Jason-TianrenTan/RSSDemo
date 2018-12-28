@@ -67,6 +67,20 @@ public class ReaderActivity extends AppCompatActivity implements Contract.IReade
             String url = intent.getStringExtra("link");
             currentLink = url;
             webView.loadUrl(url);
+            String nickname = "网页";
+            if (url.contains("csdn")) {//CSDN
+                nickname = "CSDN";
+            } else if (url.contains("jianshu")) {
+                //简书
+                nickname = "简书";
+            } else if (url.contains("cnblogs")) {
+                nickname = "博客园";
+            } else if (url.contains("zhihu")) {
+                nickname = "知乎";
+            } else if (url.contains("iteye")) {
+                nickname = "ITeye";
+            }
+            titleTextView.setText(nickname);
         }
     }
 

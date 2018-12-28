@@ -23,7 +23,13 @@ public class NavHomeFragment extends Fragment {
         ViewPager tab_viewPager = (ViewPager) view.findViewById(R.id.tab_viewPager);
         TabAdapter tab_adapter = new TabAdapter(getChildFragmentManager());
 
-        String[] tabName = {"已订阅","更多"};
+        String[] tabName = {"推荐","已订阅","更多"};
+
+        //
+        RecommendFragment tab0 = new RecommendFragment();
+        tab_adapter.addFragment(tab0);
+        tabs.addTab(tabs.newTab());
+        //
 
         SourceFragment tab1 = new SourceFragment();
         tab_adapter.addFragment(tab1);

@@ -27,7 +27,7 @@ public class GroupEntryFragmentModelImpl implements Contract.IGroupEntryFragment
 
     @Override
     public void doGetGroupEntries(String groupId) {
-        new UniversalPresenter().GetEntryListPublicToGroup("all");
+        new UniversalPresenter().GetEntryListPublicToGroup(groupId, "all");
     }
 
     @Override

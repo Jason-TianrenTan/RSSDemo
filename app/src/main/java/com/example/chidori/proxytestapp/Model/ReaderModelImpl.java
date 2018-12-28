@@ -58,15 +58,17 @@ public class ReaderModelImpl implements Contract.IReaderModel {
             }
             if (document != null) {
                 link = url;
-                if (url.contains("blog.csdn.net")) {//CSDN
+                if (url.contains("csdn")) {//CSDN
                     nickname = "CSDN";
-                } else if (url.contains("www.jianshu.com")) {
+                } else if (url.contains("jianshu")) {
                     //简书
                     nickname = "简书";
-                } else if (url.contains("www.cnblogs.com")) {
+                } else if (url.contains("cnblogs")) {
                     nickname = "博客园";
-                } else if (url.contains("daily.zhihu.com")) {
-                    nickname = "知乎日报";
+                } else if (url.contains("zhihu")) {
+                    nickname = "知乎";
+                } else if (url.contains("iteye")) {
+                    nickname = "ITeye";
                 }
                 EventBus.getDefault().post(new URLEvent(nickname));
             }
