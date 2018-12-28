@@ -28,7 +28,7 @@ public class TabFragment extends Fragment implements Contract.ITabACView,Contrac
     private int option;
     private SwipeRefreshLayout swipeRefresh;
     private RecyclerView.Adapter recyclerAdapter;
-    private List cardList;
+    private List cardListSource, cardListEntries, cardListCollections;
 
     public static final int source = 0;
     public static final int publicEntry = 1;
@@ -44,26 +44,27 @@ public class TabFragment extends Fragment implements Contract.ITabACView,Contrac
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_recycler_swipe, container, false);
-
-
+        homePresenter.attachView(this);
+        tabACPresenter.attachView(this);
         switch (option){
             case source:{
-                homePresenter.attachView(this);
                 homePresenter.doGetSources(0);
                 break;
             }
             case publicEntry:{
-                homePresenter.attachView(this);
-                homePresenter.doGetPublicEntries();
+                //homePresenter.doGetPublicEntries();
+                cardListEntries = StaticTool.getTestEntryCardList();
+                recyclerAdapter = new EntryCardRecyclerAdapter(cardListEntries,EntryCardRecyclerAdapter.tabAC);
+                RecyclerView recyclerView=(RecyclerView)view.findViewById(R.id.recycler_view);
+                recyclerView.setLayoutManager(new LinearLayoutManager(getActivity(),LinearLayoutManager.VERTICAL,false));
                 break;
             }
             case group_collection:{
-                tabACPresenter.attachView(this);
+
                 tabACPresenter.doGetGroupCollections(id);
                 break;
             }
             case group_entry:{
-                tabACPresenter.attachView(this);
                 tabACPresenter.doGetGroupEntries(id);
                 break;
             }
@@ -95,6 +96,7 @@ public class TabFragment extends Fragment implements Contract.ITabACView,Contrac
                         switch (option){
                             case source:{
                                 homePresenter.doGetSources(0);
+
                                 break;
                             }
                             case publicEntry:{
@@ -124,14 +126,15 @@ public class TabFragment extends Fragment implements Contract.ITabACView,Contrac
     @Override
     public void onGroupCollectionsRetrieved(String status) {
         if(status.equals("success")){
-            cardList = tabACPresenter.getCollections();
-            if(cardList==null) cardList = new ArrayList<Collection>();
-            recyclerAdapter = new CollectionCardRecyclerAdapter(cardList,true);
-            RecyclerView recyclerView=(RecyclerView)view.findViewById(R.id.recycler_view);         recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext(),LinearLayoutManager.VERTICAL,false));         recyclerView.setAdapter(recyclerAdapter);
+            cardListCollections = tabACPresenter.getCollections();
+            if(cardListCollections==null) cardListCollections = new ArrayList<Collection>();
+            recyclerAdapter = new CollectionCardRecyclerAdapter(cardListCollections,true);
+            RecyclerView recyclerView=(RecyclerView)view.findViewById(R.id.recycler_view);
+            recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext(),LinearLayoutManager.VERTICAL,false));         recyclerView.setAdapter(recyclerAdapter);
         }
         else {
             Toast.makeText(getContext(), "获取收藏夹列表失败", Toast.LENGTH_SHORT).show();
-            cardList = new ArrayList<Collection>();
+            cardListCollections = new ArrayList<Collection>();
         }
         StaticTool.opPosition=-1;
     }
@@ -139,14 +142,15 @@ public class TabFragment extends Fragment implements Contract.ITabACView,Contrac
     @Override
     public void onGroupEntriesRetrieved(String status) {
         if(status.equals("success")){
-            cardList = homePresenter.getEntries();
-            if(cardList==null) cardList = new ArrayList<Entry>();
-            recyclerAdapter = new EntryCardRecyclerAdapter(cardList,EntryCardRecyclerAdapter.tabAC);
-            RecyclerView recyclerView=(RecyclerView)view.findViewById(R.id.recycler_view);         recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext(),LinearLayoutManager.VERTICAL,false));         recyclerView.setAdapter(recyclerAdapter);
+            cardListEntries = homePresenter.getEntries();
+            if(cardListEntries ==null) cardListEntries = new ArrayList<Entry>();
+            recyclerAdapter = new EntryCardRecyclerAdapter(cardListEntries,EntryCardRecyclerAdapter.tabAC);
+            RecyclerView recyclerView=(RecyclerView)view.findViewById(R.id.recycler_view);
+            recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext(),LinearLayoutManager.VERTICAL,false));         recyclerView.setAdapter(recyclerAdapter);
         }
         else {
             Toast.makeText(getContext(), "获得文章失败", Toast.LENGTH_SHORT).show();
-            cardList = new ArrayList<Entry>();
+            cardListEntries = new ArrayList<Entry>();
         }
         StaticTool.opPosition=-1;
     }
@@ -154,16 +158,17 @@ public class TabFragment extends Fragment implements Contract.ITabACView,Contrac
     @Override
     public void onSourceGet(String status) {
         if(status.equals("success")){
-            cardList = homePresenter.getSources();
-            if(cardList==null) cardList = new ArrayList<Source>();
-            recyclerAdapter = new SourceCardRecyclerAdapter(cardList,SourceCardRecyclerAdapter.home);
+            cardListSource = homePresenter.getSources();
+            if(cardListSource==null) cardListSource = new ArrayList<Source>();
+            recyclerAdapter = new SourceCardRecyclerAdapter(cardListSource,SourceCardRecyclerAdapter.home);
             RecyclerView recyclerView=(RecyclerView)view.findViewById(R.id.recycler_view);
-            recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext(),LinearLayoutManager.VERTICAL,false));
+            //recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext(),LinearLayoutManager.VERTICAL,false));
+            recyclerView.setLayoutManager(new LinearLayoutManager(getActivity(),LinearLayoutManager.VERTICAL,false));
             recyclerView.setAdapter(recyclerAdapter);
         }
         else {
             Toast.makeText(getContext(), "获得订阅列表失败", Toast.LENGTH_SHORT).show();
-            cardList = new ArrayList<Source>();
+            cardListSource = new ArrayList<Source>();
         }
         StaticTool.opPosition=-1;
     }
@@ -184,14 +189,15 @@ public class TabFragment extends Fragment implements Contract.ITabACView,Contrac
     @Override
     public void onPublicEntriesRetrieved(String status) {
         if(status.equals("success")){
-            cardList = tabACPresenter.getEntries();
-            if(cardList==null) cardList = new ArrayList<Entry>();
-            recyclerAdapter = new EntryCardRecyclerAdapter(cardList,EntryCardRecyclerAdapter.tabAC);
-            RecyclerView recyclerView=(RecyclerView)view.findViewById(R.id.recycler_view);         recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext(),LinearLayoutManager.VERTICAL,false));         recyclerView.setAdapter(recyclerAdapter);
+            cardListEntries = tabACPresenter.getEntries();
+            if(cardListEntries==null) cardListEntries = new ArrayList<Entry>();
+            recyclerAdapter = new EntryCardRecyclerAdapter(cardListEntries,EntryCardRecyclerAdapter.tabAC);
+            RecyclerView recyclerView=(RecyclerView)view.findViewById(R.id.recycler_view);
+            recyclerView.setLayoutManager(new LinearLayoutManager(getActivity(),LinearLayoutManager.VERTICAL,false));         recyclerView.setAdapter(recyclerAdapter);
         }
         else {
             Toast.makeText(getContext(), "获得文章失败", Toast.LENGTH_SHORT).show();
-            cardList = new ArrayList<Entry>();
+            cardListEntries = new ArrayList<Entry>();
         }
         StaticTool.opPosition=-1;
     }

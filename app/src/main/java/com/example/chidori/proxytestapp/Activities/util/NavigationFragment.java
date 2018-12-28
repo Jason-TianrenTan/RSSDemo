@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
@@ -19,6 +20,7 @@ import android.widget.Toast;
 
 import com.example.chidori.proxytestapp.Activities.ListActivity;
 import com.example.chidori.proxytestapp.Activities.LoginActivity;
+import com.example.chidori.proxytestapp.Activities.entity.Entry;
 import com.example.chidori.proxytestapp.Activities.entity.Group;
 import com.example.chidori.proxytestapp.Config;
 import com.example.chidori.proxytestapp.Contract.Contract;
@@ -51,6 +53,36 @@ public class NavigationFragment extends Fragment implements Contract.INavMenuVie
             case 0:{
                 view = inflater.inflate(R.layout.fragment_tabs, null);
                 setHome(view);
+                /*
+                view = inflater.inflate(R.layout.fragment_recycler_swipe, container, false);
+                List<Entry> cardListEntries = StaticTool.getTestEntryCardList();
+                EntryCardRecyclerAdapter cyclerAdapter = new EntryCardRecyclerAdapter(cardListEntries,EntryCardRecyclerAdapter.tabAC);
+                RecyclerView recyclerView=(RecyclerView)view.findViewById(R.id.recycler_view);
+                recyclerView.setLayoutManager(new LinearLayoutManager(getActivity(),LinearLayoutManager.VERTICAL,false));
+
+                SwipeRefreshLayout swipeRefresh = (SwipeRefreshLayout)view.findViewById(R.id.swipe_refresh);
+                swipeRefresh.setColorSchemeResources(R.color.colorPrimary);
+                swipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+                    @Override
+                    public void onRefresh() {
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                getActivity().runOnUiThread(new Runnable(){
+                                    @Override
+                                    public void run(){
+                                        List<Entry> cardListEntries = StaticTool.getTestEntryCardList();
+                                        EntryCardRecyclerAdapter recyclerAdapter = new EntryCardRecyclerAdapter(cardListEntries,EntryCardRecyclerAdapter.tabAC);
+                                        RecyclerView recyclerView=(RecyclerView)view.findViewById(R.id.recycler_view);
+                                        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity(),LinearLayoutManager.VERTICAL,false));
+
+                                        swipeRefresh.setRefreshing(false);
+                                    }
+                                });
+                            }
+                        }).start();
+                    }
+                });*/
                 break;
             }
             case 1:{
